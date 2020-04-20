@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">DataVirus</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name">DataVirus.it</string>
     <string name="data_tiles_head">Conteggio dati nazionale</string>
+
 </resources>
