@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">DataVirus.it</string>
     <string name="data_tiles_head">Conteggio dati nazionale</string>
-
+    <string name="data_tiles_total">Casi totali</string>
+    <string name="data_tiles_active">Casi attuali</string>
+    <string name="data_tiles_healed">Dimessi guariti</string>
+    <string name="data_tiles_deaths">Deceduti</string>
+    <string name="placeholder">...</string>
 </resources>

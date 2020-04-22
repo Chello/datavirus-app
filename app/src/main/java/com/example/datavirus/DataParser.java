@@ -17,18 +17,15 @@ import java.util.Scanner;
 
 public class DataParser {
 
-    enum Field {
-        NAZIONALE, REGIONALE, PROVINCIALE
-    }
-
     private UpdateUI UI;
 
     private static String JSONUrl[] = new String[] {
-        "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni.json",
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale.json",
+        "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni.json",
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-province.json"};
 
     public DataParser(UpdateUI toUpdate) {
+        Log.d("DataParser", "Created DataParser Object");
         this.setUI(toUpdate);
     }
 
@@ -37,27 +34,24 @@ public class DataParser {
     }
 
     public boolean refreshData() {
-        AsyncTask<String, Integer, ArrayList<String>> data = new AsyncDownloader().execute(JSONUrl);
+        AsyncTask<String, Integer, String[]> data = new AsyncDownloader().execute(JSONUrl);
         return true;
     }
 
-    private class AsyncDownloader  extends AsyncTask<String, Integer, ArrayList<String>> {
+    private class AsyncDownloader  extends AsyncTask<String, Integer, String[]> {
 
         @Override
-        protected void onPostExecute(ArrayList<String> jsonArrays) {
-            super.onPostExecute(jsonArrays);
-
-            for (String str : jsonArrays) {
-                UI.updateData(new DPCData(str));
-            }
+        protected void onPostExecute(String[] jsonArray) {
+            super.onPostExecute(jsonArray);
+            UI.updateData(new DPCData(jsonArray[0], jsonArray[1], jsonArray[2]));
         }
 
         @Override
-        protected ArrayList<String> doInBackground(String... strings) {
+        protected String[] doInBackground(String... strings) {
             try {
-                ArrayList<String> arr = new ArrayList<String>();
-                for (String url: strings) {
-                    arr.add(retrieveJSONFromUrl(url));
+                String[] arr = new String[strings.length];
+                for (int i = 0; i < strings.length; i++) {
+                    arr[i] = this.retrieveJSONFromUrl(strings[i]);
                 }
                 Log.d("DataParser", "All JSON download successful");
 
