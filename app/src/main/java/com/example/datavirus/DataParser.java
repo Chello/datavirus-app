@@ -12,25 +12,30 @@ import org.json.*;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DataParser {
 
     private UpdateUI UI;
+    private DPCData repositoryData;
 
     private static String JSONUrl[] = new String[] {
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale.json",
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni.json",
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-province.json"};
 
-    public DataParser(UpdateUI toUpdate) {
-        Log.d("DataParser", "Created DataParser Object");
-        this.setUI(toUpdate);
+    public DataParser() {
+        this.refreshData();
     }
 
     public void setUI(UpdateUI UI) {
         this.UI = UI;
+        this.refreshUI();
+    }
+
+    private void refreshUI() {
+        if (this.repositoryData != null)
+            this.UI.updateData(this.repositoryData);
     }
 
     public boolean refreshData() {
@@ -43,7 +48,9 @@ public class DataParser {
         @Override
         protected void onPostExecute(String[] jsonArray) {
             super.onPostExecute(jsonArray);
-            UI.updateData(new DPCData(jsonArray[0], jsonArray[1], jsonArray[2]));
+            repositoryData = new DPCData(jsonArray[0], jsonArray[1], jsonArray[2]);
+            if (UI != null)
+                UI.updateData(repositoryData);
         }
 
         @Override
