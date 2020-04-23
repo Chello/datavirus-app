@@ -23,14 +23,8 @@ public class DPCData {
     private DailyReport[] regionale;
     private DailyReport[] provinciale;
 
-    public DailyReport[] get(Field field) {
-        if (field == Field.NAZIONALE)
-            return this.nazionale;
-        if (field == Field.REGIONALE)
-            return this.regionale;
-        if (field == Field.PROVINCIALE)
-            return this.provinciale;
-        return null;
+    public DailyReport[] getNazionale() {
+        return this.nazionale;
     }
 
     public DPCData(String nazionaleJson, String regionaleJson, String provincialeJson) {

@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -61,21 +61,46 @@ public class DataTilesFragment extends Fragment implements UpdateUI {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.data_tiles, container, false);
-        //Populating spinner
-//        Spinner macrofield = (Spinner) v.getView().findViewById(R.id.spinner_macrofield_spinner);
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R., android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        macrofield.setAdapter(adapter);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.data_tiles, container, false);
+
+        spinnerHandlers(v);
         return v;
+    }
+
+    private void setRegionalSpinner() {
+
+    }
+
+    /**
+     * Manages the handlers for spinners
+     * @param v the View where spinners are
+     */
+    private void spinnerHandlers(final View v) {
+        Spinner macrofield = (Spinner) v.findViewById(R.id.spinner_macrofield);
+        macrofield.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Spinner regional = (Spinner) v.findViewById(R.id.spinner_regional);
+                if (!parent.getItemAtPosition(position).toString().equals("Nazionale")) {
+                    regional.setVisibility(View.VISIBLE);
+                } else {
+                    regional.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
     public void updateData(DPCData data) {
-        DPCData.DailyReport[] report = data.get(DPCData.Field.NAZIONALE);
+        DPCData.DailyReport[] report = data.getNazionale();
 
         //Set total value of last day
         TextView total = (TextView) getView().findViewById(R.id.tile_total);
@@ -104,7 +129,6 @@ public class DataTilesFragment extends Fragment implements UpdateUI {
         //Set deaths delta of last day
         TextView deathsDelta = (TextView) getView().findViewById(R.id.tile_deaths_delta);
         deathsDelta.setText("Δ" + (report[report.length -1].getDeceduti() - report[report.length-2].getDeceduti()));
-
 
     }
 

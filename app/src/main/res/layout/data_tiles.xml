@@ -19,15 +19,28 @@
             android:layout_centerHorizontal="true"
             android:paddingTop="16dp"
             android:text="@string/data_tiles_head"
-            android:textSize="30dp"
+            android:textSize="30sp"
             app:autoSizeTextType="uniform" />
 
         <Spinner
-            android:id="@+id/spinner_macrofield_spinner"
+            android:id="@+id/spinner_macrofield"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/data_tiles_head"
+            android:layout_centerHorizontal="true"
             android:entries="@array/macrofields"
+            android:padding="16dp"
+            android:scrollbarSize="16dp"/>
+
+        <Spinner
+            android:id="@+id/spinner_regional"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/data_tiles_head"
+            android:layout_centerHorizontal="true"
+            android:entries="@array/macrofields"
+            android:visibility="invisible"
+            android:layout_toEndOf="@+id/spinner_macrofield"
             android:padding="16dp"
             android:scrollbarSize="16dp"/>
 
