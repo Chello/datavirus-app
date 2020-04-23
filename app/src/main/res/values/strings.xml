@@ -6,4 +6,11 @@
     <string name="data_tiles_healed">Dimessi guariti</string>
     <string name="data_tiles_deaths">Deceduti</string>
     <string name="placeholder">...</string>
+
+
+    <string-array name="macrofields">
+        <item>Nazionale</item>
+        <item>Regionale</item>
+        <item>Provinciale</item>
+    </string-array>
 </resources>
