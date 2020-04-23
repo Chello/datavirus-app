@@ -41,7 +41,6 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
@@ -54,16 +53,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
+                    android:layout_margin="10dp"
                     android:orientation="vertical"
-                    android:weightSum="12">
+                    android:weightSum="13">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="2dp"
-                        android:layout_weight="4"
+                        android:layout_weight="3"
                         android:text="@string/data_tiles_total"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
@@ -73,10 +72,11 @@
                         android:id="@+id/tile_total"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_margin="6dp"
+                        android:layout_margin="2dp"
                         android:layout_weight="6"
                         android:text="@string/placeholder"
                         android:textAlignment="center"
+                        android:textStyle="bold"
                         android:textColor="@android:color/black"
                         android:textSize="30sp" />
 
@@ -84,10 +84,10 @@
                         android:id="@+id/tile_total_delta"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_margin="6dp"
-                        android:layout_weight="3"
+                        android:layout_margin="2dp"
+                        android:layout_weight="4"
                         android:text="@string/placeholder"
-
+                        android:textSize="24sp"
                         android:textAlignment="center"
                         android:textColor="@android:color/black" />
 
@@ -98,7 +98,6 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
@@ -111,16 +110,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
+                    android:layout_margin="10dp"
                     android:orientation="vertical"
-                    android:weightSum="12">
+                    android:weightSum="13">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="2dp"
-                        android:layout_weight="4"
+                        android:layout_weight="3"
                         android:text="@string/data_tiles_total"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
@@ -130,10 +129,11 @@
                         android:id="@+id/tile_active"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_margin="6dp"
+                        android:layout_margin="2dp"
                         android:layout_weight="6"
                         android:text="@string/placeholder"
                         android:textAlignment="center"
+                        android:textStyle="bold"
                         android:textColor="@android:color/black"
                         android:textSize="30sp" />
 
@@ -141,20 +141,20 @@
                         android:id="@+id/tile_active_delta"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_margin="6dp"
-                        android:layout_weight="3"
+                        android:layout_margin="2dp"
+                        android:layout_weight="4"
                         android:text="@string/placeholder"
-
+                        android:textSize="24sp"
                         android:textAlignment="center"
                         android:textColor="@android:color/black" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+<!--            Riga 2 col 1-->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
@@ -167,16 +167,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
+                    android:layout_margin="10dp"
                     android:orientation="vertical"
-                    android:weightSum="12">
+                    android:weightSum="13">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="2dp"
-                        android:layout_weight="4"
+                        android:layout_weight="3"
                         android:text="@string/data_tiles_total"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
@@ -186,9 +186,10 @@
                         android:id="@+id/tile_healed"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_margin="6dp"
+                        android:layout_margin="2dp"
                         android:layout_weight="6"
                         android:text="@string/placeholder"
+                        android:textStyle="bold"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
                         android:textSize="30sp" />
@@ -197,10 +198,10 @@
                         android:id="@+id/tile_healed_delta"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_margin="6dp"
-                        android:layout_weight="3"
+                        android:layout_margin="2dp"
+                        android:layout_weight="4"
                         android:text="@string/placeholder"
-
+                        android:textSize="24sp"
                         android:textAlignment="center"
                         android:textColor="@android:color/black" />
 
@@ -211,7 +212,6 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
@@ -224,16 +224,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
+                    android:layout_margin="10dp"
                     android:orientation="vertical"
-                    android:weightSum="12">
+                    android:weightSum="13">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="2dp"
-                        android:layout_weight="4"
+                        android:layout_weight="3"
                         android:text="@string/data_tiles_total"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
@@ -243,9 +243,10 @@
                         android:id="@+id/tile_deaths"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_margin="6dp"
+                        android:layout_margin="2dp"
                         android:layout_weight="6"
                         android:text="@string/placeholder"
+                        android:textStyle="bold"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
                         android:textSize="30sp" />
@@ -254,10 +255,10 @@
                         android:id="@+id/tile_deaths_delta"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_margin="6dp"
-                        android:layout_weight="3"
+                        android:layout_margin="2dp"
+                        android:layout_weight="4"
                         android:text="@string/placeholder"
-
+                        android:textSize="24sp"
                         android:textAlignment="center"
                         android:textColor="@android:color/black" />
 
