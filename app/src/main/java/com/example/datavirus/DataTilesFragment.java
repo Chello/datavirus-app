@@ -18,7 +18,7 @@ import android.widget.TextView;
  * Use the {@link DataTilesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DataTilesFragment extends Fragment {
+public class DataTilesFragment extends Fragment implements OnDPCDataReady {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -135,5 +135,10 @@ public class DataTilesFragment extends Fragment {
         //Set deaths delta of last day
         TextView deathsDelta = (TextView) getView().findViewById(R.id.tile_deaths_delta);
         deathsDelta.setText("Δ " + (report[report.length -1].getDeceduti() - report[report.length-2].getDeceduti()));
+    }
+
+    @Override
+    public void updateData(DPCData data) {
+        this.updateTiles(data.getNazionale());
     }
 }

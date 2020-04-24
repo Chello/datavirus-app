@@ -63,6 +63,7 @@ public class DataParser {
             super.onPostExecute(jsonArray);
             repositoryData = new DPCData(jsonArray[0], jsonArray[1], jsonArray[2]);
             dialog.dismiss();
+            UI.updateData(repositoryData);
         }
 
         @Override
