@@ -4,11 +4,10 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -80,24 +79,13 @@ public class DataTilesFragment extends Fragment implements OnDPCDataReady {
      * @param v the View where spinners are
      */
     private void spinnerHandlers(final View v) {
-        Spinner macrofield = (Spinner) v.findViewById(R.id.spinner_macrofield);
-        macrofield.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
+        Button macrofield = (Button) v.findViewById(R.id.button_geographic);
+        macrofield.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Spinner regional = (Spinner) v.findViewById(R.id.spinner_regional);
-
-                String selected = parent.getItemAtPosition(position).toString();
-                if (!selected.equals("Nazionale")) {
-                    regional.setVisibility(View.VISIBLE);
-                } else {
-                    regional.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View v) {
+                DPCDataPicker picker = new DPCDataPicker();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                             .add(picker, null).addToBackStack(null).commit();
             }
         });
     }

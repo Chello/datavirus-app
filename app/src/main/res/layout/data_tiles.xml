@@ -22,25 +22,13 @@
             android:textSize="30sp"
             app:autoSizeTextType="uniform" />
 
-        <Spinner
-            android:id="@+id/spinner_macrofield"
+        <Button
+            android:id="@+id/button_geographic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/data_tiles_head"
             android:layout_centerHorizontal="true"
-            android:entries="@array/macrofields"
-            android:padding="16dp"
-            android:scrollbarSize="16dp"/>
-
-        <Spinner
-            android:id="@+id/spinner_regional"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/data_tiles_head"
-            android:layout_centerHorizontal="true"
-            android:entries="@array/macrofields"
-            android:visibility="invisible"
-            android:layout_toEndOf="@+id/spinner_macrofield"
+            android:text="@string/geographicChooser"
             android:padding="16dp"
             android:scrollbarSize="16dp"/>
 

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import java.util.HashMap;
  * These data are structured as the italian Dipartimento della Protezione Civile JSONs are structured
  */
 
-public class DPCData {
+public class DPCData implements Serializable {
 
     enum Field {
         NAZIONALE, REGIONALE, PROVINCIALE

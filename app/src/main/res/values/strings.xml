@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">DataVirus.it</string>
-    <string name="data_tiles_head">Conteggio dati nazionale</string>
+    <string name="data_tiles_head">Conteggio dati</string>
     <string name="data_tiles_total">Casi totali</string>
     <string name="data_tiles_active">Casi attuali</string>
     <string name="data_tiles_healed">Dimessi guariti</string>
     <string name="data_tiles_deaths">Deceduti</string>
     <string name="placeholder">...</string>
+    <string name="geographicChooser">Seleziona area geografica</string>
 
 
     <string-array name="macrofields">
@@ -16,4 +17,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="loading">Scaricamento dei dati dal repository del Dipartimento di Protezione Civile</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
