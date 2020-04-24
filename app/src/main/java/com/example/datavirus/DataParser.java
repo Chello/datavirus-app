@@ -4,8 +4,11 @@
 
 package com.example.datavirus;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import androidx.fragment.app.FragmentManager;
 
 import org.json.*;
 
@@ -16,26 +19,21 @@ import java.util.Scanner;
 
 public class DataParser {
 
-    private UpdateUI UI;
+    private LoadingDialog dialog;
     private DPCData repositoryData;
+    private FragmentManager fm;
+    private OnDPCDataReady UI;
 
     private static String JSONUrl[] = new String[] {
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale.json",
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni.json",
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-province.json"};
 
-    public DataParser() {
-        this.refreshData();
-    }
-
-    public void setUI(UpdateUI UI) {
+    public DataParser(FragmentManager fm, OnDPCDataReady UI) {
         this.UI = UI;
-        this.refreshUI();
-    }
-
-    private void refreshUI() {
-        if (this.repositoryData != null)
-            this.UI.updateData(this.repositoryData);
+        this.dialog = new LoadingDialog();
+        this.fm = fm;
+        this.refreshData();
     }
 
     public boolean refreshData() {
@@ -43,14 +41,28 @@ public class DataParser {
         return true;
     }
 
+    public void setUI(OnDPCDataReady UI) {
+        this.UI = UI;
+        if (this.repositoryData == null) {
+            this.refreshData();
+        } else {
+            this.UI.updateData(this.repositoryData);
+        }
+    }
+
     private class AsyncDownloader  extends AsyncTask<String, Integer, String[]> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog.show(fm, "Loading");
+        }
 
         @Override
         protected void onPostExecute(String[] jsonArray) {
             super.onPostExecute(jsonArray);
             repositoryData = new DPCData(jsonArray[0], jsonArray[1], jsonArray[2]);
-            if (UI != null)
-                UI.updateData(repositoryData);
+            dialog.dismiss();
         }
 
         @Override

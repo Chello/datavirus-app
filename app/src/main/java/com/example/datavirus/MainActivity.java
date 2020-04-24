@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements OnDPCDataReady {
 
     DataParser parser;
 
@@ -16,10 +16,13 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.parser = new DataParser();
+        this.parser = new DataParser(getSupportFragmentManager(), this);
 
-        DataTilesFragment fragment = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.data_tiles);
-        fragment.setParser(parser);
     }
 
+    @Override
+    public void updateData(DPCData data) {
+        Log.d("Blabla", "BleBle1111");
+        DataTilesFragment fragment = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.data_tiles);
+    }
 }

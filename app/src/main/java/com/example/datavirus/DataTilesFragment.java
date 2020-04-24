@@ -18,7 +18,7 @@ import android.widget.TextView;
  * Use the {@link DataTilesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DataTilesFragment extends Fragment implements UpdateUI {
+public class DataTilesFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -135,30 +135,5 @@ public class DataTilesFragment extends Fragment implements UpdateUI {
         //Set deaths delta of last day
         TextView deathsDelta = (TextView) getView().findViewById(R.id.tile_deaths_delta);
         deathsDelta.setText("Δ " + (report[report.length -1].getDeceduti() - report[report.length-2].getDeceduti()));
-    }
-
-    /**
-     * Updates data given by the DataParser object.
-     * This method will be called only after the data are obtained
-     * @param data the data to use for updates
-     */
-    @Override
-    public void updateData(DPCData data) {
-        this.covidData = data;
-
-        DPCData.DailyReport[] regionali = this.covidData.getRegionaleReport("Emilia-Romagna");
-        Log.d("DataTilesFragment", "Here I am");
-        //Update the daily national report
-        this.updateTiles(data.getNazionale());
-    }
-
-    /**
-     * Update the parser. Called by the parser.
-     * @param parser
-     */
-    @Override
-    public void setParser(DataParser parser) {
-        this.parser = parser;
-        parser.setUI(this);
     }
 }
