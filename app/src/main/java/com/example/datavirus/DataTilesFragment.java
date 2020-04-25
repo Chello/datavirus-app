@@ -83,7 +83,8 @@ public class DataTilesFragment extends Fragment implements OnDPCDataReady {
         macrofield.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DPCDataPicker picker = new DPCDataPicker();
+                DPCDataPicker picker = DPCDataPicker.newInstance(covidData);
+                //picker.setCovidData(covidData);
                 getActivity().getSupportFragmentManager().beginTransaction()
                              .add(picker, null).addToBackStack(null).commit();
             }
@@ -127,6 +128,7 @@ public class DataTilesFragment extends Fragment implements OnDPCDataReady {
 
     @Override
     public void updateData(DPCData data) {
+        this.covidData = data;
         this.updateTiles(data.getNazionale());
     }
 }

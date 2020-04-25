@@ -3,18 +3,27 @@ package com.example.datavirus;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
-import java.io.Serializable;
+import org.json.JSONArray;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Objects from this class will contain data from Nazionale, Regionale and Provinciale sections.
  * These data are structured as the italian Dipartimento della Protezione Civile JSONs are structured
  */
 
-public class DPCData implements Serializable {
+public class DPCData {
 
     enum Field {
         NAZIONALE, REGIONALE, PROVINCIALE
@@ -25,6 +34,22 @@ public class DPCData implements Serializable {
     private DailyReport[] nazionale;
     private HashMap<String, ArrayList<DailyReport>> regionale;
     private HashMap<String, ArrayList<DailyReport>> provinciale;
+
+    public ArrayList<String> getNazionaleKeyList() {
+        return nazionaleKeyList;
+    }
+
+    public ArrayList<String> getRegionaleKeyList() {
+        return regionaleKeyList;
+    }
+
+    public ArrayList<String> getProvincialeKeyList() {
+        return provincialeKeyList;
+    }
+
+    private ArrayList<String> nazionaleKeyList;
+    private ArrayList<String> regionaleKeyList;
+    private ArrayList<String> provincialeKeyList;
 
     /**
      * Returns the Nazionale report
@@ -68,7 +93,42 @@ public class DPCData implements Serializable {
         this.regionale = createKeyValueList(regionale);
         this.provinciale = createKeyValueList(provinciale);
 
+        this.nazionaleKeyList = this.getKeysFromJsonArray(nazionaleJson);
+        this.regionaleKeyList = this.getKeysFromJsonArray(regionaleJson);
+        this.provincialeKeyList = this.getKeysFromJsonArray(provincialeJson);
+
         Log.d("DPCParse", "Data parsed");
+    }
+
+    /**
+     * https://stackoverflow.com/questions/31094305/java-gson-getting-the-list-of-all-keys-under-a-jsonobject
+     * Retrieves the key list of the first element of the array of object passed via String
+     *
+     * @param json Json, array of objects
+     * @return the key list of the first array
+     */
+
+    private static List<String> list = Arrays.asList(new String[]{
+            "note_en", "note_it", "lat","long", "stato", "sigla_provincia",
+            "denominazione_provincia", "codice_provincia",
+            "denominazione_regione", "codice_regione"
+    });
+
+    private ArrayList<String> getKeysFromJsonArray(String json) {
+        ArrayList<String> toRet = new ArrayList<String>();
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(json);
+        JsonArray arr = element.getAsJsonArray();
+        JsonObject obj = arr.get(0).getAsJsonObject(); //since you know it's a JsonObject
+        Set<Map.Entry<String, JsonElement>> entries = obj.entrySet();//will return members of your object
+        for (Map.Entry<String, JsonElement> entry: entries) {
+            String current = entry.getKey();
+            if (this.list.contains(current))
+                continue;
+            toRet.add(current);
+            Log.d("Has json parsed: " , entry.getKey() );
+        }
+        return toRet;
     }
 
     /**
