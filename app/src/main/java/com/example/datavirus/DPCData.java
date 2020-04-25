@@ -26,6 +26,13 @@ public class DPCData  {
         NAZIONALE, REGIONALE, PROVINCIALE
     }
 
+    /**
+     * List of keys to exclude from a DailyReport but in a Json exists
+     */
+    private static List<String> excludeList = Arrays.asList("note_en", "note_it", "lat","long", "stato", "sigla_provincia",
+            "denominazione_provincia", "codice_provincia",
+            "denominazione_regione", "codice_regione", "In fase di definizione/aggiornamento");
+
     private Gson gson;
     //Reports for territorial data
     private DailyReport[] nazionale;
@@ -55,6 +62,41 @@ public class DPCData  {
         ArrayList<String> arr = new ArrayList<String>(s);
         Collections.sort(arr);
         return arr;
+    }
+
+    /**
+     * Returns ordered array of GeographicElements.
+     * This array has the following skeleton:
+     * The first element is about national datas
+     * then follows regions (in alphabetical order) and for each region, follows all provinces that belongs to that region
+     * @return the array of GraphicElements, sorted
+     */
+    public ArrayList<GeographicElement> getOrderedGeoElements() {
+        ArrayList<GeographicElement> toReturn = new ArrayList<GeographicElement>();
+        toReturn.add(new GeographicElement("Andamento nazionale", GeoField.NAZIONALE));
+        for (String regione : this.getRegioniList()) {
+            toReturn.add(new GeographicElement(regione, GeoField.REGIONALE));
+            toReturn.addAll(this.getProvinciaFromRegione(regione));
+        }
+
+        return toReturn;
+    }
+
+    /**
+     * Returns list of provinces that belongs the specified region
+     * @param regione the specified region
+     * @return array of GeographicElement, only provinces
+     */
+    private ArrayList<GeographicElement> getProvinciaFromRegione(String regione) {
+        ArrayList<GeographicElement> toReturn = new ArrayList<GeographicElement>();
+        for (Map.Entry<String, ArrayList<DailyReport>> pair: this.provinciale.entrySet()) {
+            if (pair.getValue().get(0).getString("denominazione_regione").equals(regione) &&
+                !excludeList.contains(pair.getKey())) {
+                toReturn.add(new GeographicElement(pair.getKey(), GeoField.PROVINCIALE));
+            }
+        }
+        return toReturn;
+
     }
 
     /**
@@ -125,10 +167,6 @@ public class DPCData  {
      * @return the key list of the first array
      */
 
-    private static List<String> list = Arrays.asList("note_en", "note_it", "lat","long", "stato", "sigla_provincia",
-            "denominazione_provincia", "codice_provincia",
-            "denominazione_regione", "codice_regione");
-
     private ArrayList<String> getKeysFromJsonArray(String json) {
         ArrayList<String> toRet = new ArrayList<String>();
         JsonParser parser = new JsonParser();
@@ -138,7 +176,7 @@ public class DPCData  {
         Set<Map.Entry<String, JsonElement>> entries = obj.entrySet();//will return members of your object
         for (Map.Entry<String, JsonElement> entry: entries) {
             String current = entry.getKey();
-            if (this.list.contains(current))
+            if (this.excludeList.contains(current))
                 continue;
             toRet.add(current);
             //Log.d("Has json parsed: " , entry.getKey() );
@@ -256,6 +294,32 @@ public class DPCData  {
                     return null;
                 }
             return null;
+        }
+    }
+
+    public class GeographicElement {
+        private String denominazione;
+        private GeoField geoField;
+
+        public String getDenominazione() {
+            return denominazione;
+        }
+
+        public void setDenominazione(String denominazione) {
+            this.denominazione = denominazione;
+        }
+
+        public GeoField getGeoField() {
+            return geoField;
+        }
+
+        public void setGeoField(GeoField geoField) {
+            this.geoField = geoField;
+        }
+
+        public GeographicElement(String denominazione, GeoField geoField) {
+            this.denominazione = denominazione;
+            this.geoField = geoField;
         }
     }
 

@@ -1,5 +1,7 @@
 package com.example.datavirus;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
@@ -14,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -92,36 +93,26 @@ public class DPCDataPicker extends DialogFragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        RecyclerView.Adapter mAdapter = new MyAdapter(this.covidData.getRegioniList());
+        RecyclerView.Adapter mAdapter = new MyAdapter(this.covidData.getOrderedGeoElements());
         recyclerView.setAdapter(mAdapter);
     }
 
     class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-        private ArrayList<String> mDataset;
+        private ArrayList<DPCData.GeographicElement> geoElements;
 
-        // Provide a reference to the views for each data item
-        // Complex data items may need more than one view per item, and
-        // you provide access to all the views for a data item in a view holder
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            // each data item is just a string in this case
             public TextView mainText;
             public TextView secText;
-            public String denominazione;
-            public DPCData.GeoField geoField;
-            public MyViewHolder(LinearLayout v, String denominazione, DPCData.GeoField geoField) {
+            public MyViewHolder(LinearLayout v/**, String denominazione, DPCData.GeoField geoField**/) {
                 super(v);
-
-                this.denominazione = denominazione;
-                this.geoField = geoField;
-
                 mainText = (TextView) v.findViewById(R.id.dialog_recycler_main);
                 secText = (TextView) v.findViewById(R.id.dialog_recycler_sec);
             }
         }
 
 
-        public MyAdapter(ArrayList<String> myDataset) {
-            mDataset = myDataset;
+        public MyAdapter(ArrayList<DPCData.GeographicElement> myDataset) {
+            this.geoElements = myDataset;
         }
 
         // Create new views (invoked by the layout manager)
@@ -132,23 +123,38 @@ public class DPCDataPicker extends DialogFragment {
             LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                     .inflate( R.layout.dialog_recycler_item, parent, false);
 
-            MyViewHolder vh = new MyViewHolder(v, null, null);
+            MyViewHolder vh = new MyViewHolder(v/*, null, null*/);
             return vh;
         }
 
         // Replace the contents of a view (invoked by the layout manager)
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
-            // - get element from your dataset at this position
-            // - replace the contents of the view with that element
-            holder.mainText.setText(mDataset.get(position));
+            DPCData.GeographicElement current = geoElements.get(position);
+            if (current.getGeoField() == DPCData.GeoField.REGIONALE) {
+                holder.mainText.setText("Regione");
+                holder.mainText.setTextColor(Color.BLUE);
+                holder.mainText.setTypeface(holder.mainText.getTypeface(), Typeface.NORMAL);
+            } else if (current.getGeoField() == DPCData.GeoField.PROVINCIALE) {
+                holder.mainText.setText("Provincia");
+                holder.mainText.setTextColor(Color.GREEN);
+                holder.mainText.setTypeface(holder.mainText.getTypeface(), Typeface.NORMAL);
+            }
+            else if (current.getGeoField() == DPCData.GeoField.NAZIONALE) {
+                holder.mainText.setText(current.getDenominazione());
+                holder.mainText.setTextColor(Color.BLACK);
+                holder.mainText.setTypeface(holder.mainText.getTypeface(), Typeface.BOLD);
+                holder.secText.setText("");
+                return;
+            }
+            holder.secText.setText(current.getDenominazione());
 
         }
 
         // Return the size of your dataset (invoked by the layout manager)
         @Override
         public int getItemCount() {
-            return mDataset.size();
+            return this.geoElements.size();
         }
     }
 }

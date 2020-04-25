@@ -9,14 +9,16 @@
         android:id="@+id/dialog_recycler_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp" >
+        android:padding="16dp"
+        android:textSize="16sp" >
     </TextView>
 
     <TextView
         android:id="@+id/dialog_recycler_sec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp" >
+        android:padding="16dp"
+        android:textSize="16sp" >
     </TextView>
 
 </LinearLayout>
