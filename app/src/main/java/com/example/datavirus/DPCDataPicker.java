@@ -93,7 +93,7 @@ public class DPCDataPicker extends DialogFragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        RecyclerView.Adapter mAdapter = new MyAdapter(this.covidData.getNazionaleKeyList());
+        RecyclerView.Adapter mAdapter = new MyAdapter(this.covidData.getProvinceList());
         recyclerView.setAdapter(mAdapter);
     }
 

@@ -35,11 +35,9 @@ public class DPCData {
     public ArrayList<String> getNazionaleKeyList() {
         return nazionaleKeyList;
     }
-
     public ArrayList<String> getRegionaleKeyList() {
         return regionaleKeyList;
     }
-
     public ArrayList<String> getProvincialeKeyList() {
         return provincialeKeyList;
     }
@@ -47,6 +45,24 @@ public class DPCData {
     private ArrayList<String> nazionaleKeyList;
     private ArrayList<String> regionaleKeyList;
     private ArrayList<String> provincialeKeyList;
+
+    /**
+     * Returns the list of Regioni
+     * @return
+     */
+    public ArrayList<String> getRegioniList() {
+        Set s = this.regionale.keySet();
+        return new ArrayList<String>(s);
+    }
+
+    /**
+     * Returns the list of Province
+     * @return
+     */
+    public ArrayList<String> getProvinceList() {
+        Set<String> s = this.provinciale.keySet();
+        return new ArrayList<String>(s);
+    }
 
     /**
      * Returns the Nazionale report
@@ -107,11 +123,9 @@ public class DPCData {
      * @return the key list of the first array
      */
 
-    private static List<String> list = Arrays.asList(new String[]{
-            "note_en", "note_it", "lat","long", "stato", "sigla_provincia",
+    private static List<String> list = Arrays.asList("note_en", "note_it", "lat","long", "stato", "sigla_provincia",
             "denominazione_provincia", "codice_provincia",
-            "denominazione_regione", "codice_regione"
-    });
+            "denominazione_regione", "codice_regione");
 
     private ArrayList<String> getKeysFromJsonArray(String json) {
         ArrayList<String> toRet = new ArrayList<String>();
@@ -125,14 +139,15 @@ public class DPCData {
             if (this.list.contains(current))
                 continue;
             toRet.add(current);
-            Log.d("Has json parsed: " , entry.getKey() );
+            //Log.d("Has json parsed: " , entry.getKey() );
         }
         return toRet;
     }
 
     /**
      * Creates the key-value Hash Table, useful for organizing data into field of interest.
-     * The field used is DPCData's 'denominazione', obtained via getDenominazione()
+     * The field used is DPCData's 'denominazione', obtained via getDenominazione().
+     * This method is used for split into province/regioni the array passed, so will have a well-ordered HashMap by provincie/regioni
      * @param reports the row array to order
      * @return an ordered Hash Table by field ('denominazione')
      */
@@ -141,7 +156,7 @@ public class DPCData {
         HashMap<String, ArrayList<DailyReport>> build = new HashMap<String, ArrayList<DailyReport>>();
         //Build the reports, by field
         for (DailyReport report : reports) {
-            String currentDenominazione = report.getGeoField() == GeoField.REGIONALE ? report.getString("denonmiazione_regione") : report.getString("denonmiazione_provincia");
+            String currentDenominazione = report.getGeoField() == GeoField.REGIONALE ? report.getString("denominazione_regione") : report.getString("denominazione_provincia");
             //if the array does not yet contains the current 'denominazione'
             if (!build.containsKey(currentDenominazione))
                 //create it
@@ -187,10 +202,10 @@ public class DPCData {
                 JsonObject curJsonObj = array.get(i).getAsJsonObject();
                 GeoField curField;
                 //DailyReport curDailyReport =
-                if (curJsonObj.has("denominazione_regione")) {
-                    curField = GeoField.REGIONALE;
-                } else if (curJsonObj.has("denominazione_provincia")) {
+                if (curJsonObj.has("denominazione_provincia")) {
                     curField = GeoField.PROVINCIALE;
+                } else if (curJsonObj.has("denominazione_regione")) {
+                    curField = GeoField.REGIONALE;
                 } else {
                     curField = GeoField.NAZIONALE;
                 }
