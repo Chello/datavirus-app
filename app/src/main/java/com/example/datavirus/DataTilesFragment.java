@@ -4,11 +4,11 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 
@@ -17,7 +17,7 @@ import android.widget.TextView;
  * Use the {@link DataTilesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DataTilesFragment extends Fragment implements OnDPCDataReady {
+public class DataTilesFragment extends Fragment implements OnDPCDataReady, OnDPCGeoListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -83,10 +83,10 @@ public class DataTilesFragment extends Fragment implements OnDPCDataReady {
         macrofield.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DPCDataPicker picker = DPCDataPicker.newInstance(covidData);
+                DPCGeoPicker picker = DPCGeoPicker.newInstance(covidData);
                 //picker.setCovidData(covidData);
                 getActivity().getSupportFragmentManager().beginTransaction()
-                             .add(picker, null).addToBackStack(null).commit();
+                             .add(picker, "picker").addToBackStack(null).commit();
             }
         });
     }
@@ -130,5 +130,10 @@ public class DataTilesFragment extends Fragment implements OnDPCDataReady {
     public void updateData(DPCData data) {
         this.covidData = data;
         this.updateTiles(data.getNazionale());
+    }
+
+    @Override
+    public void onDPCGeoClick(DPCData.GeographicElement element) {
+        this.updateTiles(this.covidData.getReportFromGeoData(element));
     }
 }

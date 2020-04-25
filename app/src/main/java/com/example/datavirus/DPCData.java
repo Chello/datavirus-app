@@ -116,6 +116,16 @@ public class DPCData  {
         return this.nazionale;
     }
 
+    public DailyReport[] getReportFromGeoData(GeographicElement element) {
+        if (element.getGeoField() == GeoField.NAZIONALE)
+            return this.nazionale;
+        if (element.getGeoField() == GeoField.REGIONALE)
+            return this.getRegionaleReport(element.getDenominazione());
+        if (element.getGeoField() == GeoField.PROVINCIALE)
+            return this.getProvincialeReport(element.getDenominazione());
+        return null;
+    }
+
     /**
      * Returns the Regionale report, by giving it's regione
      * @param regione the regione to obtain

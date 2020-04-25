@@ -9,21 +9,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.datavirus.OnDPCGeoListener;
+
 import java.util.ArrayList;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DPCDataPicker#newInstance} factory method to
+ * Use the {@link DPCGeoPicker#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DPCDataPicker extends DialogFragment {
+public class DPCGeoPicker extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,7 +38,7 @@ public class DPCDataPicker extends DialogFragment {
 
     private DPCData covidData;
 
-    public DPCDataPicker() {
+    public DPCGeoPicker() {
         // Required empty public constructor
     }
 
@@ -53,8 +56,8 @@ public class DPCDataPicker extends DialogFragment {
      * @return A new instance of fragment DPCDataPicker.
      */
     // TODO: Rename and change types and number of parameters
-    public static DPCDataPicker newInstance(DPCData covidData) {
-        DPCDataPicker fragment = new DPCDataPicker();
+    public static DPCGeoPicker newInstance(DPCData covidData) {
+        DPCGeoPicker fragment = new DPCGeoPicker();
         fragment.setCovidData(covidData);
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -93,43 +96,35 @@ public class DPCDataPicker extends DialogFragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        RecyclerView.Adapter mAdapter = new MyAdapter(this.covidData.getOrderedGeoElements());
+        RecyclerView.Adapter mAdapter = new DPCGeoAdapter(this.covidData.getOrderedGeoElements(), (OnDPCGeoListener) getFragmentManager().findFragmentById(R.id.data_tiles));
         recyclerView.setAdapter(mAdapter);
     }
 
-    class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+    class DPCGeoAdapter extends RecyclerView.Adapter<DPCGeoAdapter.DPCGeoHolder> {
+
         private ArrayList<DPCData.GeographicElement> geoElements;
+        private OnDPCGeoListener listener;
 
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView mainText;
-            public TextView secText;
-            public MyViewHolder(LinearLayout v/**, String denominazione, DPCData.GeoField geoField**/) {
-                super(v);
-                mainText = (TextView) v.findViewById(R.id.dialog_recycler_main);
-                secText = (TextView) v.findViewById(R.id.dialog_recycler_sec);
-            }
-        }
-
-
-        public MyAdapter(ArrayList<DPCData.GeographicElement> myDataset) {
+        public DPCGeoAdapter(ArrayList<DPCData.GeographicElement> myDataset, OnDPCGeoListener listener) {
             this.geoElements = myDataset;
+            this.listener = listener;
         }
 
         // Create new views (invoked by the layout manager)
         @Override
-        public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                         int viewType) {
+        public DPCGeoHolder onCreateViewHolder(ViewGroup parent,
+                                               int viewType) {
             // create a new view
             LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                     .inflate( R.layout.dialog_recycler_item, parent, false);
 
-            MyViewHolder vh = new MyViewHolder(v/*, null, null*/);
+            DPCGeoHolder vh = new DPCGeoHolder(v, this.listener);
             return vh;
         }
 
         // Replace the contents of a view (invoked by the layout manager)
         @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
+        public void onBindViewHolder(DPCGeoHolder holder, int position) {
             DPCData.GeographicElement current = geoElements.get(position);
             if (current.getGeoField() == DPCData.GeoField.REGIONALE) {
                 holder.mainText.setText("Regione");
@@ -155,6 +150,25 @@ public class DPCDataPicker extends DialogFragment {
         @Override
         public int getItemCount() {
             return this.geoElements.size();
+        }
+        public class DPCGeoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            public TextView mainText;
+            public TextView secText;
+            private OnDPCGeoListener listener;
+
+            public DPCGeoHolder(LinearLayout v, OnDPCGeoListener listener) {
+                super(v);
+                this.listener = listener;
+                v.setOnClickListener(this);
+                mainText = (TextView) v.findViewById(R.id.dialog_recycler_main);
+                secText = (TextView) v.findViewById(R.id.dialog_recycler_sec);
+            }
+
+            @Override
+            public void onClick(View v) {
+                listener.onDPCGeoClick(geoElements.get(getAdapterPosition()));
+                dismiss();
+            }
         }
     }
 }

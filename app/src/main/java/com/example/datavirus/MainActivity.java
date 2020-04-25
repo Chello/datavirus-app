@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady {
 
     @Override
     public void updateData(DPCData data) {
-        Log.d("Blabla", "BleBle1111");
         DataTilesFragment fragment = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.data_tiles);
         fragment.updateData(data);
+        Log.d("Backstack", getSupportFragmentManager().toString());
     }
 }
