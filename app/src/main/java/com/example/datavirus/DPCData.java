@@ -8,11 +8,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +22,7 @@ import java.util.Set;
 
 public class DPCData {
 
-    enum Field {
+    enum GeoField {
         NAZIONALE, REGIONALE, PROVINCIALE
     }
 
@@ -86,9 +83,11 @@ public class DPCData {
     public DPCData(String nazionaleJson, String regionaleJson, String provincialeJson) {
         this.gson = new Gson();
 
-        this.nazionale = gson.fromJson(nazionaleJson, DailyReport[].class);
-        DailyReport[] regionale = gson.fromJson(regionaleJson, DailyReport[].class);
-        DailyReport[] provinciale = gson.fromJson(provincialeJson, DailyReport[].class);
+        JsonParser parser = new JsonParser();
+
+        this.nazionale = DailyReport.reportsBuilder(parser.parse(nazionaleJson).getAsJsonArray());
+        DailyReport[] regionale = DailyReport.reportsBuilder(parser.parse(regionaleJson).getAsJsonArray());
+        DailyReport[] provinciale = DailyReport.reportsBuilder(parser.parse(provincialeJson).getAsJsonArray());
 
         this.regionale = createKeyValueList(regionale);
         this.provinciale = createKeyValueList(provinciale);
@@ -142,7 +141,7 @@ public class DPCData {
         HashMap<String, ArrayList<DailyReport>> build = new HashMap<String, ArrayList<DailyReport>>();
         //Build the reports, by field
         for (DailyReport report : reports) {
-            String currentDenominazione = report.getDenominazione();
+            String currentDenominazione = report.getGeoField() == GeoField.REGIONALE ? report.getString("denonmiazione_regione") : report.getString("denonmiazione_provincia");
             //if the array does not yet contains the current 'denominazione'
             if (!build.containsKey(currentDenominazione))
                 //create it
@@ -153,83 +152,94 @@ public class DPCData {
         return build;
     }
 
-    public class DailyReport {
-        private String data;
-        private String denominazione_regione;
-        private String denominazione_provincia;
-        private Integer ricoverati_con_sintomi;
-        private Integer terapia_intensiva;
-        private Integer isolamento_domiciliare;
-        private Integer totale_positivi;
-        private Integer variazione_totale_positivi;
-        private Integer nuovi_positivi;
-        private Integer dimessi_guariti;
-        private Integer deceduti;
-        private Integer totale_casi;
-        private Integer tamponi;
-        private Integer casi_testati;
+    /**
+     * This class contains a single daily report, obtained via italian Dipartimento di Protezione Civile.
+     * This object cannot be created individually: it has to be built by a given JsonArray, using the static method DailyReport.reportsBuilder()
+     */
+    public static class DailyReport {
 
-        public String getDenominazione() {
-            return (this.denominazione_provincia != null) ? this.denominazione_provincia : this.denominazione_regione;
+        /**
+         * The geographic territory of appartenence
+         */
+        private GeoField geoField;
+
+        /**
+         * The raw JsonObject containing data about that daily report
+         */
+        private JsonObject rawObject;
+
+        /**
+         * Returns the geographic field of appartenence of the daily report
+         * @return the geographic field (NAZIONALE, REGIONALE, PROVINCIALE)
+         */
+        public GeoField getGeoField() {
+            return geoField;
         }
 
-        public Integer getRicoverati_con_sintomi() {
-            return ricoverati_con_sintomi;
+        /**
+         * Builds an array of DailyReport by the json array string
+         * @param array array of JsonObject's
+         * @return a DailyReport array containing all the reports structured
+         */
+        public static DailyReport[] reportsBuilder(JsonArray array) {
+            DailyReport[] toReturn = new DailyReport[array.size()];
+            for (int i = 0; i < array.size(); i++) {
+                JsonObject curJsonObj = array.get(i).getAsJsonObject();
+                GeoField curField;
+                //DailyReport curDailyReport =
+                if (curJsonObj.has("denominazione_regione")) {
+                    curField = GeoField.REGIONALE;
+                } else if (curJsonObj.has("denominazione_provincia")) {
+                    curField = GeoField.PROVINCIALE;
+                } else {
+                    curField = GeoField.NAZIONALE;
+                }
+                toReturn[i] = new DailyReport(curField, curJsonObj);
+            }
+            return toReturn;
         }
 
-        public Integer getTerapia_intensiva() {
-            return terapia_intensiva;
+        /**
+         * Private constructor of a DailyReport
+         * @param geoField the geographic field of appartenance
+         * @param rawObject the raw JsonObject containing datas
+         */
+        private DailyReport(GeoField geoField, JsonObject rawObject) {
+            this.geoField = geoField;
+            this.rawObject = rawObject;
         }
 
-        public Integer getIsolamento_domiciliare() {
-            return isolamento_domiciliare;
+        /**
+         * Returns an Integer value by it's key
+         * @param key the key of the JsonObject
+         * @return the corresponding key's integer (if any, otherwise returns null)
+         */
+        public Integer getInt(String key) {
+            if (this.rawObject.has(key))
+                try {
+                    return this.rawObject.get(key).getAsInt();
+                }
+                catch (ClassCastException ex) {
+                    return null;
+                }
+            return null;
         }
 
-        public Integer getTotale_positivi() {
-            return totale_positivi;
+        /**
+         * Returns a String value by it's key
+         * @param key the key of the JsonObject
+         * @return the corresponding key's string (if any, otherwise returns null)
+         */
+        public String getString(String key) {
+            if (this.rawObject.has(key))
+                try {
+                    return this.rawObject.get(key).getAsString();
+                }
+                catch (ClassCastException ex) {
+                    return null;
+                }
+            return null;
         }
-
-        public Integer getVariazione_totale_positivi() {
-            return variazione_totale_positivi;
-        }
-
-        public Integer getNuovi_positivi() {
-            return nuovi_positivi;
-        }
-
-        public Integer getDimessi_guariti() {
-            return dimessi_guariti;
-        }
-
-        public Integer getDeceduti() {
-            return deceduti;
-        }
-
-        public Integer getTotale_casi() {
-            return totale_casi;
-        }
-
-        public Integer getTamponi() {
-            return tamponi;
-        }
-
-        public Integer getCasi_testati() {
-            return casi_testati;
-        }
-
-//        public DailyReport(String denominazione_regione, String denominazione_provincia, Integer ricoverati_con_sintomi, Integer terapia_intensiva, Integer isolamento_domiciliare, Integer totale_positivi, Integer variazione_totale_positivi, Integer nuovi_positivi, Integer dimessi_guariti, Integer deceduti, Integer totale_casi, Integer tamponi, Integer casi_testati) {
-//            this.ricoverati_con_sintomi = ricoverati_con_sintomi;
-//            this.terapia_intensiva = terapia_intensiva;
-//            this.isolamento_domiciliare = isolamento_domiciliare;
-//            this.totale_positivi = totale_positivi;
-//            this.variazione_totale_positivi = variazione_totale_positivi;
-//            this.nuovi_positivi = nuovi_positivi;
-//            this.dimessi_guariti = dimessi_guariti;
-//            this.deceduti = deceduti;
-//            this.totale_casi = totale_casi;
-//            this.tamponi = tamponi;
-//            this.casi_testati = casi_testati;
-//        }
     }
 
 }

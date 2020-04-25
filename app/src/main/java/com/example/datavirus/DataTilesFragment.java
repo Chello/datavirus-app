@@ -99,31 +99,31 @@ public class DataTilesFragment extends Fragment implements OnDPCDataReady {
     private void updateTiles(DPCData.DailyReport[] report) {
         //Set total value of last day
         TextView total = (TextView) getView().findViewById(R.id.tile_total);
-        total.setText(report[report.length -1].getTotale_casi().toString());
+        total.setText(report[report.length -1].getInt("totale_casi").toString());
         //Set total delta of last day
         TextView totalDelta = (TextView) getView().findViewById(R.id.tile_total_delta);
-        totalDelta.setText("Δ " + (report[report.length -1].getTotale_casi() - report[report.length-2].getTotale_casi()));
+        totalDelta.setText("Δ " + (report[report.length -1].getInt("totale_casi") - report[report.length-2].getInt("totale_casi")));
 
         //Set active value of last day
         TextView active = (TextView) getView().findViewById(R.id.tile_active);
-        active.setText(report[report.length -1].getTotale_positivi().toString());
+        active.setText(report[report.length -1].getInt("totale_positivi").toString());
         //Set active delta of last day
         TextView activeDelta = (TextView) getView().findViewById(R.id.tile_active_delta);
-        activeDelta.setText("Δ " + (report[report.length -1].getTotale_positivi() - report[report.length-2].getTotale_positivi()));
+        activeDelta.setText("Δ " + (report[report.length -1].getInt("totale_positivi") - report[report.length-2].getInt("totale_positivi")));
 
         //Set healed value of last day
         TextView healed = (TextView) getView().findViewById(R.id.tile_healed);
-        healed.setText(report[report.length -1].getDimessi_guariti().toString());
+        healed.setText(report[report.length -1].getInt("dimessi_guariti").toString());
         //Set healed delta of last day
         TextView healedDelta = (TextView) getView().findViewById(R.id.tile_healed_delta);
-        healedDelta.setText("Δ " + (report[report.length -1].getDimessi_guariti() - report[report.length-2].getDimessi_guariti()));
+        healedDelta.setText("Δ " + (report[report.length -1].getInt("dimessi_guariti") - report[report.length-2].getInt("dimessi_guariti")));
 
         //Set deaths value of last day
         TextView deaths = (TextView) getView().findViewById(R.id.tile_deaths);
-        deaths.setText(report[report.length -1].getDeceduti().toString());
+        deaths.setText(report[report.length -1].getInt("deceduti").toString());
         //Set deaths delta of last day
         TextView deathsDelta = (TextView) getView().findViewById(R.id.tile_deaths_delta);
-        deathsDelta.setText("Δ " + (report[report.length -1].getDeceduti() - report[report.length-2].getDeceduti()));
+        deathsDelta.setText("Δ " + (report[report.length -1].getInt("deceduti") - report[report.length-2].getInt("deceduti")));
     }
 
     @Override
