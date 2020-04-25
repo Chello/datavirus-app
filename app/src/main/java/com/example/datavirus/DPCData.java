@@ -10,6 +10,7 @@ import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,7 @@ import java.util.Set;
  * These data are structured as the italian Dipartimento della Protezione Civile JSONs are structured
  */
 
-public class DPCData {
-
+public class DPCData  {
     enum GeoField {
         NAZIONALE, REGIONALE, PROVINCIALE
     }
@@ -52,7 +52,9 @@ public class DPCData {
      */
     public ArrayList<String> getRegioniList() {
         Set s = this.regionale.keySet();
-        return new ArrayList<String>(s);
+        ArrayList<String> arr = new ArrayList<String>(s);
+        Collections.sort(arr);
+        return arr;
     }
 
     /**

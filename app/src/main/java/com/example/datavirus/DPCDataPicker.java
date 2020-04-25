@@ -13,8 +13,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -93,27 +92,35 @@ public class DPCDataPicker extends DialogFragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        RecyclerView.Adapter mAdapter = new MyAdapter(this.covidData.getProvinceList());
+        RecyclerView.Adapter mAdapter = new MyAdapter(this.covidData.getRegioniList());
         recyclerView.setAdapter(mAdapter);
     }
 
     class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-        private List<String> mDataset;
+        private ArrayList<String> mDataset;
 
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
         public class MyViewHolder extends RecyclerView.ViewHolder {
             // each data item is just a string in this case
-            public TextView textView;
-            public MyViewHolder(LinearLayout v) {
+            public TextView mainText;
+            public TextView secText;
+            public String denominazione;
+            public DPCData.GeoField geoField;
+            public MyViewHolder(LinearLayout v, String denominazione, DPCData.GeoField geoField) {
                 super(v);
-                textView = (TextView) v.findViewById(R.id.dialog_recycler_tv);
+
+                this.denominazione = denominazione;
+                this.geoField = geoField;
+
+                mainText = (TextView) v.findViewById(R.id.dialog_recycler_main);
+                secText = (TextView) v.findViewById(R.id.dialog_recycler_sec);
             }
         }
 
-        // Provide a suitable constructor (depends on the kind of dataset)
-        public MyAdapter(List<String> myDataset) {
+
+        public MyAdapter(ArrayList<String> myDataset) {
             mDataset = myDataset;
         }
 
@@ -125,7 +132,7 @@ public class DPCDataPicker extends DialogFragment {
             LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                     .inflate( R.layout.dialog_recycler_item, parent, false);
 
-            MyViewHolder vh = new MyViewHolder(v);
+            MyViewHolder vh = new MyViewHolder(v, null, null);
             return vh;
         }
 
@@ -134,7 +141,7 @@ public class DPCDataPicker extends DialogFragment {
         public void onBindViewHolder(MyViewHolder holder, int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            holder.textView.setText(mDataset.get(position));
+            holder.mainText.setText(mDataset.get(position));
 
         }
 
