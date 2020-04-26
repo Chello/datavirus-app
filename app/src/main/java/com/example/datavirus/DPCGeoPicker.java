@@ -96,7 +96,7 @@ public class DPCGeoPicker extends DialogFragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        RecyclerView.Adapter mAdapter = new DPCGeoAdapter(this.covidData.getOrderedGeoElements(), (OnDPCGeoListener) getFragmentManager().findFragmentById(R.id.data_tiles));
+        RecyclerView.Adapter mAdapter = new DPCGeoAdapter(this.covidData.getOrderedGeoElements(), (OnDPCGeoListener) getActivity());
         recyclerView.setAdapter(mAdapter);
     }
 

@@ -7,33 +7,6 @@
     android:orientation="vertical"
     android:weightSum="10">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2">
-
-        <TextView
-            android:id="@+id/data_tiles_head"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="16dp"
-            android:text="@string/data_tiles_head"
-            android:textSize="30sp"
-            app:autoSizeTextType="uniform" />
-
-        <Button
-            android:id="@+id/button_geographic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/data_tiles_head"
-            android:layout_centerHorizontal="true"
-            android:text="@string/geographicChooser"
-            android:padding="16dp"
-            android:scrollbarSize="16dp"/>
-
-    </RelativeLayout>
-
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"

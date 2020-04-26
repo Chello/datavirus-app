@@ -1,5 +1,6 @@
 package com.example.datavirus;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,7 +18,7 @@ import android.widget.TextView;
  * Use the {@link DataTilesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DataTilesFragment extends Fragment implements OnDPCDataReady, OnDPCGeoListener {
+public class DataTilesFragment extends Fragment implements OnDPCDataReady {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -66,7 +67,7 @@ public class DataTilesFragment extends Fragment implements OnDPCDataReady, OnDPC
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.data_tiles, container, false);
 
-        spinnerHandlers(v);
+        //spinnerHandlers(v);
         return v;
     }
 
@@ -75,56 +76,47 @@ public class DataTilesFragment extends Fragment implements OnDPCDataReady, OnDPC
     }
 
     /**
-     * Manages the handlers for spinners
-     * @param v the View where spinners are
-     */
-    private void spinnerHandlers(final View v) {
-        Button macrofield = (Button) v.findViewById(R.id.button_geographic);
-        macrofield.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DPCGeoPicker picker = DPCGeoPicker.newInstance(covidData);
-                //picker.setCovidData(covidData);
-                getActivity().getSupportFragmentManager().beginTransaction()
-                             .add(picker, "picker").addToBackStack(null).commit();
-            }
-        });
-    }
-
-    /**
      * Update tiles, using data passed.
      * It only uses the last two days for getting the current data and the delta
      * @param report report to use for the update
      */
-    private void updateTiles(DPCData.DailyReport[] report) {
+    public void updateTiles(DPCData.DailyReport[] report) {
+        Resources res = getResources();
         //Set total value of last day
         TextView total = (TextView) getView().findViewById(R.id.tile_total);
         total.setText(report[report.length -1].getInt("totale_casi").toString());
         //Set total delta of last day
         TextView totalDelta = (TextView) getView().findViewById(R.id.tile_total_delta);
-        totalDelta.setText("Δ " + (report[report.length -1].getInt("totale_casi") - report[report.length-2].getInt("totale_casi")));
+
+        Integer deltaTotal = report[report.length -1].getInt("totale_casi") - report[report.length-2].getInt("totale_casi");
+        totalDelta.setText(String.format(res.getString(R.string.placeholder_delta), deltaTotal));
 
         //Set active value of last day
         TextView active = (TextView) getView().findViewById(R.id.tile_active);
         active.setText(report[report.length -1].getInt("totale_positivi").toString());
         //Set active delta of last day
         TextView activeDelta = (TextView) getView().findViewById(R.id.tile_active_delta);
-        activeDelta.setText("Δ " + (report[report.length -1].getInt("totale_positivi") - report[report.length-2].getInt("totale_positivi")));
+        Integer deltaActive = report[report.length -1].getInt("totale_positivi") - report[report.length-2].getInt("totale_positivi");
+        activeDelta.setText(String.format(res.getString(R.string.placeholder_delta), deltaActive));
 
         //Set healed value of last day
         TextView healed = (TextView) getView().findViewById(R.id.tile_healed);
         healed.setText(report[report.length -1].getInt("dimessi_guariti").toString());
         //Set healed delta of last day
         TextView healedDelta = (TextView) getView().findViewById(R.id.tile_healed_delta);
-        healedDelta.setText("Δ " + (report[report.length -1].getInt("dimessi_guariti") - report[report.length-2].getInt("dimessi_guariti")));
+        Integer deltaHealed = report[report.length -1].getInt("dimessi_guariti") - report[report.length-2].getInt("dimessi_guariti");
+        healedDelta.setText(String.format(res.getString(R.string.placeholder_delta), deltaHealed));
 
         //Set deaths value of last day
         TextView deaths = (TextView) getView().findViewById(R.id.tile_deaths);
         deaths.setText(report[report.length -1].getInt("deceduti").toString());
         //Set deaths delta of last day
         TextView deathsDelta = (TextView) getView().findViewById(R.id.tile_deaths_delta);
-        deathsDelta.setText("Δ " + (report[report.length -1].getInt("deceduti") - report[report.length-2].getInt("deceduti")));
+        Integer deltaDeaths = report[report.length -1].getInt("deceduti") - report[report.length-2].getInt("deceduti");
+        deathsDelta.setText(String.format(res.getString(R.string.placeholder_delta), deltaDeaths));
     }
+
+
 
     @Override
     public void updateData(DPCData data) {
@@ -132,8 +124,4 @@ public class DataTilesFragment extends Fragment implements OnDPCDataReady, OnDPC
         this.updateTiles(data.getNazionale());
     }
 
-    @Override
-    public void onDPCGeoClick(DPCData.GeographicElement element) {
-        this.updateTiles(this.covidData.getReportFromGeoData(element));
-    }
 }

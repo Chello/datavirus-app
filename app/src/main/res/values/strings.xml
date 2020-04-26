@@ -6,6 +6,7 @@
     <string name="data_tiles_healed">Dimessi guariti</string>
     <string name="data_tiles_deaths">Deceduti</string>
     <string name="placeholder">…</string>
+    <string name="placeholder_delta">Δ %d</string>
     <string name="geographicChooser">Seleziona area geografica</string>
 
 
