@@ -73,7 +73,7 @@ public class DPCData  {
      */
     public ArrayList<GeographicElement> getOrderedGeoElements() {
         ArrayList<GeographicElement> toReturn = new ArrayList<GeographicElement>();
-        toReturn.add(new GeographicElement("Andamento nazionale", GeoField.NAZIONALE));
+        toReturn.add(new GeographicElement(GeoField.NAZIONALE));
         for (String regione : this.getRegioniList()) {
             toReturn.add(new GeographicElement(regione, GeoField.REGIONALE));
             toReturn.addAll(this.getProvinciaFromRegione(regione));
@@ -144,9 +144,10 @@ public class DPCData  {
      * @return the Provincia report
      */
     public DailyReport[] getProvincialeReport(String provincia) {
-        DailyReport[] arr = new DailyReport[this.provinciale.size()];
-        if (this.provinciale.containsKey(provincia))
-            return this.provinciale.get(provincia).toArray(arr);
+        if (this.provinciale.containsKey(provincia)) {
+            ArrayList<DailyReport> arr = this.provinciale.get(provincia);
+            return arr.toArray(new DailyReport[arr.size()]);
+        }
         return null;
     }
 
@@ -307,7 +308,7 @@ public class DPCData  {
         }
     }
 
-    public class GeographicElement {
+    public static class GeographicElement {
         private String denominazione;
         private GeoField geoField;
 
@@ -330,6 +331,11 @@ public class DPCData  {
         public GeographicElement(String denominazione, GeoField geoField) {
             this.denominazione = denominazione;
             this.geoField = geoField;
+        }
+
+        public GeographicElement(GeoField geoField) {
+            this.geoField = geoField;
+            this.denominazione = "Nazionale";
         }
     }
 

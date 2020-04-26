@@ -4,7 +4,6 @@
 
 package com.example.datavirus;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -46,7 +45,7 @@ public class DataParser {
         if (this.repositoryData == null) {
             this.refreshData();
         } else {
-            this.UI.updateData(this.repositoryData);
+            this.UI.setReport(this.repositoryData);
         }
     }
 
@@ -63,7 +62,7 @@ public class DataParser {
             super.onPostExecute(jsonArray);
             repositoryData = new DPCData(jsonArray[0], jsonArray[1], jsonArray[2]);
             dialog.dismiss();
-            UI.updateData(repositoryData);
+            UI.setReport(repositoryData);
         }
 
         @Override

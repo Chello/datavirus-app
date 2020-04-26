@@ -1,8 +1,10 @@
 package com.example.datavirus;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -13,53 +15,21 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DataTilesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class DataTilesFragment extends Fragment implements OnDPCDataReady {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class DataTilesFragment extends DataSingleTileFragment {
 
-    private DataParser parser;
-    private DPCData covidData;
-
-    public DataTilesFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BlankFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DataTilesFragment newInstance(String param1, String param2) {
-        DataTilesFragment fragment = new DataTilesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private static final String TOTAL = "total";
+    private static final String TOTAL_DELTA = "total_delta";
+    private static final String ACTIVE = "active";
+    private static final String ACTIVE_DELTA = "active_delta";
+    private static final String HEALED = "healed";
+    private static final String HEALED_DELTA = "healed_delta";
+    private static final String DEATHS = "deaths";
+    private static final String DEATHS_DELTA = "deaths_delta";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -67,12 +37,30 @@ public class DataTilesFragment extends Fragment implements OnDPCDataReady {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.data_tiles, container, false);
 
-        //spinnerHandlers(v);
+        if (getArguments() != null) {
+            updateTiles(v, getArguments());
+        }
         return v;
     }
 
-    private void setRegionaleSpinner() {
+    public static DataTilesFragment newInstance(DPCData.DailyReport[] report) {
 
+        Bundle args = new Bundle();
+        args.putInt(TOTAL, report[report.length -1].getInt("totale_casi"));
+        args.putInt(TOTAL_DELTA, report[report.length -1].getInt("totale_casi") - report[report.length-2].getInt("totale_casi"));
+
+        args.putInt(ACTIVE, report[report.length -1].getInt("totale_positivi"));
+        args.putInt(ACTIVE_DELTA, report[report.length -1].getInt("totale_positivi") - report[report.length-2].getInt("totale_positivi"));
+
+        args.putInt(HEALED, report[report.length -1].getInt("dimessi_guariti"));
+        args.putInt(HEALED_DELTA, report[report.length -1].getInt("dimessi_guariti") - report[report.length-2].getInt("dimessi_guariti"));
+
+        args.putInt(DEATHS, report[report.length -1].getInt("deceduti"));
+        args.putInt(DEATHS_DELTA, report[report.length -1].getInt("deceduti") - report[report.length-2].getInt("deceduti"));
+
+        DataTilesFragment fragment = new DataTilesFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     /**
@@ -80,48 +68,36 @@ public class DataTilesFragment extends Fragment implements OnDPCDataReady {
      * It only uses the last two days for getting the current data and the delta
      * @param report report to use for the update
      */
-    public void updateTiles(DPCData.DailyReport[] report) {
+    protected void updateTiles(View v, Bundle b) {
+        super.updateTiles(v, b);
         Resources res = getResources();
-        //Set total value of last day
-        TextView total = (TextView) getView().findViewById(R.id.tile_total);
-        total.setText(report[report.length -1].getInt("totale_casi").toString());
-        //Set total delta of last day
-        TextView totalDelta = (TextView) getView().findViewById(R.id.tile_total_delta);
-
-        Integer deltaTotal = report[report.length -1].getInt("totale_casi") - report[report.length-2].getInt("totale_casi");
-        totalDelta.setText(String.format(res.getString(R.string.placeholder_delta), deltaTotal));
 
         //Set active value of last day
-        TextView active = (TextView) getView().findViewById(R.id.tile_active);
-        active.setText(report[report.length -1].getInt("totale_positivi").toString());
+        TextView active = (TextView) v.findViewById(R.id.tile_active);
+        active.setText(String.format(res.getString(R.string.placeholder_decimal), b.getInt(ACTIVE)));
         //Set active delta of last day
-        TextView activeDelta = (TextView) getView().findViewById(R.id.tile_active_delta);
-        Integer deltaActive = report[report.length -1].getInt("totale_positivi") - report[report.length-2].getInt("totale_positivi");
-        activeDelta.setText(String.format(res.getString(R.string.placeholder_delta), deltaActive));
+        TextView activeDelta = (TextView) v.findViewById(R.id.tile_active_delta);
+        activeDelta.setText(String.format(res.getString(R.string.placeholder_delta), b.getInt(ACTIVE_DELTA)));
 
         //Set healed value of last day
-        TextView healed = (TextView) getView().findViewById(R.id.tile_healed);
-        healed.setText(report[report.length -1].getInt("dimessi_guariti").toString());
+        TextView healed = (TextView) v.findViewById(R.id.tile_healed);
+        healed.setText(String.format(res.getString(R.string.placeholder_decimal), b.getInt(HEALED)));
         //Set healed delta of last day
-        TextView healedDelta = (TextView) getView().findViewById(R.id.tile_healed_delta);
-        Integer deltaHealed = report[report.length -1].getInt("dimessi_guariti") - report[report.length-2].getInt("dimessi_guariti");
-        healedDelta.setText(String.format(res.getString(R.string.placeholder_delta), deltaHealed));
+        TextView healedDelta = (TextView) v.findViewById(R.id.tile_healed_delta);
+        healedDelta.setText(String.format(res.getString(R.string.placeholder_delta), b.getInt(HEALED_DELTA)));
 
         //Set deaths value of last day
-        TextView deaths = (TextView) getView().findViewById(R.id.tile_deaths);
-        deaths.setText(report[report.length -1].getInt("deceduti").toString());
+        TextView deaths = (TextView) v.findViewById(R.id.tile_deaths);
+        deaths.setText(String.format(res.getString(R.string.placeholder_decimal), b.getInt(DEATHS)));
         //Set deaths delta of last day
-        TextView deathsDelta = (TextView) getView().findViewById(R.id.tile_deaths_delta);
-        Integer deltaDeaths = report[report.length -1].getInt("deceduti") - report[report.length-2].getInt("deceduti");
-        deathsDelta.setText(String.format(res.getString(R.string.placeholder_delta), deltaDeaths));
+        TextView deathsDelta = (TextView) v.findViewById(R.id.tile_deaths_delta);
+        deathsDelta.setText(String.format(res.getString(R.string.placeholder_delta), b.getInt(DEATHS_DELTA)));
     }
 
-
-
-    @Override
-    public void updateData(DPCData data) {
-        this.covidData = data;
-        this.updateTiles(data.getNazionale());
-    }
+//    public void setReport(DPCData.DailyReport[] report) {
+//        this.report = report;
+//        if (getContext() != null)
+//            this.updateTiles(report);
+//    }
 
 }

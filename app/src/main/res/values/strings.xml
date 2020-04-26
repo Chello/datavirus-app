@@ -1,13 +1,14 @@
 <resources>
     <string name="app_name">DataVirus.it</string>
-    <string name="data_tiles_head">Conteggio dati</string>
+    <string name="data_tiles_head">Conteggio dati %s</string>
     <string name="data_tiles_total">Casi totali</string>
     <string name="data_tiles_active">Casi attuali</string>
     <string name="data_tiles_healed">Dimessi guariti</string>
     <string name="data_tiles_deaths">Deceduti</string>
-    <string name="placeholder">…</string>
+    <string name="placeholder_decimal">%d</string>
     <string name="placeholder_delta">Δ %d</string>
     <string name="geographicChooser">Seleziona area geografica</string>
+    <string name="national">Nazionale</string>
 
 
     <string-array name="macrofields">

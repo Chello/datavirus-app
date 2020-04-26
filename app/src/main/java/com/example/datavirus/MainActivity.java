@@ -1,18 +1,11 @@
 package com.example.datavirus;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import org.json.JSONArray;
 
 public class MainActivity extends AppCompatActivity implements OnDPCDataReady, OnDPCGeoListener {
 
@@ -24,23 +17,28 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.parser = new DataParser(getSupportFragmentManager(), this);
-        spinnerHandlers();
+        buttonHandler();
     }
 
     @Override
-    public void updateData(DPCData data) {
+    public void setReport(DPCData data) {
         this.covidData = data;
+        //Setting nationals values
+        DataTilesFragment frg = DataTilesFragment.newInstance(this.covidData.getNazionale());
 
-        DataTilesFragment fragment = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.data_tiles);
-        fragment.updateData(data);
-        Log.d("Backstack", getSupportFragmentManager().toString());
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.data_tiles, frg)
+                .commit();
+
+        this.updateTitle(new DPCData.GeographicElement(DPCData.GeoField.NAZIONALE));
     }
+
     /**
-     * Manages the handlers for spinners
-     * @param v the View where spinners are
+     * Manages the handlers for buttons
      */
-    private void spinnerHandlers() {
+    private void buttonHandler() {
         Button macrofield = (Button) findViewById(R.id.button_geographic);
+        //TODO check lambda
         macrofield.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +52,28 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
 
     @Override
     public void onDPCGeoClick(DPCData.GeographicElement element) {
-        DataTilesFragment frg = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.data_tiles);
-        frg.updateTiles(this.covidData.getReportFromGeoData(element));
+        //DataSingleTileFragment frg = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.data_tiles);
+        DataSingleTileFragment newFragment;
+
+        if (element.getGeoField() == DPCData.GeoField.PROVINCIALE) { //If it is a Provincia, so there will be only one tile (use DataSingleTileFragment)
+            newFragment = DataSingleTileFragment.newInstance(this.covidData.getProvincialeReport(element.getDenominazione()));
+        } else { //Otherwise is a Regionale o Nazionale, so there will be all tiles
+            newFragment = DataTilesFragment.newInstance(this.covidData.getReportFromGeoData(element));
+        }
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.data_tiles, newFragment)
+                .commit();
+        //transaction.addToBackStack(null);
+
+
+        //newFragment.setReport(this.covidData.getReportFromGeoData(element));
+        this.updateTitle(element);
     }
+
+    private void updateTitle(DPCData.GeographicElement element) {
+        TextView head = (TextView) findViewById(R.id.data_tiles_head);
+        head.setText(String.format(getResources().getString(R.string.data_tiles_head), element.getDenominazione()));
+    }
+
 }
