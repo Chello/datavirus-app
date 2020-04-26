@@ -11,7 +11,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/data_tiles_head"
@@ -24,6 +25,7 @@
             app:autoSizeTextType="uniform" />
 
         <Button
+
             android:id="@+id/button_geographic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,13 +37,14 @@
 
     </RelativeLayout>
 
-    <fragment
-        android:layout_weight="8"
+    <ScrollView
+        android:orientation="vertical"
+        android:layout_weight="9"
         android:id="@+id/data_tiles"
-        android:name="com.example.datavirus.DataTilesFragment"
+
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
-    </fragment>
+    </ScrollView>
 
 </LinearLayout>
