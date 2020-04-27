@@ -125,10 +125,60 @@ public class DPCGeoPicker extends DialogFragment {
     }
 
     class DPCGeoAdapter extends RecyclerView.Adapter<DPCGeoAdapter.DPCGeoHolder> implements Filterable {
-
+        /**
+         * All geo elements
+         */
         private ArrayList<DPCData.GeographicElement> geoElements;
+        /**
+         * List for searching elements
+         */
         private ArrayList<DPCData.GeographicElement> searchList;
+        /**
+         * Listener for onclick items
+         */
         private OnDPCGeoListener listener;
+
+        /**
+         * Filter for search an item by SearchView
+         */
+        private Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                ArrayList<DPCData.GeographicElement> filteredList = new ArrayList<>();
+                Resources res = getResources();
+
+                if (constraint == null || constraint.length() == 0) {
+                    filteredList.addAll(searchList);
+                } else {
+                    //Adjusting filter pattern
+                    String filterPatter = constraint.toString().toLowerCase().trim();
+                    //for each item check if searched pattern corresponds
+                    for (DPCData.GeographicElement elem : searchList) {
+                        //Creating string with both definizione and Geographic field concat
+                        String toSearchFor = elem.getDenominazione().toLowerCase().trim();
+                        if (elem.getGeoField() == DPCData.GeoField.REGIONALE)
+                            toSearchFor += res.getString(R.string.region).toLowerCase();
+                        else if (elem.getGeoField() == DPCData.GeoField.PROVINCIALE)
+                            toSearchFor += res.getString(R.string.province).toLowerCase();
+
+                        //If this string contains what user searched...
+                        if (toSearchFor.contains(filterPatter)) {
+                            filteredList.add(elem); //Add to return list
+                        }
+                    }
+                }
+                FilterResults toReturn = new FilterResults();
+                toReturn.values = filteredList;
+                return toReturn;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                geoElements.clear();
+                geoElements.addAll((ArrayList) results.values);
+                notifyDataSetChanged();
+            }
+        };
 
         public DPCGeoAdapter(ArrayList<DPCData.GeographicElement> list, OnDPCGeoListener listener) {
             this.geoElements = list;
@@ -184,51 +234,9 @@ public class DPCGeoPicker extends DialogFragment {
             return filter;
         }
 
-        private Filter filter = new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                ArrayList<DPCData.GeographicElement> filteredList = new ArrayList<>();
-                Resources res = getResources();
-
-                if (constraint == null || constraint.length() == 0) {
-                    filteredList.addAll(searchList);
-                } else {
-                    String filterPatter = constraint.toString().toLowerCase().trim();
-
-                    //for each item check if searched pattern corresponds
-                    for (DPCData.GeographicElement elem : searchList) {
-                        //If search pattern matches with some of the items' denominazione, add these string to list
-                        String toSearchFor = elem.getDenominazione().toLowerCase().trim();
-
-                        if (elem.getGeoField() == DPCData.GeoField.REGIONALE)
-                            toSearchFor += res.getString(R.string.region).toLowerCase();
-                        else if (elem.getGeoField() == DPCData.GeoField.PROVINCIALE)
-                            toSearchFor += res.getString(R.string.province).toLowerCase();
-
-                        Log.d("toSearchFor", toSearchFor);
-
-                        if (toSearchFor.contains(filterPatter)) {
-//                            ( && res.getString(R.string.region).toLowerCase().contains(filterPatter)) ){ //||
-////                            res.getString(R.string.region).toLowerCase().contains(filterPatter)) {
-
-                            //Log.d("Search: ", "is " + filterPatter + " in " + res.getString(R.string.region).toLowerCase() + "? " + Boolean.toString(res.getString(R.string.region).toLowerCase().contains(filterPatter)));
-                            filteredList.add(elem);
-                        }
-                    }
-                }
-                FilterResults toReturn = new FilterResults();
-                toReturn.values = filteredList;
-                return toReturn;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                 geoElements.clear();
-                 geoElements.addAll((ArrayList) results.values);
-                 notifyDataSetChanged();
-            }
-        };
-
+        /**
+         * Holder for the click listener
+         */
         public class DPCGeoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             public TextView mainText;
             public TextView secText;
