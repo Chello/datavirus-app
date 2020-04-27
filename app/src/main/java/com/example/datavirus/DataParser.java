@@ -51,6 +51,8 @@ public class DataParser {
 
     private class AsyncDownloader  extends AsyncTask<String, Integer, String[]> {
 
+        private Exception excp;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -60,9 +62,15 @@ public class DataParser {
         @Override
         protected void onPostExecute(String[] jsonArray) {
             super.onPostExecute(jsonArray);
-            repositoryData = new DPCData(jsonArray[0], jsonArray[1], jsonArray[2]);
-            dialog.dismiss();
-            UI.setReport(repositoryData);
+            //if download has failed
+            if (this.excp != null) {
+                dialog.setError(this.excp);
+                return;
+            } else {
+                dialog.dismiss();
+                repositoryData = new DPCData(jsonArray[0], jsonArray[1], jsonArray[2]);
+                UI.setReport(repositoryData);
+            }
         }
 
         @Override
@@ -76,10 +84,12 @@ public class DataParser {
 
                 return arr;
             } catch (IOException e) {
+                this.excp = e;
                 Log.e("DataParser", "JSON download error");
                 e.printStackTrace();
                 return null;
             } catch (JSONException e) {
+                this.excp = e;
                 Log.e("DataParser", "JSON parse error");
                 e.printStackTrace();
                 return null;

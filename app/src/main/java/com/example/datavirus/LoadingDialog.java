@@ -1,9 +1,13 @@
 package com.example.datavirus;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -70,9 +74,26 @@ public class LoadingDialog extends DialogFragment {
         return inflater.inflate(R.layout.fragment_loading_dialog, container, false);
     }
 
+    @NonNull
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        return super.onCreateDialog(savedInstanceState);
+    }
 
+    public void setError(Exception e) {
+        this.dismiss();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(R.string.loading_error)
+//                .setPositiveButton(R.string.fire, new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        // FIRE ZE MISSILES!
+//                    }
+//                })
+                .setNegativeButton(R.string.close_app, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        getActivity().finishAndRemoveTask();
+                    }
+                });
+        builder.create().show();
     }
 }

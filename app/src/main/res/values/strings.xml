@@ -11,6 +11,8 @@
     <string name="national">Nazionale</string>
     <string name="region">Regione</string>
     <string name="province">Provincia</string>
+    <string name="loading_error">Errore nel download dei dati dal repository GitHub del Dipartimento di Protezione Civile. Riprovare piú tardi.</string>
+    <string name="close_app">Chiudi DataVirus</string>
 
 
     <string-array name="macrofields">
