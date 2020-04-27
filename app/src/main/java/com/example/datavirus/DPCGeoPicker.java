@@ -1,5 +1,6 @@
 package com.example.datavirus;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -13,12 +14,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.datavirus.OnDPCGeoListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -35,6 +40,7 @@ public class DPCGeoPicker extends DialogFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private DPCGeoAdapter adapter;
 
     private DPCData covidData;
 
@@ -79,6 +85,7 @@ public class DPCGeoPicker extends DialogFragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_d_p_c_data_picker, container, false);
         this.populateRecycler(v);
+        this.setUpSearchView(v);
         return v;
     }
 
@@ -96,17 +103,36 @@ public class DPCGeoPicker extends DialogFragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        RecyclerView.Adapter mAdapter = new DPCGeoAdapter(this.covidData.getOrderedGeoElements(), (OnDPCGeoListener) getActivity());
-        recyclerView.setAdapter(mAdapter);
+        this.adapter = new DPCGeoAdapter(this.covidData.getOrderedGeoElements(), (OnDPCGeoListener) getActivity());
+        recyclerView.setAdapter(this.adapter);
     }
 
-    class DPCGeoAdapter extends RecyclerView.Adapter<DPCGeoAdapter.DPCGeoHolder> {
+    private void setUpSearchView(View v) {
+        SearchView searchView = (SearchView) v.findViewById(R.id.action_search);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+    }
+
+    class DPCGeoAdapter extends RecyclerView.Adapter<DPCGeoAdapter.DPCGeoHolder> implements Filterable {
 
         private ArrayList<DPCData.GeographicElement> geoElements;
+        private ArrayList<DPCData.GeographicElement> searchList;
         private OnDPCGeoListener listener;
 
-        public DPCGeoAdapter(ArrayList<DPCData.GeographicElement> myDataset, OnDPCGeoListener listener) {
-            this.geoElements = myDataset;
+        public DPCGeoAdapter(ArrayList<DPCData.GeographicElement> list, OnDPCGeoListener listener) {
+            this.geoElements = list;
+            this.searchList = new ArrayList<>(list);
             this.listener = listener;
         }
 
@@ -125,13 +151,14 @@ public class DPCGeoPicker extends DialogFragment {
         // Replace the contents of a view (invoked by the layout manager)
         @Override
         public void onBindViewHolder(DPCGeoHolder holder, int position) {
+            Resources res = getResources();
             DPCData.GeographicElement current = geoElements.get(position);
             if (current.getGeoField() == DPCData.GeoField.REGIONALE) {
-                holder.mainText.setText("Regione");
+                holder.mainText.setText(res.getText(R.string.region));
                 holder.mainText.setTextColor(Color.BLUE);
                 holder.mainText.setTypeface(holder.mainText.getTypeface(), Typeface.NORMAL);
             } else if (current.getGeoField() == DPCData.GeoField.PROVINCIALE) {
-                holder.mainText.setText("Provincia");
+                holder.mainText.setText(res.getText(R.string.province));
                 holder.mainText.setTextColor(Color.GREEN);
                 holder.mainText.setTypeface(holder.mainText.getTypeface(), Typeface.NORMAL);
             }
@@ -151,6 +178,57 @@ public class DPCGeoPicker extends DialogFragment {
         public int getItemCount() {
             return this.geoElements.size();
         }
+
+        @Override
+        public Filter getFilter() {
+            return filter;
+        }
+
+        private Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                ArrayList<DPCData.GeographicElement> filteredList = new ArrayList<>();
+                Resources res = getResources();
+
+                if (constraint == null || constraint.length() == 0) {
+                    filteredList.addAll(searchList);
+                } else {
+                    String filterPatter = constraint.toString().toLowerCase().trim();
+
+                    //for each item check if searched pattern corresponds
+                    for (DPCData.GeographicElement elem : searchList) {
+                        //If search pattern matches with some of the items' denominazione, add these string to list
+                        String toSearchFor = elem.getDenominazione().toLowerCase().trim();
+
+                        if (elem.getGeoField() == DPCData.GeoField.REGIONALE)
+                            toSearchFor += res.getString(R.string.region).toLowerCase();
+                        else if (elem.getGeoField() == DPCData.GeoField.PROVINCIALE)
+                            toSearchFor += res.getString(R.string.province).toLowerCase();
+
+                        Log.d("toSearchFor", toSearchFor);
+
+                        if (toSearchFor.contains(filterPatter)) {
+//                            ( && res.getString(R.string.region).toLowerCase().contains(filterPatter)) ){ //||
+////                            res.getString(R.string.region).toLowerCase().contains(filterPatter)) {
+
+                            //Log.d("Search: ", "is " + filterPatter + " in " + res.getString(R.string.region).toLowerCase() + "? " + Boolean.toString(res.getString(R.string.region).toLowerCase().contains(filterPatter)));
+                            filteredList.add(elem);
+                        }
+                    }
+                }
+                FilterResults toReturn = new FilterResults();
+                toReturn.values = filteredList;
+                return toReturn;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                 geoElements.clear();
+                 geoElements.addAll((ArrayList) results.values);
+                 notifyDataSetChanged();
+            }
+        };
+
         public class DPCGeoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             public TextView mainText;
             public TextView secText;

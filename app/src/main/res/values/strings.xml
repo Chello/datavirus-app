@@ -9,6 +9,8 @@
     <string name="placeholder_delta">Δ %d</string>
     <string name="geographicChooser">Seleziona area geografica</string>
     <string name="national">Nazionale</string>
+    <string name="region">Regione</string>
+    <string name="province">Provincia</string>
 
 
     <string-array name="macrofields">
