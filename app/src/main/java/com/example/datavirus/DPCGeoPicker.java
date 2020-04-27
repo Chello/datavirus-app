@@ -33,14 +33,7 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class DPCGeoPicker extends DialogFragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private DPCGeoAdapter adapter;
 
     private DPCData covidData;
@@ -71,35 +64,30 @@ public class DPCGeoPicker extends DialogFragment {
         return fragment;
     }
 
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        View v = getActivity().getLayoutInflater().inflate(R.layout.fragment_d_p_c_data_picker, null, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_d_p_c_data_picker, null, false);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(v).setTitle(R.string.geo_picker_title)
-            .setPositiveButton("R.string.fire", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // FIRE ZE MISSILES!
-            }})
-            .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
-                    }
-                });
+        builder.setView(v).setTitle(R.string.geo_picker_title);
 
         this.populateRecycler(v);
         this.setUpSearchView(v);
-        return builder.create();
+        return v;
+
     }
+
+//    @NonNull
+//    @Override
+//    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+//        View v = getActivity().getLayoutInflater().inflate(R.layout.fragment_d_p_c_data_picker, null, false);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        builder.setView(v).setTitle(R.string.geo_picker_title);
+//
+//        this.populateRecycler(v);
+//        this.setUpSearchView(v);
+//        return builder.create();
+//    }
 
     private void populateRecycler(View v) {
         if (v == null) v = getView();
@@ -247,14 +235,16 @@ public class DPCGeoPicker extends DialogFragment {
         public class DPCGeoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             public TextView mainText;
             public TextView secText;
+            public LinearLayout container;
             private OnDPCGeoListener listener;
 
             public DPCGeoHolder(LinearLayout v, OnDPCGeoListener listener) {
                 super(v);
                 this.listener = listener;
                 v.setOnClickListener(this);
-                mainText = (TextView) v.findViewById(R.id.dialog_recycler_main);
-                secText = (TextView) v.findViewById(R.id.dialog_recycler_sec);
+                this.mainText = (TextView) v.findViewById(R.id.dialog_recycler_main);
+                this.secText = (TextView) v.findViewById(R.id.dialog_recycler_sec);
+                this.container = (LinearLayout) v.findViewById(R.id.recycler_container);
             }
 
             @Override
