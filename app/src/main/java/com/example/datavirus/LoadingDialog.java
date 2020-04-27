@@ -51,6 +51,7 @@ public class LoadingDialog extends DialogFragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +59,13 @@ public class LoadingDialog extends DialogFragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getDialog().setCanceledOnTouchOutside(false);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_loading_dialog, container, false);
     }
