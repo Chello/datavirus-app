@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import org.json.*;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
@@ -88,15 +89,10 @@ public class DataParser {
                 Log.e("DataParser", "JSON download error");
                 e.printStackTrace();
                 return null;
-            } catch (JSONException e) {
-                this.excp = e;
-                Log.e("DataParser", "JSON parse error");
-                e.printStackTrace();
-                return null;
             }
         }
 
-        private String retrieveJSONFromUrl(String Url) throws IOException, JSONException {
+        private String retrieveJSONFromUrl(String Url) throws IOException {
             //Download json from source URL
             Scanner scanner = new Scanner(new URL(Url).openStream(), StandardCharsets.UTF_8.toString());
             scanner.useDelimiter("\\A");

@@ -1,16 +1,20 @@
 package com.example.datavirus;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.example.datavirus.OnDPCGeoListener;
-
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -79,30 +80,36 @@ public class DPCGeoPicker extends DialogFragment {
         }
     }
 
+    @NonNull
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_d_p_c_data_picker, container, false);
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        View v = getActivity().getLayoutInflater().inflate(R.layout.fragment_d_p_c_data_picker, null, false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(v).setTitle(R.string.geo_picker_title)
+            .setPositiveButton("R.string.fire", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // FIRE ZE MISSILES!
+            }})
+            .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+
         this.populateRecycler(v);
         this.setUpSearchView(v);
-        return v;
+        return builder.create();
     }
 
     private void populateRecycler(View v) {
         if (v == null) v = getView();
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        // specify an adapter (see also next example)
         this.adapter = new DPCGeoAdapter(this.covidData.getOrderedGeoElements(), (OnDPCGeoListener) getActivity());
         recyclerView.setAdapter(this.adapter);
     }
