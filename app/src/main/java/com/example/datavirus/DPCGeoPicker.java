@@ -53,7 +53,6 @@ public class DPCGeoPicker extends DialogFragment {
      * this fragment using the provided parameters.
      * @return A new instance of fragment DPCDataPicker.
      */
-    // TODO: Rename and change types and number of parameters
     public static DPCGeoPicker newInstance(DPCData covidData) {
         DPCGeoPicker fragment = new DPCGeoPicker();
         fragment.setCovidData(covidData);

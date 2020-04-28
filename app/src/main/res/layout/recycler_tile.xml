@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_columnWeight="1"
     android:layout_margin="10dp"
-    app:cardBackgroundColor="@android:color/holo_red_dark"
+    app:cardBackgroundColor="@android:color/darker_gray"
     app:cardCornerRadius="6dp"
     app:cardElevation="8dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -25,7 +25,6 @@
             android:layout_gravity="center"
             android:layout_marginBottom="2dp"
             android:layout_weight="3"
-            android:text="@string/data_tiles_deaths"
             android:textAlignment="center"
             android:textColor="@android:color/black"
             android:textSize="18sp" />

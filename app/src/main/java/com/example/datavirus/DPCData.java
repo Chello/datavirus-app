@@ -33,10 +33,11 @@ public class DPCData  {
     /**
      * List of keys to exclude from a DailyReport but in a Json exists
      */
-    private static List<String> excludeList = Arrays.asList("note_en", "note_it", "lat","long", "stato", "sigla_provincia",
+    public static List<String> excludeList = Arrays.asList("note_en", "note_it", "lat","long", "stato", "sigla_provincia",
             "denominazione_provincia", "codice_provincia",
             "denominazione_regione", "codice_regione", "In fase di definizione/aggiornamento");
 
+    //private static List<String> excludeList;
     private Gson gson;
     //Reports for territorial data
     private DailyReport[] nazionale;
@@ -332,7 +333,7 @@ public class DPCData  {
                 try {
                     return this.rawObject.get(key).getAsString();
                 }
-                catch (ClassCastException ex) {
+                catch (Exception ex) {
                     return null;
                 }
             return null;

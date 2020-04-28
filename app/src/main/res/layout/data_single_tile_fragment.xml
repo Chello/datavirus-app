@@ -30,7 +30,7 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="3"
-                android:text="@string/data_tiles_total"
+                android:text="@string/data_total"
                 android:textAlignment="center"
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />

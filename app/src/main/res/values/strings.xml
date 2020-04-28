@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">DataVirus.it</string>
     <string name="data_tiles_head">Conteggio dati %s</string>
-    <string name="data_tiles_total">Casi totali</string>
-    <string name="data_tiles_active">Casi attuali</string>
-    <string name="data_tiles_healed">Dimessi guariti</string>
-    <string name="data_tiles_deaths">Deceduti</string>
+    <string name="data_total">totale_casi</string>
+    <string name="data_active">totale_positivi</string>
+    <string name="data_healed">dimessi_guariti</string>
+    <string name="data_deaths">deceduti</string>
     <string name="placeholder_decimal">%d</string>
     <string name="placeholder_delta">Δ %d</string>
     <string name="geographicChooser">Seleziona area geografica</string>
@@ -20,6 +20,20 @@
         <item>Nazionale</item>
         <item>Regionale</item>
         <item>Provinciale</item>
+    </string-array>
+
+    <string-array name="fields_exclude_list">
+        <item>note_en</item>
+        <item>note_it</item>
+        <item>lat</item>
+        <item>long</item>
+        <item>stato</item>
+        <item>sigla_provincia</item>
+        <item>denominazione_provincia</item>
+        <item>codice_provincia</item>
+        <item>denominazione_regione</item>
+        <item>codice_regione</item>
+        <item>In fase di definizione/aggiornamento</item>
     </string-array>
 
     <string name="loading">Scaricamento dei dati dal repository del Dipartimento di Protezione Civile</string>
