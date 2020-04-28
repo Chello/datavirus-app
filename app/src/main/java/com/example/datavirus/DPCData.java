@@ -316,7 +316,7 @@ public class DPCData  {
                 try {
                     return this.rawObject.get(key).getAsInt();
                 }
-                catch (ClassCastException ex) {
+                catch (Exception ex) {
                     return null;
                 }
             return null;

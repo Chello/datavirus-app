@@ -15,14 +15,14 @@ import android.widget.TextView;
 
 public class DataTilesFragment extends DataSingleTileFragment {
 
-    private static final String TOTAL = "total";
-    private static final String TOTAL_DELTA = "total_delta";
-    private static final String ACTIVE = "active";
-    private static final String ACTIVE_DELTA = "active_delta";
-    private static final String HEALED = "healed";
-    private static final String HEALED_DELTA = "healed_delta";
-    private static final String DEATHS = "deaths";
-    private static final String DEATHS_DELTA = "deaths_delta";
+//    private static final String TOTAL = "total";
+//    private static final String TOTAL_DELTA = "total_delta";
+//    private static final String ACTIVE = "active";
+//    private static final String ACTIVE_DELTA = "active_delta";
+//    private static final String HEALED = "healed";
+//    private static final String HEALED_DELTA = "healed_delta";
+//    private static final String DEATHS = "deaths";
+//    private static final String DEATHS_DELTA = "deaths_delta";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,20 +40,28 @@ public class DataTilesFragment extends DataSingleTileFragment {
         return v;
     }
 
-    public static DataTilesFragment newInstance(DPCData.DailyReport[] report) {
-
+    public static DataTilesFragment newInstance(DPCData.DailyReport[] reports) {
         Bundle args = new Bundle();
-        args.putInt(TOTAL, report[report.length -1].getInt("totale_casi"));
-        args.putInt(TOTAL_DELTA, report[report.length -1].getInt("totale_casi") - report[report.length-2].getInt("totale_casi"));
+        Integer last = reports.length -1;
+        Integer lastLast = reports.length -2;
 
-        args.putInt(ACTIVE, report[report.length -1].getInt("totale_positivi"));
-        args.putInt(ACTIVE_DELTA, report[report.length -1].getInt("totale_positivi") - report[report.length-2].getInt("totale_positivi"));
+        for (String key : reports[last].getKeys()) {
+            if (reports[last].getInt(key) != null) {
+                args.putInt(key, reports[last].getInt(key));
+                args.putInt(key + "_delta", reports[last].getInt(key) - reports[lastLast].getInt(key));
+            }
+        }
+//        args.putInt(TOTAL, report[report.length -1].getInt("totale_casi"));
+//        args.putInt(TOTAL_DELTA, report[report.length -1].getInt("totale_casi") - report[report.length-2].getInt("totale_casi"));
+//
+//        args.putInt(ACTIVE, report[report.length -1].getInt("totale_positivi"));
+//        args.putInt(ACTIVE_DELTA, report[report.length -1].getInt("totale_positivi") - report[report.length-2].getInt("totale_positivi"));
+//
+//        args.putInt(HEALED, report[report.length -1].getInt("dimessi_guariti"));
+//        args.putInt(HEALED_DELTA, report[report.length -1].getInt("dimessi_guariti") - report[report.length-2].getInt("dimessi_guariti"));
 
-        args.putInt(HEALED, report[report.length -1].getInt("dimessi_guariti"));
-        args.putInt(HEALED_DELTA, report[report.length -1].getInt("dimessi_guariti") - report[report.length-2].getInt("dimessi_guariti"));
-
-        args.putInt(DEATHS, report[report.length -1].getInt("deceduti"));
-        args.putInt(DEATHS_DELTA, report[report.length -1].getInt("deceduti") - report[report.length-2].getInt("deceduti"));
+//        args.putInt(DEATHS, report[report.length -1].getInt("deceduti"));
+//        args.putInt(DEATHS_DELTA, report[report.length -1].getInt("deceduti") - report[report.length-2].getInt("deceduti"));
 
         DataTilesFragment fragment = new DataTilesFragment();
         fragment.setArguments(args);
@@ -71,24 +79,24 @@ public class DataTilesFragment extends DataSingleTileFragment {
 
         //Set active value of last day
         TextView active = (TextView) v.findViewById(R.id.tile_active);
-        active.setText(String.format(res.getString(R.string.placeholder_decimal), b.getInt(ACTIVE)));
+        active.setText(String.format(res.getString(R.string.placeholder_decimal), b.getInt("totale_positivi")));
         //Set active delta of last day
         TextView activeDelta = (TextView) v.findViewById(R.id.tile_active_delta);
-        activeDelta.setText(String.format(res.getString(R.string.placeholder_delta), b.getInt(ACTIVE_DELTA)));
+        activeDelta.setText(String.format(res.getString(R.string.placeholder_delta), b.getInt("totale_positivi_delta")));
 
         //Set healed value of last day
         TextView healed = (TextView) v.findViewById(R.id.tile_healed);
-        healed.setText(String.format(res.getString(R.string.placeholder_decimal), b.getInt(HEALED)));
+        healed.setText(String.format(res.getString(R.string.placeholder_decimal), b.getInt("dimessi_guariti")));
         //Set healed delta of last day
         TextView healedDelta = (TextView) v.findViewById(R.id.tile_healed_delta);
-        healedDelta.setText(String.format(res.getString(R.string.placeholder_delta), b.getInt(HEALED_DELTA)));
+        healedDelta.setText(String.format(res.getString(R.string.placeholder_delta), b.getInt("dimessi_guariti_delta")));
 
         //Set deaths value of last day
         TextView deaths = (TextView) v.findViewById(R.id.tile_deaths);
-        deaths.setText(String.format(res.getString(R.string.placeholder_decimal), b.getInt(DEATHS)));
+        deaths.setText(String.format(res.getString(R.string.placeholder_decimal), b.getInt("deceduti")));
         //Set deaths delta of last day
         TextView deathsDelta = (TextView) v.findViewById(R.id.tile_deaths_delta);
-        deathsDelta.setText(String.format(res.getString(R.string.placeholder_delta), b.getInt(DEATHS_DELTA)));
+        deathsDelta.setText(String.format(res.getString(R.string.placeholder_delta), b.getInt("deceduti_delta")));
     }
 
     public static class DataTilesAdapter extends RecyclerView.Adapter<DataTilesAdapter.DataTilesHolder> {
@@ -99,13 +107,13 @@ public class DataTilesFragment extends DataSingleTileFragment {
         // you provide access to all the views for a data item in a view holder
         public static class DataTilesHolder extends RecyclerView.ViewHolder {
             // each data item is just a string in this case
-            public CardView textView;
+            public CardView container;
             public TextView qty;
             public TextView qty_delta;
             public TextView tile_head;
             public DataTilesHolder(CardView v) {
                 super(v);
-                this.textView = v;
+                this.container = v;
                 this.qty = v.findViewById(R.id.tile_qty);
                 this.qty_delta = v.findViewById(R.id.tile_qty_delta);
                 this.tile_head = v.findViewById(R.id.tile_head);
