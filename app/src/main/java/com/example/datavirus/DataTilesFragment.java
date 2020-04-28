@@ -21,9 +21,9 @@ public class DataTilesFragment extends Fragment {
 
     private DataTilesAdapter adapter;
 
-    private DPCData.DailyReport[] reports;
+    private DailyReport[] reports;
 
-    public void setReports(DPCData.DailyReport[] reports) {
+    public void setReports(DailyReport[] reports) {
         this.reports = reports;
     }
 
@@ -53,7 +53,7 @@ public class DataTilesFragment extends Fragment {
         recyclerView.setAdapter(this.adapter);
     }
 
-    public static DataTilesFragment newInstance(DPCData.DailyReport[] reports) {
+    public static DataTilesFragment newInstance(DailyReport[] reports) {
         Bundle args = new Bundle();
         Integer last = reports.length -1;
         Integer lastLast = reports.length -2;
@@ -72,7 +72,7 @@ public class DataTilesFragment extends Fragment {
     }
 
     public class DataTilesAdapter extends RecyclerView.Adapter<DataTilesAdapter.DataTilesHolder> {
-        private DPCData.DailyReport[] reports;
+        private DailyReport[] reports;
         private String[] fields;
         private Integer last;
         private Integer lastLast;
@@ -121,7 +121,7 @@ public class DataTilesFragment extends Fragment {
         }
 
 
-        public DataTilesAdapter(DPCData.DailyReport[] myDataset) {
+        public DataTilesAdapter(DailyReport[] myDataset) {
             this.reports = myDataset;
             this.last = myDataset.length -1;
             this.lastLast = myDataset.length -2;
