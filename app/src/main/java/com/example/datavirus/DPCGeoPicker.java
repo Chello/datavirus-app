@@ -1,8 +1,6 @@
 package com.example.datavirus;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -77,21 +75,13 @@ public class DPCGeoPicker extends DialogFragment {
 
     }
 
-//    @NonNull
-//    @Override
-//    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-//        View v = getActivity().getLayoutInflater().inflate(R.layout.fragment_d_p_c_data_picker, null, false);
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        builder.setView(v).setTitle(R.string.geo_picker_title);
-//
-//        this.populateRecycler(v);
-//        this.setUpSearchView(v);
-//        return builder.create();
-//    }
-
+    /**
+     * Initializes and populates the RecyclerView
+     * @param v the fragment view containing the Recycler
+     */
     private void populateRecycler(View v) {
         if (v == null) v = getView();
-        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_geo_picker);
 
         recyclerView.setHasFixedSize(true);
 

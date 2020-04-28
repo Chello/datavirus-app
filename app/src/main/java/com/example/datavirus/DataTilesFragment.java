@@ -1,17 +1,14 @@
 package com.example.datavirus;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -66,7 +63,7 @@ public class DataTilesFragment extends DataSingleTileFragment {
     /**
      * Update tiles, using data passed.
      * It only uses the last two days for getting the current data and the delta
-     * @param report report to use for the update
+     * @param v the view containing objects to set
      */
     protected void updateTiles(View v, Bundle b) {
         super.updateTiles(v, b);
@@ -94,10 +91,58 @@ public class DataTilesFragment extends DataSingleTileFragment {
         deathsDelta.setText(String.format(res.getString(R.string.placeholder_delta), b.getInt(DEATHS_DELTA)));
     }
 
-//    public void setReport(DPCData.DailyReport[] report) {
-//        this.report = report;
-//        if (getContext() != null)
-//            this.updateTiles(report);
-//    }
+    public static class DataTilesAdapter extends RecyclerView.Adapter<DataTilesAdapter.DataTilesHolder> {
+        private DPCData.DailyReport[] reports;
+
+        // Provide a reference to the views for each data item
+        // Complex data items may need more than one view per item, and
+        // you provide access to all the views for a data item in a view holder
+        public static class DataTilesHolder extends RecyclerView.ViewHolder {
+            // each data item is just a string in this case
+            public CardView textView;
+            public TextView qty;
+            public TextView qty_delta;
+            public TextView tile_head;
+            public DataTilesHolder(CardView v) {
+                super(v);
+                this.textView = v;
+                this.qty = v.findViewById(R.id.tile_qty);
+                this.qty_delta = v.findViewById(R.id.tile_qty_delta);
+                this.tile_head = v.findViewById(R.id.tile_head);
+            }
+        }
+
+        // Provide a suitable constructor (depends on the kind of dataset)
+        public DataTilesAdapter(DPCData.DailyReport[] myDataset) {
+            this.reports = myDataset;
+        }
+
+        // Create new views (invoked by the layout manager)
+        @Override
+        public DataTilesHolder onCreateViewHolder(ViewGroup parent,
+                                                  int viewType) {
+            // create a new view
+            CardView v = (CardView) LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.recycler_tile, parent, false);
+            DataTilesHolder vh = new DataTilesHolder(v);
+            return vh;
+        }
+
+        // Replace the contents of a view (invoked by the layout manager)
+        @Override
+        public void onBindViewHolder(DataTilesHolder holder, int position) {
+            // - get element from your dataset at this position
+            // - replace the contents of the view with that element
+            //holder.textView.setText(mDataset[position]);
+
+        }
+
+        // Return the size of your dataset (invoked by the layout manager)
+        @Override
+        public int getItemCount() {
+            return this.reports[0].getKeys().size();
+        }
+    }
+
 
 }

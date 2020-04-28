@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 public class DataSingleTileFragment extends Fragment {
 
-    private DataSingleTileViewModel mViewModel;
     DPCData.DailyReport[] report;
 
     private static final String TOTAL = "total";

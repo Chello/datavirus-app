@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,18 +44,16 @@ public class DPCData  {
     private HashMap<String, ArrayList<DailyReport>> provinciale;
 
     public ArrayList<String> getNazionaleKeyList() {
-        return nazionaleKeyList;
-    }
-    public ArrayList<String> getRegionaleKeyList() {
-        return regionaleKeyList;
-    }
-    public ArrayList<String> getProvincialeKeyList() {
-        return provincialeKeyList;
+        return this.nazionale[0].getKeys();
     }
 
-    private ArrayList<String> nazionaleKeyList;
-    private ArrayList<String> regionaleKeyList;
-    private ArrayList<String> provincialeKeyList;
+    public ArrayList<String> getRegionaleKeyList() {
+        return this.regionale.get("Abruzzo").get(0).getKeys();
+    }
+
+    public ArrayList<String> getProvincialeKeyList() {
+        return this.provinciale.get("Abruzzo").get(0).getKeys();
+    }
 
     /**
      * Returns the list of Regioni
@@ -184,9 +180,9 @@ public class DPCData  {
         this.regionale = createKeyValueList(regionale);
         this.provinciale = createKeyValueList(provinciale);
 
-        this.nazionaleKeyList = this.getKeysFromJsonArray(nazionaleJson);
-        this.regionaleKeyList = this.getKeysFromJsonArray(regionaleJson);
-        this.provincialeKeyList = this.getKeysFromJsonArray(provincialeJson);
+//        this.nazionaleKeyList = ;
+//        this.regionaleKeyList = this.regionale[0].getKeys();
+//        this.provincialeKeyList = this.getKeysFromJsonArray(provincialeJson);
 
         Log.d("DPCParse", "Data parsed");
     }
@@ -261,6 +257,20 @@ public class DPCData  {
          */
         public GeoField getGeoField() {
             return geoField;
+        }
+
+        public ArrayList<String> getKeys() {
+            ArrayList<String> toRet = new ArrayList<String>();
+
+            Set<Map.Entry<String, JsonElement>> entries = this.rawObject.entrySet();//will return members of your object
+            for (Map.Entry<String, JsonElement> entry: entries) {
+                String current = entry.getKey();
+                if (excludeList.contains(current))
+                    continue;
+                toRet.add(current);
+                //Log.d("Has json parsed: " , entry.getKey() );
+            }
+            return toRet;
         }
 
         /**
