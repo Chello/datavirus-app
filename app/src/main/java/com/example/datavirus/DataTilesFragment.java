@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,13 +94,13 @@ public class DataTilesFragment extends Fragment {
             public void setTileHead(String tile_head) {
                 this.tile_head.setText(this.adjustTitleString(tile_head));
                 //setting colors
-                if (tile_head.equals(getResources().getText(R.string.data_total)))
+                if (tile_head.equals(getResources().getText(R.string.denominazione_total)))
                     this.container.setBackgroundColor(getResources().getColor(R.color.colorBlue, null));
-                else if (tile_head.equals(getResources().getText(R.string.data_active)))
+                else if (tile_head.equals(getResources().getText(R.string.denominazione_active)))
                     this.container.setBackgroundColor(getResources().getColor(R.color.colorOrange, null));
-                else if (tile_head.equals(getResources().getText(R.string.data_healed)))
+                else if (tile_head.equals(getResources().getText(R.string.denominazione_healed)))
                     this.container.setBackgroundColor(getResources().getColor(R.color.colorGreen, null));
-                else if (tile_head.equals(getResources().getText(R.string.data_deaths)))
+                else if (tile_head.equals(getResources().getText(R.string.denominazione_deaths)))
                     this.container.setBackgroundColor(getResources().getColor(R.color.colorRed, null));
                 else this.container.setBackgroundColor(getResources().getColor(R.color.colorGrey, null));
             }

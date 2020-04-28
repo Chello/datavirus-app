@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
                 .replace(R.id.data_tiles, frg)
                 .commit();
 
-        this.updateTitle(new DPCData.GeographicElement(DPCData.GeoField.NAZIONALE));
+        this.updateTitle(new GeographicElement(DPCData.GeoField.NAZIONALE));
     }
 
     /**
@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         });
     }
 
-    @Override
-    public void onDPCGeoClick(DPCData.GeographicElement element) {
+
+    public void onDPCGeoClick(GeographicElement element) {
         DataTilesFragment newFragment = DataTilesFragment.newInstance(this.covidData.getReportFromGeoData(element), getResources());
 
         getSupportFragmentManager().beginTransaction()
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         this.updateTitle(element);
     }
 
-    private void updateTitle(DPCData.GeographicElement element) {
+    private void updateTitle(GeographicElement element) {
         TextView head = (TextView) findViewById(R.id.data_tiles_head);
         head.setText(String.format(getResources().getString(R.string.data_tiles_head), element.getDenominazione()));
 

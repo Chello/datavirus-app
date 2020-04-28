@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">DataVirus.it</string>
     <string name="data_tiles_head">Conteggio dati %s</string>
-    <string name="data_total">totale_casi</string>
-    <string name="data_active">totale_positivi</string>
-    <string name="data_healed">dimessi_guariti</string>
-    <string name="data_deaths">deceduti</string>
+    <string name="denominazione_total">totale_casi</string>
+    <string name="denominazione_active">totale_positivi</string>
+    <string name="denominazione_healed">dimessi_guariti</string>
+    <string name="denominazione_deaths">deceduti</string>
     <string name="placeholder_decimal">%d</string>
     <string name="placeholder_delta">Δ %d</string>
     <string name="geographicChooser">Seleziona area geografica</string>
@@ -15,6 +15,7 @@
     <string name="close">Chiudi</string>
     <string name="geo_picker_title">Seleziona localitá</string>
     <string name="date_ph">Bollettino del %d/%d/%d ore %d</string>
+    <string name="national_poll">andamento nazionale</string>
 
     <string-array name="macrofields">
         <item>Nazionale</item>

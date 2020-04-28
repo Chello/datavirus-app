@@ -47,10 +47,10 @@ public class DailyReport {
                 continue;
             toRet.add(current);
         }
-        this.moveElemToPos(toRet, res.getString(R.string.data_total),0);
-        this.moveElemToPos(toRet, res.getString(R.string.data_active), 1);
-        this.moveElemToPos(toRet, res.getString(R.string.data_healed), 2);
-        this.moveElemToPos(toRet, res.getString(R.string.data_deaths), 3);
+        this.moveElemToPos(toRet, res.getString(R.string.denominazione_total),0);
+        this.moveElemToPos(toRet, res.getString(R.string.denominazione_active), 1);
+        this.moveElemToPos(toRet, res.getString(R.string.denominazione_healed), 2);
+        this.moveElemToPos(toRet, res.getString(R.string.denominazione_deaths), 3);
         return toRet;
     }
 

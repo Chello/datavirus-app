@@ -236,35 +236,6 @@ public class DPCData  {
         return build;
     }
 
-    public static class GeographicElement {
-        private String denominazione;
-        private GeoField geoField;
 
-        public String getDenominazione() {
-            return denominazione;
-        }
-
-        public void setDenominazione(String denominazione) {
-            this.denominazione = denominazione;
-        }
-
-        public GeoField getGeoField() {
-            return geoField;
-        }
-
-        public void setGeoField(GeoField geoField) {
-            this.geoField = geoField;
-        }
-
-        public GeographicElement(String denominazione, GeoField geoField) {
-            this.denominazione = denominazione;
-            this.geoField = geoField;
-        }
-
-        public GeographicElement(GeoField geoField) {
-            this.geoField = geoField;
-            this.denominazione = "Andamento nazionale";
-        }
-    }
 
 }

@@ -112,11 +112,11 @@ public class DPCGeoPicker extends DialogFragment {
         /**
          * All geo elements
          */
-        private ArrayList<DPCData.GeographicElement> geoElements;
+        private ArrayList<GeographicElement> geoElements;
         /**
          * List for searching elements
          */
-        private ArrayList<DPCData.GeographicElement> searchList;
+        private ArrayList<GeographicElement> searchList;
         /**
          * Listener for onclick items
          */
@@ -128,7 +128,7 @@ public class DPCGeoPicker extends DialogFragment {
         private Filter filter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                ArrayList<DPCData.GeographicElement> filteredList = new ArrayList<>();
+                ArrayList<GeographicElement> filteredList = new ArrayList<>();
                 Resources res = getResources();
 
                 if (constraint == null || constraint.length() == 0) {
@@ -137,7 +137,7 @@ public class DPCGeoPicker extends DialogFragment {
                     //Adjusting filter pattern
                     String filterPatter = constraint.toString().toLowerCase().trim();
                     //for each item check if searched pattern corresponds
-                    for (DPCData.GeographicElement elem : searchList) {
+                    for (GeographicElement elem : searchList) {
                         //Creating string with both definizione and Geographic field concat
                         String toSearchFor = elem.getDenominazione().toLowerCase().trim();
                         if (elem.getGeoField() == DPCData.GeoField.REGIONALE)
@@ -164,7 +164,7 @@ public class DPCGeoPicker extends DialogFragment {
             }
         };
 
-        public DPCGeoAdapter(ArrayList<DPCData.GeographicElement> list, OnDPCGeoListener listener) {
+        public DPCGeoAdapter(ArrayList<GeographicElement> list, OnDPCGeoListener listener) {
             this.geoElements = list;
             this.searchList = new ArrayList<>(list);
             this.listener = listener;
@@ -186,7 +186,7 @@ public class DPCGeoPicker extends DialogFragment {
         @Override
         public void onBindViewHolder(DPCGeoHolder holder, int position) {
             Resources res = getResources();
-            DPCData.GeographicElement current = geoElements.get(position);
+            GeographicElement current = geoElements.get(position);
             if (current.getGeoField() == DPCData.GeoField.REGIONALE) {
                 holder.mainText.setText(res.getText(R.string.region));
                 holder.mainText.setTextColor(Color.BLUE);
