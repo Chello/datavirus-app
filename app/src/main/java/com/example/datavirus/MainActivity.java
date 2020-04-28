@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
     public void setReport(DPCData data) {
         this.covidData = data;
         //Setting nationals values
-        DataTilesFragment frg = DataTilesFragment.newInstance(this.covidData.getNazionale());
+        DataTilesFragment frg = DataTilesFragment.newInstance(this.covidData.getNazionale(), getResources());
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.data_tiles, frg)
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
 
     @Override
     public void onDPCGeoClick(DPCData.GeographicElement element) {
-        DataTilesFragment newFragment = DataTilesFragment.newInstance(this.covidData.getReportFromGeoData(element));;
+        DataTilesFragment newFragment = DataTilesFragment.newInstance(this.covidData.getReportFromGeoData(element), getResources());
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.data_tiles, newFragment)

@@ -53,12 +53,12 @@ public class DataTilesFragment extends Fragment {
         recyclerView.setAdapter(this.adapter);
     }
 
-    public static DataTilesFragment newInstance(DailyReport[] reports) {
+    public static DataTilesFragment newInstance(DailyReport[] reports, Resources res) {
         Bundle args = new Bundle();
         Integer last = reports.length -1;
         Integer lastLast = reports.length -2;
 
-        for (String key : reports[last].getKeys()) {
+        for (String key : reports[last].getKeys(res)) {
             if (reports[last].getInt(key) != null) {
                 args.putInt(key, reports[last].getInt(key));
                 args.putInt(key + "_delta", reports[last].getInt(key) - reports[lastLast].getInt(key));
@@ -125,11 +125,11 @@ public class DataTilesFragment extends Fragment {
             this.reports = myDataset;
             this.last = myDataset.length -1;
             this.lastLast = myDataset.length -2;
-            Integer keysLenght = myDataset[this.last].getKeys().size();
+            Integer keysLenght = myDataset[this.last].getKeys(getResources()).size();
             ArrayList<String> fields = new ArrayList<String>();
             //For each key beautify the string
             for (int i = 0; i < keysLenght; i++) {
-                String s = myDataset[this.last].getKeys().get(i); //get the string
+                String s = myDataset[this.last].getKeys(getResources()).get(i); //get the string
                 if (myDataset[this.last].getInt(s) != null)
                     fields.add(s);
             }

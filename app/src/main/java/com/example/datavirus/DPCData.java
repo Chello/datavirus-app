@@ -47,17 +47,17 @@ public class DPCData  {
 
     private Resources res;
 
-    public ArrayList<String> getNazionaleKeyList() {
-        return this.nazionale[0].getKeys();
-    }
-
-    public ArrayList<String> getRegionaleKeyList() {
-        return this.regionale.get("Abruzzo").get(0).getKeys();
-    }
-
-    public ArrayList<String> getProvincialeKeyList() {
-        return this.provinciale.get("Abruzzo").get(0).getKeys();
-    }
+//    public ArrayList<String> getNazionaleKeyList() {
+//        return this.nazionale[0].getKeys();
+//    }
+//
+//    public ArrayList<String> getRegionaleKeyList() {
+//        return this.regionale.get("Abruzzo").get(0).getKeys();
+//    }
+//
+//    public ArrayList<String> getProvincialeKeyList() {
+//        return this.provinciale.get("Abruzzo").get(0).getKeys();
+//    }
 
     /**
      * Returns the list of Regioni

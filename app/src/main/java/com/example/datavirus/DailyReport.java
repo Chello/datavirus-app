@@ -1,5 +1,7 @@
 package com.example.datavirus;
 
+import android.content.res.Resources;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -36,7 +38,7 @@ public class DailyReport {
      * Returns available keys that makes sense to query
      * @return an array of queryable keys
      */
-    public ArrayList<String> getKeys() {
+    public ArrayList<String> getKeys(Resources res) {
         ArrayList<String> toRet = new ArrayList<String>();
         Set<Map.Entry<String, JsonElement>> entries = this.rawObject.entrySet();
         for (Map.Entry<String, JsonElement> entry: entries) {
@@ -45,7 +47,10 @@ public class DailyReport {
                 continue;
             toRet.add(current);
         }
-        //this.moveElemToPos(toRet, res.getString(R.string.data_total),0);
+        this.moveElemToPos(toRet, res.getString(R.string.data_total),0);
+        this.moveElemToPos(toRet, res.getString(R.string.data_active), 1);
+        this.moveElemToPos(toRet, res.getString(R.string.data_healed), 2);
+        this.moveElemToPos(toRet, res.getString(R.string.data_deaths), 3);
         return toRet;
     }
 
@@ -53,7 +58,7 @@ public class DailyReport {
         if (!arr.contains(item))
             return;
         Integer oldPos = arr.indexOf(item);
-        arr.remove(oldPos);
+        arr.remove(item);
         arr.add(itemPos, item );
     }
 
