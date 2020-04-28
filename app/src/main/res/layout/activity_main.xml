@@ -9,17 +9,19 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_gravity="center_horizontal|center_vertical" >
 
         <TextView
             android:id="@+id/data_tiles_head"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:paddingTop="16dp"
+            android:layout_gravity="center"
+            android:textAlignment="center"
             android:text="@string/data_tiles_head"
             android:textSize="30sp"
             app:autoSizeTextType="uniform" />
@@ -27,15 +29,20 @@
         <Button
 
             android:id="@+id/button_geographic"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/data_tiles_head"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal|center_vertical"
             android:text="@string/geographicChooser"
             android:padding="16dp"
             android:scrollbarSize="16dp"/>
 
-    </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/head_date"
+            android:textAlignment="center" />
+
+    </LinearLayout>
 
     <ScrollView
         android:orientation="vertical"

@@ -8,9 +8,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,6 +130,21 @@ public class DPCData  {
         if (element.getGeoField() == GeoField.PROVINCIALE)
             return this.getProvincialeReport(element.getDenominazione());
         return null;
+    }
+
+    public Calendar getDate() {
+        try {
+            //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd`T`hh:mm:ss");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Integer last = this.nazionale.length -1;
+            String dateRaw = this.nazionale[last].getString("data");
+            //return format.parse(dateRaw);
+            Calendar calendar = Calendar.getInstance(); // creates a new calendar instance
+            calendar.setTime(dateFormat.parse(dateRaw));   // assigns calendar to given date
+            return calendar;
+        } catch (ParseException e) {
+            return null;
+        }
     }
 
     /**

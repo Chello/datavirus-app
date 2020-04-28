@@ -3,9 +3,13 @@ package com.example.datavirus;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements OnDPCDataReady, OnDPCGeoListener {
 
@@ -74,6 +78,15 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
     private void updateTitle(DPCData.GeographicElement element) {
         TextView head = (TextView) findViewById(R.id.data_tiles_head);
         head.setText(String.format(getResources().getString(R.string.data_tiles_head), element.getDenominazione()));
+
+        TextView dateTV = (TextView) findViewById(R.id.head_date);
+        Calendar date = this.covidData.getDate();
+        dateTV.setText(String.format(String.valueOf(getResources().getText(R.string.date_ph)),
+                date.get(Calendar.DAY_OF_MONTH),
+                date.get(Calendar.MONTH),
+                date.get(Calendar.YEAR),
+                date.get(Calendar.HOUR_OF_DAY)));
+        ///Log.d("aaa", "bbb");
     }
 
 }
