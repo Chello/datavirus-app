@@ -1,5 +1,6 @@
 package com.example.datavirus;
 
+import android.content.res.Resources;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -43,6 +44,8 @@ public class DPCData  {
     private DailyReport[] nazionale;
     private HashMap<String, ArrayList<DailyReport>> regionale;
     private HashMap<String, ArrayList<DailyReport>> provinciale;
+
+    private Resources res;
 
     public ArrayList<String> getNazionaleKeyList() {
         return this.nazionale[0].getKeys();
@@ -169,8 +172,9 @@ public class DPCData  {
         return null;
     }
 
-    public DPCData(String nazionaleJson, String regionaleJson, String provincialeJson) {
+    public DPCData(Resources res, String nazionaleJson, String regionaleJson, String provincialeJson) {
         this.gson = new Gson();
+        this.res = res;
 
         JsonParser parser = new JsonParser();
 
@@ -180,10 +184,6 @@ public class DPCData  {
 
         this.regionale = createKeyValueList(regionale);
         this.provinciale = createKeyValueList(provinciale);
-
-//        this.nazionaleKeyList = ;
-//        this.regionaleKeyList = this.regionale[0].getKeys();
-//        this.provincialeKeyList = this.getKeysFromJsonArray(provincialeJson);
 
         Log.d("DPCParse", "Data parsed");
     }
@@ -260,18 +260,29 @@ public class DPCData  {
             return geoField;
         }
 
+        /**
+         * Returns available keys that makes sense to query
+         * @return an array of queryable keys
+         */
         public ArrayList<String> getKeys() {
             ArrayList<String> toRet = new ArrayList<String>();
-
-            Set<Map.Entry<String, JsonElement>> entries = this.rawObject.entrySet();//will return members of your object
+            Set<Map.Entry<String, JsonElement>> entries = this.rawObject.entrySet();
             for (Map.Entry<String, JsonElement> entry: entries) {
                 String current = entry.getKey();
                 if (excludeList.contains(current))
                     continue;
                 toRet.add(current);
-                //Log.d("Has json parsed: " , entry.getKey() );
             }
+            //this.moveElemToPos(toRet, res.getString(R.string.data_total),0);
             return toRet;
+        }
+
+        private void moveElemToPos(ArrayList<String> arr, String item, Integer itemPos) {
+            if (!arr.contains(item))
+                return;
+            Integer oldPos = arr.indexOf(item);
+            arr.remove(oldPos);
+            arr.add(itemPos, item );
         }
 
         /**
@@ -367,7 +378,7 @@ public class DPCData  {
 
         public GeographicElement(GeoField geoField) {
             this.geoField = geoField;
-            this.denominazione = "Nazionale";
+            this.denominazione = "Andamento nazionale";
         }
     }
 

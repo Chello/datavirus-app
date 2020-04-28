@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,16 +17,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-public class DataTilesFragment extends DataSingleTileFragment {
+public class DataTilesFragment extends Fragment {
 
-//    private static final String TOTAL = "total";
-//    private static final String TOTAL_DELTA = "total_delta";
-//    private static final String ACTIVE = "active";
-//    private static final String ACTIVE_DELTA = "active_delta";
-//    private static final String HEALED = "healed";
-//    private static final String HEALED_DELTA = "healed_delta";
-//    private static final String DEATHS = "deaths";
-//    private static final String DEATHS_DELTA = "deaths_delta";
     private DataTilesAdapter adapter;
 
     private DPCData.DailyReport[] reports;
@@ -44,10 +37,6 @@ public class DataTilesFragment extends DataSingleTileFragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.data_tiles, container, false);
         populateRecycler(v);
-
-//        if (getArguments() != null) {
-//            updateTiles(v, getArguments());
-//        }
         return v;
     }
 
@@ -75,54 +64,12 @@ public class DataTilesFragment extends DataSingleTileFragment {
                 args.putInt(key + "_delta", reports[last].getInt(key) - reports[lastLast].getInt(key));
             }
         }
-//        args.putInt(TOTAL, report[report.length -1].getInt("totale_casi"));
-//        args.putInt(TOTAL_DELTA, report[report.length -1].getInt("totale_casi") - report[report.length-2].getInt("totale_casi"));
-//
-//        args.putInt(ACTIVE, report[report.length -1].getInt("totale_positivi"));
-//        args.putInt(ACTIVE_DELTA, report[report.length -1].getInt("totale_positivi") - report[report.length-2].getInt("totale_positivi"));
-//
-//        args.putInt(HEALED, report[report.length -1].getInt("dimessi_guariti"));
-//        args.putInt(HEALED_DELTA, report[report.length -1].getInt("dimessi_guariti") - report[report.length-2].getInt("dimessi_guariti"));
-
-//        args.putInt(DEATHS, report[report.length -1].getInt("deceduti"));
-//        args.putInt(DEATHS_DELTA, report[report.length -1].getInt("deceduti") - report[report.length-2].getInt("deceduti"));
 
         DataTilesFragment fragment = new DataTilesFragment();
         fragment.setArguments(args);
         fragment.setReports(reports);
         return fragment;
     }
-
-    /**
-     * Update tiles, using data passed.
-     * It only uses the last two days for getting the current data and the delta
-     * @param v the view containing objects to set
-     */
-//    protected void updateTiles(View v, Bundle b) {
-//        super.updateTiles(v, b);
-//        Resources res = getResources();
-//
-//        //Set active value of last day
-//        TextView active = (TextView) v.findViewById(R.id.tile_active);
-//        active.setText(String.format(res.getString(R.string.placeholder_decimal), b.getInt("totale_positivi")));
-//        //Set active delta of last day
-//        TextView activeDelta = (TextView) v.findViewById(R.id.tile_active_delta);
-//        activeDelta.setText(String.format(res.getString(R.string.placeholder_delta), b.getInt("totale_positivi_delta")));
-//
-//        //Set healed value of last day
-//        TextView healed = (TextView) v.findViewById(R.id.tile_healed);
-//        healed.setText(String.format(res.getString(R.string.placeholder_decimal), b.getInt("dimessi_guariti")));
-//        //Set healed delta of last day
-//        TextView healedDelta = (TextView) v.findViewById(R.id.tile_healed_delta);
-//        healedDelta.setText(String.format(res.getString(R.string.placeholder_delta), b.getInt("dimessi_guariti_delta")));
-//
-//        //Set deaths value of last day
-//        TextView deaths = (TextView) v.findViewById(R.id.tile_deaths);
-//        deaths.setText(String.format(res.getString(R.string.placeholder_decimal), b.getInt("deceduti")));
-//        //Set deaths delta of last day
-//        TextView deathsDelta = (TextView) v.findViewById(R.id.tile_deaths_delta);
-//        deathsDelta.setText(String.format(res.getString(R.string.placeholder_delta), b.getInt("deceduti_delta")));
-//    }
 
     public class DataTilesAdapter extends RecyclerView.Adapter<DataTilesAdapter.DataTilesHolder> {
         private DPCData.DailyReport[] reports;
@@ -148,7 +95,6 @@ public class DataTilesFragment extends DataSingleTileFragment {
             public void setTileHead(String tile_head) {
                 this.tile_head.setText(this.adjustTitleString(tile_head));
                 //setting colors
-                Log.d("ColorTest", getResources().getText(R.string.data_total).toString());
                 if (tile_head.equals(getResources().getText(R.string.data_total)))
                     this.container.setBackgroundColor(getResources().getColor(R.color.colorBlue, null));
                 else if (tile_head.equals(getResources().getText(R.string.data_active)))
@@ -174,7 +120,7 @@ public class DataTilesFragment extends DataSingleTileFragment {
             }
         }
 
-        // Provide a suitable constructor (depends on the kind of dataset)
+
         public DataTilesAdapter(DPCData.DailyReport[] myDataset) {
             this.reports = myDataset;
             this.last = myDataset.length -1;

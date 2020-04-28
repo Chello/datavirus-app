@@ -4,6 +4,7 @@
 
 package com.example.datavirus;
 
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -23,16 +24,18 @@ public class DataParser {
     private DPCData repositoryData;
     private FragmentManager fm;
     private OnDPCDataReady UI;
+    private Resources res;
 
     private static String JSONUrl[] = new String[] {
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale.json",
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni.json",
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-province.json"};
 
-    public DataParser(FragmentManager fm, OnDPCDataReady UI) {
+    public DataParser(Resources res, FragmentManager fm, OnDPCDataReady UI) {
         this.UI = UI;
         this.dialog = new LoadingDialog();
         this.fm = fm;
+        this.res = res;
         this.refreshData();
     }
 
@@ -69,7 +72,7 @@ public class DataParser {
                 return;
             } else {
                 dialog.dismiss();
-                repositoryData = new DPCData(jsonArray[0], jsonArray[1], jsonArray[2]);
+                repositoryData = new DPCData(res, jsonArray[0], jsonArray[1], jsonArray[2]);
                 UI.setReport(repositoryData);
             }
         }

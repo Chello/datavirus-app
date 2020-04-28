@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.parser = new DataParser(getSupportFragmentManager(), this);
+        this.parser = new DataParser(getResources(), getSupportFragmentManager(), this);
         buttonHandler();
     }
 
@@ -56,22 +56,12 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
 
     @Override
     public void onDPCGeoClick(DPCData.GeographicElement element) {
-        //DataSingleTileFragment frg = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.data_tiles);
-        DataSingleTileFragment newFragment;
-
-        if (element.getGeoField() == DPCData.GeoField.PROVINCIALE) { //If it is a Provincia, so there will be only one tile (use DataSingleTileFragment)
-            newFragment = DataSingleTileFragment.newInstance(this.covidData.getProvincialeReport(element.getDenominazione()));
-        } else { //Otherwise is a Regionale o Nazionale, so there will be all tiles
-            newFragment = DataTilesFragment.newInstance(this.covidData.getReportFromGeoData(element));
-        }
+        DataTilesFragment newFragment = DataTilesFragment.newInstance(this.covidData.getReportFromGeoData(element));;
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.data_tiles, newFragment)
                 .commit();
-        //transaction.addToBackStack(null);
 
-
-        //newFragment.setReport(this.covidData.getReportFromGeoData(element));
         this.updateTitle(element);
     }
 
@@ -86,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
                 date.get(Calendar.MONTH),
                 date.get(Calendar.YEAR),
                 date.get(Calendar.HOUR_OF_DAY)));
-        ///Log.d("aaa", "bbb");
     }
 
 }
