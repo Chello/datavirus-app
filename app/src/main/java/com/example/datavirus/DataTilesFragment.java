@@ -48,7 +48,7 @@ public class DataTilesFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        this.adapter = new DataTilesAdapter(this.reports, (OnTileClick) getActivity());
+        this.adapter = new DataTilesAdapter(this.reports);
         recyclerView.setAdapter(this.adapter);
     }
 
@@ -75,10 +75,8 @@ public class DataTilesFragment extends Fragment {
         private String[] fields;
         private Integer last;
         private Integer lastLast;
-        private OnTileClick listener;
 
-        public DataTilesAdapter(DailyReport[] myDataset, OnTileClick listener) {
-            this.listener = listener;
+        public DataTilesAdapter(DailyReport[] myDataset) {
             this.reports = myDataset;
             this.last = myDataset.length -1;
             this.lastLast = myDataset.length -2;

@@ -87,7 +87,7 @@ public class DPCGeoPicker extends DialogFragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        this.adapter = new DPCGeoAdapter(this.covidData.getOrderedGeoElements(), (OnDPCGeoListener) getActivity());
+        this.adapter = new DPCGeoAdapter(this.covidData.getOrderedGeoElements());
         recyclerView.setAdapter(this.adapter);
     }
 
@@ -117,10 +117,6 @@ public class DPCGeoPicker extends DialogFragment {
          * List for searching elements
          */
         private ArrayList<GeographicElement> searchList;
-        /**
-         * Listener for onclick items
-         */
-        private OnDPCGeoListener listener;
 
         /**
          * Filter for search an item by SearchView
@@ -164,10 +160,9 @@ public class DPCGeoPicker extends DialogFragment {
             }
         };
 
-        public DPCGeoAdapter(ArrayList<GeographicElement> list, OnDPCGeoListener listener) {
+        public DPCGeoAdapter(ArrayList<GeographicElement> list) {
             this.geoElements = list;
             this.searchList = new ArrayList<>(list);
-            this.listener = listener;
         }
 
         // Create new views (invoked by the layout manager)
@@ -178,7 +173,7 @@ public class DPCGeoPicker extends DialogFragment {
             LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                     .inflate( R.layout.dialog_recycler_item, parent, false);
 
-            DPCGeoHolder vh = new DPCGeoHolder(v, this.listener);
+            DPCGeoHolder vh = new DPCGeoHolder(v, (OnDPCGeoListener) getActivity());
             return vh;
         }
 
