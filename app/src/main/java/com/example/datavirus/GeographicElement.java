@@ -27,6 +27,6 @@ public class GeographicElement {
 
     public GeographicElement(DPCData.GeoField geoField) {
         this.geoField = geoField;
-        this.denominazione = "";//res.getString(R.string.national_poll);
+        this.denominazione = "Nazionale";//res.getString(R.string.national_poll);
     }
 }
