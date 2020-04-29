@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements OnDPCDataReady, OnDPCGeoListener {
+public class MainActivity extends AppCompatActivity implements OnDPCDataReady, OnDPCGeoListener, OnTileClick {
 
     DataParser parser;
     DPCData covidData;
@@ -78,4 +78,8 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
                 date.get(Calendar.HOUR_OF_DAY)));
     }
 
+    @Override
+    public void onTileClick(String field) {
+        Log.d("Tile click", field);
+    }
 }

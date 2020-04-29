@@ -48,7 +48,7 @@ public class DataTilesFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        this.adapter = new DataTilesAdapter(this.reports);
+        this.adapter = new DataTilesAdapter(this.reports, (OnTileClick) getActivity());
         recyclerView.setAdapter(this.adapter);
     }
 
@@ -75,52 +75,10 @@ public class DataTilesFragment extends Fragment {
         private String[] fields;
         private Integer last;
         private Integer lastLast;
+        private OnTileClick listener;
 
-        public class DataTilesHolder extends RecyclerView.ViewHolder {
-            // each data item is just a string in this case
-            private CardView container;
-            private TextView qty;
-            private TextView qty_delta;
-            private TextView tile_head;
-
-            public void setQty(Integer qty) {
-                this.qty.setText(qty.toString());
-            }
-
-            public void setQtyDelta(Integer qty_delta) {
-                this.qty_delta.setText(qty_delta.toString());
-            }
-
-            public void setTileHead(String tile_head) {
-                this.tile_head.setText(this.adjustTitleString(tile_head));
-                //setting colors
-                if (tile_head.equals(getResources().getText(R.string.denominazione_total)))
-                    this.container.setBackgroundColor(getResources().getColor(R.color.colorBlue, null));
-                else if (tile_head.equals(getResources().getText(R.string.denominazione_active)))
-                    this.container.setBackgroundColor(getResources().getColor(R.color.colorOrange, null));
-                else if (tile_head.equals(getResources().getText(R.string.denominazione_healed)))
-                    this.container.setBackgroundColor(getResources().getColor(R.color.colorGreen, null));
-                else if (tile_head.equals(getResources().getText(R.string.denominazione_deaths)))
-                    this.container.setBackgroundColor(getResources().getColor(R.color.colorRed, null));
-                else this.container.setBackgroundColor(getResources().getColor(R.color.colorGrey, null));
-            }
-
-            private String adjustTitleString(String s) {
-                s = s.trim().replace('_', ' '); //replace bad characters
-                return s.substring(0, 1).toUpperCase() + s.substring(1); //first capital letter
-            }
-
-            public DataTilesHolder(CardView v) {
-                super(v);
-                this.container = v;
-                this.qty = v.findViewById(R.id.tile_qty);
-                this.qty_delta = v.findViewById(R.id.tile_qty_delta);
-                this.tile_head = v.findViewById(R.id.tile_head);
-            }
-        }
-
-
-        public DataTilesAdapter(DailyReport[] myDataset) {
+        public DataTilesAdapter(DailyReport[] myDataset, OnTileClick listener) {
+            this.listener = listener;
             this.reports = myDataset;
             this.last = myDataset.length -1;
             this.lastLast = myDataset.length -2;
@@ -142,7 +100,7 @@ public class DataTilesFragment extends Fragment {
             // create a new view
             CardView v = (CardView) LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.recycler_tile, parent, false);
-            DataTilesHolder vh = new DataTilesHolder(v);
+            DataTilesHolder vh = new DataTilesHolder(v, (OnTileClick) getActivity());
             return vh;
         }
 
@@ -161,7 +119,58 @@ public class DataTilesFragment extends Fragment {
         public int getItemCount() {
             return this.fields.length;
         }
-    }
 
+        public class DataTilesHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            // each data item is just a string in this case
+            private CardView container;
+            private TextView qty;
+            private TextView qty_delta;
+            private TextView tile_head;
+            private OnTileClick listener;
+
+            public void setQty(Integer qty) {
+                this.qty.setText(qty.toString());
+            }
+
+            public void setQtyDelta(Integer qty_delta) {
+                this.qty_delta.setText(qty_delta.toString());
+            }
+
+            public void setTileHead(String tile_head) {
+                this.tile_head.setText(this.adjustTitleString(tile_head));
+                //setting colors
+                if (tile_head.equals(getResources().getText(R.string.denominazione_total)))
+                    this.container.setBackgroundColor(getResources().getColor(R.color.colorBlue, null));
+                else if (tile_head.equals(getResources().getText(R.string.denominazione_active)))
+                    this.container.setBackgroundColor(getResources().getColor(R.color.colorOrange, null));
+                else if (tile_head.equals(getResources().getText(R.string.denominazione_healed)))
+                    this.container.setBackgroundColor(getResources().getColor(R.color.colorGreen, null));
+                else if (tile_head.equals(getResources().getText(R.string.denominazione_deaths)))
+                    this.container.setBackgroundColor(getResources().getColor(R.color.colorRed, null));
+                else
+                    this.container.setBackgroundColor(getResources().getColor(R.color.colorGrey, null));
+            }
+
+            private String adjustTitleString(String s) {
+                s = s.trim().replace('_', ' '); //replace bad characters
+                return s.substring(0, 1).toUpperCase() + s.substring(1); //first capital letter
+            }
+
+            public DataTilesHolder(CardView v, OnTileClick listener) {
+                super(v);
+                this.listener = listener;
+                v.setOnClickListener(this);
+                this.container = v;
+                this.qty = v.findViewById(R.id.tile_qty);
+                this.qty_delta = v.findViewById(R.id.tile_qty_delta);
+                this.tile_head = v.findViewById(R.id.tile_head);
+            }
+
+            @Override
+            public void onClick(View v) {
+                listener.onTileClick(fields[getAdapterPosition()]);
+            }
+        }
+    }
 
 }
