@@ -5,8 +5,15 @@
     <string name="denominazione_active">totale_positivi</string>
     <string name="denominazione_healed">dimessi_guariti</string>
     <string name="denominazione_deaths">deceduti</string>
+    <string name="denominazione_date">data</string>
+
+    <!--    Placeholder strings-->
     <string name="placeholder_decimal">%d</string>
     <string name="placeholder_delta">Δ %d</string>
+    <string name="placeholder_date_chart">%d/%d</string>
+    <string name="placeholder_date_ph">Bollettino del %d/%d/%d ore %d</string>
+
+    <!--    Readable strings-->
     <string name="geographicChooser">Seleziona area geografica</string>
     <string name="national">Nazionale</string>
     <string name="region">Regione</string>
@@ -14,7 +21,6 @@
     <string name="loading_error">Errore nel download dei dati dal repository GitHub del Dipartimento di Protezione Civile. Riprovare piú tardi.</string>
     <string name="close">Chiudi</string>
     <string name="geo_picker_title">Seleziona localitá</string>
-    <string name="date_ph">Bollettino del %d/%d/%d ore %d</string>
     <string name="national_poll">andamento nazionale</string>
 
     <string-array name="macrofields">

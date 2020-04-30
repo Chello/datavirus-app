@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -141,15 +142,47 @@ public class DPCData  {
         return toRet;
     }
 
-    public Calendar getDate() {
+    /**
+     * Returns the date of the last DailyReport
+     * @return the date of the last DailyReport
+     */
+    public Calendar getLastDate() {
+        return this.getDate(this.nazionale.length -1);
+    }
+
+    /**
+     * Returns the date of the first DailyReport
+     * @return the date of the first DailyReport
+     */
+    public Calendar getFirstDate() {
+        return this.getDate(0);
+    }
+
+    /**
+     * Returns the date of the report in day number (from the start of the outbreak)
+     * @param pos the day from the start of the outbreak
+     * @return the date of the day requested in parameter
+     */
+    private Calendar getDate(Integer pos) {
+//        try {
+//            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ITALY);
+//            String dateRaw = this.nazionale[pos].getString("data");
+//            //return format.parse(dateRaw);
+//            Calendar calendar = Calendar.getInstance(); // creates a new calendar instance
+//            calendar.setTime(dateFormat.parse(dateRaw));   // assigns calendar to given date
+//            return calendar;
+//        } catch (ParseException e) {
+//            return null;
+//        }
+        String dateRaw = this.nazionale[pos].getString("data");
+        return DPCData.convertStringToDate(dateRaw);
+    }
+
+    public static Calendar convertStringToDate(String s) {
         try {
-            //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd`T`hh:mm:ss");
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            Integer last = this.nazionale.length -1;
-            String dateRaw = this.nazionale[last].getString("data");
-            //return format.parse(dateRaw);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ITALY);
             Calendar calendar = Calendar.getInstance(); // creates a new calendar instance
-            calendar.setTime(dateFormat.parse(dateRaw));   // assigns calendar to given date
+            calendar.setTime(dateFormat.parse(s));   // assigns calendar to given date
             return calendar;
         } catch (ParseException e) {
             return null;

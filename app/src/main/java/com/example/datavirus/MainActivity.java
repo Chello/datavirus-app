@@ -9,9 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements OnDPCDataReady, OnDPCGeoListener, OnTileClick {
 
@@ -72,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         head.setText(String.format(getResources().getString(R.string.data_tiles_head), element.getDenominazione()));
 
         TextView dateTV = (TextView) findViewById(R.id.head_date);
-        Calendar date = this.covidData.getDate();
-        dateTV.setText(String.format(String.valueOf(getResources().getText(R.string.date_ph)),
+        Calendar date = this.covidData.getLastDate();
+        dateTV.setText(String.format(String.valueOf(getResources().getText(R.string.placeholder_date_ph)),
                 date.get(Calendar.DAY_OF_MONTH),
                 date.get(Calendar.MONTH),
                 date.get(Calendar.YEAR),
@@ -86,9 +84,11 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         Intent i = new Intent(this, ChartActivity.class);
         Bundle b = new Bundle();
 
-        b.putIntegerArrayList(ChartActivity.DATE, this.covidData.getValuesFromGeoField(geo, field));
+        b.putIntegerArrayList(ChartActivity.FIELD, this.covidData.getValuesFromGeoField(geo, field));
+        //b.putParcelable(ChartActivity.DATE, this.covidData.getFirstDate());
 
         i.putExtras(b);
+        i.putExtra(ChartActivity.DATE, this.covidData.getFirstDate());
         startActivity(i);
     }
 
