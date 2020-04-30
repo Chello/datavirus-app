@@ -2,12 +2,14 @@ package com.example.datavirus;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
     public void setReport(DPCData data) {
         this.covidData = data;
         //Setting nationals values
-        DataTilesFragment frg = DataTilesFragment.newInstance(this.covidData.getNazionale(), getResources());
+        DataTilesFragment frg = DataTilesFragment.newInstance(this.covidData.getNazionale(), new GeographicElement(DPCData.GeoField.NAZIONALE), getResources());
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.data_tiles, frg)
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
 
 
     public void onDPCGeoClick(GeographicElement element) {
-        DataTilesFragment newFragment = DataTilesFragment.newInstance(this.covidData.getReportFromGeoData(element), getResources());
+        DataTilesFragment newFragment = DataTilesFragment.newInstance(this.covidData.getReportFromGeoData(element), element, getResources());
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.data_tiles, newFragment)
@@ -79,7 +81,15 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
     }
 
     @Override
-    public void onTileClick(String field) {
+    public void onTileClick(GeographicElement geo, String field) {
         Log.d("Tile click", field);
+        Intent i = new Intent(this, ChartActivity.class);
+        Bundle b = new Bundle();
+
+        b.putIntegerArrayList(ChartActivity.DATE, this.covidData.getValuesFromGeoField(geo, field));
+
+        i.putExtras(b);
+        startActivity(i);
     }
+
 }

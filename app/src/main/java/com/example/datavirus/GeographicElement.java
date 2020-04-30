@@ -1,6 +1,7 @@
 package com.example.datavirus;
 
 public class GeographicElement {
+    //TODO write doc
     private String denominazione;
     private DPCData.GeoField geoField;
 
@@ -8,16 +9,8 @@ public class GeographicElement {
         return denominazione;
     }
 
-    public void setDenominazione(String denominazione) {
-        this.denominazione = denominazione;
-    }
-
     public DPCData.GeoField getGeoField() {
         return geoField;
-    }
-
-    public void setGeoField(DPCData.GeoField geoField) {
-        this.geoField = geoField;
     }
 
     public GeographicElement(String denominazione, DPCData.GeoField geoField) {

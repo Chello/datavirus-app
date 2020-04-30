@@ -132,6 +132,15 @@ public class DPCData  {
         return null;
     }
 
+    public ArrayList<Integer> getValuesFromGeoField(GeographicElement element, String field) {
+        DailyReport[] reports = this.getReportFromGeoData(element);
+        ArrayList<Integer> toRet = new ArrayList<Integer>();
+        for (DailyReport report : reports) {
+            toRet.add(report.getInt(field));
+        }
+        return toRet;
+    }
+
     public Calendar getDate() {
         try {
             //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd`T`hh:mm:ss");

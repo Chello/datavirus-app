@@ -22,6 +22,8 @@ public class DataTilesFragment extends Fragment {
 
     private DailyReport[] reports;
 
+    protected GeographicElement geoField;
+
     public void setReports(DailyReport[] reports) {
         this.reports = reports;
     }
@@ -52,7 +54,7 @@ public class DataTilesFragment extends Fragment {
         recyclerView.setAdapter(this.adapter);
     }
 
-    public static DataTilesFragment newInstance(DailyReport[] reports, Resources res) {
+    public static DataTilesFragment newInstance(DailyReport[] reports, GeographicElement geoField, Resources res) {
         Bundle args = new Bundle();
         Integer last = reports.length -1;
         Integer lastLast = reports.length -2;
@@ -66,8 +68,13 @@ public class DataTilesFragment extends Fragment {
 
         DataTilesFragment fragment = new DataTilesFragment();
         fragment.setArguments(args);
+        fragment.setGeoField(geoField);
         fragment.setReports(reports);
         return fragment;
+    }
+
+    public void setGeoField(GeographicElement field) {
+        this.geoField = field;
     }
 
     public class DataTilesAdapter extends RecyclerView.Adapter<DataTilesAdapter.DataTilesHolder> {
@@ -157,16 +164,16 @@ public class DataTilesFragment extends Fragment {
             public DataTilesHolder(CardView v, OnTileClick listener) {
                 super(v);
                 this.listener = listener;
-                v.setOnClickListener(this);
                 this.container = v;
                 this.qty = v.findViewById(R.id.tile_qty);
                 this.qty_delta = v.findViewById(R.id.tile_qty_delta);
                 this.tile_head = v.findViewById(R.id.tile_head);
+                v.setOnClickListener(this);
             }
 
             @Override
             public void onClick(View v) {
-                listener.onTileClick(fields[getAdapterPosition()]);
+                listener.onTileClick(geoField, fields[getAdapterPosition()]);
             }
         }
     }
