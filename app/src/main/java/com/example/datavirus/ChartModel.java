@@ -18,8 +18,15 @@ public class ChartModel {
 
     private ArrayList<LineDataSet> lineDataSets;
 
+    private ArrayList<String> elementsName;
+
+    public ArrayList<String> getElementsName() {
+        return elementsName;
+    }
+
     public ChartModel() {
         this.lineDataSets = new ArrayList<>();
+        this.elementsName = new ArrayList<>();
     }
 
     public static ChartModel getInstance() {
@@ -34,21 +41,21 @@ public class ChartModel {
             ld.addDataSet(lds);
         }
         chart.setData(ld);
-
     }
 
     /**
      * Adds a dataset to the existing chart
      * @param dataset the dataset to plot
-     * @param title the title for the new datas
+     * @param elementName the title for the new datas
      */
-    public void addDataToChart(ArrayList<Integer> dataset, String title) {
+    public void addDataToChart(ArrayList<Integer> dataset, String elementName) {
         List<Entry> entries = new ArrayList<Entry>();
+        this.elementsName.add(elementName);
         int i = 0;
         for (Integer data : dataset) {
             entries.add(new Entry(i++, data));
         }
-        LineDataSet lineDataSet = new LineDataSet(entries, title);
+        LineDataSet lineDataSet = new LineDataSet(entries, elementName);
         Integer color = this.getRandomColor();
         lineDataSet.setColor(color);
         lineDataSet.setCircleColor(color);
@@ -62,4 +69,5 @@ public class ChartModel {
         Integer b = rand.nextInt(255);
         return Color.rgb(r, g, b);
     }
+
 }

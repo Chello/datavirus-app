@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
+//TODO javadoc
 public class DataTilesFragment extends Fragment {
 
     private DataTilesAdapter adapter;
