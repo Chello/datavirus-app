@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         Bundle b = new Bundle();
 
         b.putIntegerArrayList(ChartActivity.FIELD_DATA, this.covidData.getValuesFromGeoField(geo, field));
-        //b.putParcelable(ChartActivity.DATE, this.covidData.getFirstDate());
 
         i.putExtras(b);
         i.putExtra(ChartActivity.DATE, this.covidData.getFirstDate());

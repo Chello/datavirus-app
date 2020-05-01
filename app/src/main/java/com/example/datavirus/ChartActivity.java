@@ -11,6 +11,7 @@ import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.LimitLine;
@@ -33,58 +34,20 @@ public class ChartActivity extends AppCompatActivity {
 
     private LineChart covidChart;
 
-    private ArrayList<ArrayList<Integer>> datasets;
-    private ArrayList<Integer> denominazioneList;
+//    private ArrayList<ArrayList<Integer>> datasets;
+//    private ArrayList<Integer> denominazioneList;
+    private ChartModel chartModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
-
-        SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = pref.edit();
-//        if (pref.getString("Chiavesp") == null) {
-//            editor.putString("Chiavesp", "valoresp");
-//            editor.commit();
-//        }
-
-        Log.d("Chiave", pref.getString("Chiavesp", "Non c'e niente di salvato cazzo"));
+        this.chartModel = ChartModel.getInstance();
 
         this.setupChart();
-        this.addDataToChart(getIntent().getExtras().getIntegerArrayList(FIELD_DATA),
+        this.chartModel.addDataToChart(getIntent().getExtras().getIntegerArrayList(FIELD_DATA),
                 getIntent().getStringExtra(FIELD) + " " + getIntent().getStringExtra(DENOMINAZIONE));
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("Chiave", "Loooool");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    /**
-     * Adds a dataset to the existing chart
-     * @param dataset the dataset to plot
-     * @param title the title for the new datas
-     */
-    public void addDataToChart(ArrayList<Integer> dataset, String title) {
-        List<Entry> entries = new ArrayList<Entry>();
-        int i = 0;
-        for (Integer data : dataset) {
-            entries.add(new Entry(i++, data));
-        }
-        LineDataSet dataSet = new LineDataSet(entries, title);
-        LineData lineData = new LineData(dataSet);
-        this.covidChart.setData(lineData);
+        this.chartModel.addLinesToChart(this.covidChart);
     }
 
     /**
@@ -107,11 +70,6 @@ public class ChartActivity extends AppCompatActivity {
     }
 
     public void onClickAddBtn(View v) {
-        //moveTaskToBack(false);
-        SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("Chiavesp", "valoresp");
-        editor.apply();
         finish();
     }
 
