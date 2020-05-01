@@ -20,6 +20,8 @@
     <string name="province">Provincia</string>
     <string name="loading_error">Errore nel download dei dati dal repository GitHub del Dipartimento di Protezione Civile. Riprovare piú tardi.</string>
     <string name="close">Chiudi</string>
+    <string name="add">Aggiungi</string>
+    <string name="save">Salva</string>
     <string name="geo_picker_title">Seleziona localitá</string>
     <string name="national_poll">andamento nazionale</string>
 

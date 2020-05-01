@@ -1,10 +1,15 @@
 package com.example.datavirus;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.util.Log;
+import android.view.View;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -22,56 +27,118 @@ import java.util.List;
 public class ChartActivity extends AppCompatActivity {
 
     public static String DATE = "date";
+    public static String FIELD_DATA = "field_data";
     public static String FIELD = "field";
     public static String DENOMINAZIONE = "denominazione";
+
+    private LineChart covidChart;
+
+    private ArrayList<ArrayList<Integer>> datasets;
+    private ArrayList<Integer> denominazioneList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
-        LineChart chart = (LineChart) findViewById(R.id.chart);
 
-        Intent intent = getIntent();
-        Bundle b = intent.getExtras();
-        Calendar date = (Calendar) intent.getSerializableExtra(DATE);
+        SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = pref.edit();
+//        if (pref.getString("Chiavesp") == null) {
+//            editor.putString("Chiavesp", "valoresp");
+//            editor.commit();
+//        }
 
-        ArrayList<Integer> dataObjects = b.getIntegerArrayList(FIELD);
+        Log.d("Chiave", pref.getString("Chiavesp", "Non c'e niente di salvato cazzo"));
+
+        this.setupChart();
+        this.addDataToChart(getIntent().getExtras().getIntegerArrayList(FIELD_DATA),
+                getIntent().getStringExtra(FIELD) + " " + getIntent().getStringExtra(DENOMINAZIONE));
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("Chiave", "Loooool");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    /**
+     * Adds a dataset to the existing chart
+     * @param dataset the dataset to plot
+     * @param title the title for the new datas
+     */
+    public void addDataToChart(ArrayList<Integer> dataset, String title) {
         List<Entry> entries = new ArrayList<Entry>();
         int i = 0;
-        for (Integer data : dataObjects) {
-            // turn your data into Entry objects
-            new Entry();
-            entries.add(new Entry(++i, data));
+        for (Integer data : dataset) {
+            entries.add(new Entry(i++, data));
         }
-
-        LineDataSet dataSet = new LineDataSet(entries, "labella");
-
+        LineDataSet dataSet = new LineDataSet(entries, title);
         LineData lineData = new LineData(dataSet);
-        chart.setData(lineData);
+        this.covidChart.setData(lineData);
+    }
 
-        //TODO Tentone 1
-        YAxis y = chart.getAxisLeft();
+    /**
+     * Setups the chart
+     */
+    private void setupChart() {
+        this.covidChart = (LineChart) findViewById(R.id.chart);
+
+        //Add formatter to X axis, so will plotted dates instead of increment number
+        Calendar date = (Calendar) getIntent().getSerializableExtra(DATE);
+        DateXAxisFormatter formatter = new DateXAxisFormatter(date);
+        this.covidChart.getXAxis().setValueFormatter(formatter);
+
+        //Make y=0 black and bold
+        YAxis y = this.covidChart.getAxisLeft();
         LimitLine ll = new LimitLine(0);
         ll.setLineColor(Color.BLACK);
         ll.setLineWidth(3f);
-
         y.addLimitLine(ll);
-
-        //TODO Tentone 2
-
-        DateXAxisFormatter formatter = new DateXAxisFormatter(date);
-        chart.getXAxis().setValueFormatter(formatter);
-
     }
 
-    class DateXAxisFormatter extends ValueFormatter {
+    public void onClickAddBtn(View v) {
+        //moveTaskToBack(false);
+        SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("Chiavesp", "valoresp");
+        editor.apply();
+        finish();
+    }
 
+    /**
+     * Class for implement date in the X axis in current chart
+     */
+    class DateXAxisFormatter extends ValueFormatter {
+        /**
+         * The date of the first day of outbreak start
+         */
         private Calendar startDate;
 
+        /**
+         * Constructor. Requires the date of the first outbreack analysis
+         * @param startDate the date of the first day of outbreak
+         */
         public DateXAxisFormatter(Calendar startDate) {
             this.startDate = startDate;
         }
 
+        //TODO scrivi qualcosa qua
+        /**
+         *
+         * @param value
+         * @param axis
+         * @return
+         */
         @Override
         public String getAxisLabel(float value, AxisBase axis) {
             Calendar toRet = (Calendar) this.startDate.clone();
