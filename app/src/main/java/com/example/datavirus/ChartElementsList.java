@@ -1,15 +1,21 @@
 package com.example.datavirus;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -44,8 +50,13 @@ public class ChartElementsList extends Fragment {
 
         recyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager layoutManager = linearLayoutManager;
         recyclerView.setLayoutManager(layoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                linearLayoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         this.adapter = new ChartElementsAdapter();
         recyclerView.setAdapter(this.adapter);
@@ -66,9 +77,13 @@ public class ChartElementsList extends Fragment {
     public class ChartElementsAdapter extends RecyclerView.Adapter<ChartElementsAdapter.ChartElementsHolder> {
 
         private ArrayList<String> elements;
+        private ArrayList<Integer> colors;
+        //TODO devi fare un;interfaccia su chartactivity per triggerare il refresh
+        private Context context;
 
         public ChartElementsAdapter() {
             this.elements = ChartModel.getInstance().getElementsName();
+            this.colors = ChartModel.getInstance().getElementsColor();
         }
 
         @NonNull
@@ -76,13 +91,15 @@ public class ChartElementsList extends Fragment {
         public ChartElementsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.chart_element_recycler_item, parent, false);
-            ChartElementsHolder vh = new ChartElementsHolder(v);
+            ChartElementsHolder vh = new ChartElementsHolder(v, (OnTickChange) getActivity());
             return vh;
         }
 
         @Override
         public void onBindViewHolder(@NonNull ChartElementsHolder holder, int position) {
             holder.setDenominazione(this.elements.get(position));
+            holder.setColor(this.colors.get(position));
+            holder.setPos(position);
         }
 
         @Override
@@ -93,20 +110,42 @@ public class ChartElementsList extends Fragment {
         public class ChartElementsHolder extends RecyclerView.ViewHolder {
 
             private TextView denominazione;
-            private TextView field;
+            private CheckBox visible;
+            private Integer pos;
+            private OnTickChange listener;
+            private CardView color;
 
-            public ChartElementsHolder(View v) {
+            public ChartElementsHolder(View v, final OnTickChange listener) {
                 super(v);
                 this.denominazione = v.findViewById(R.id.chart_element_recycler_denominazione);
-                this.field = v.findViewById(R.id.chart_element_recycler_field);
+                this.visible = v.findViewById(R.id.chart_element_recycler_visible_checkbox);
+                this.setChecked(true);
+                this.listener = listener;
+                this.color = v.findViewById(R.id.chart_element_recycler_color);
+                this.visible.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        ChartModel cm = ChartModel.getInstance();
+                        cm.setElementVisible(pos, isChecked);
+                        listener.onTickChange();
+                    }
+                });
             }
 
             public void setDenominazione(String denominazione) {
                 this.denominazione.setText(denominazione);
             }
 
-            public void setField(String field) {
-                this.field.setText(field);
+            public void setChecked(Boolean check) {
+                this.visible.setChecked(check);
+            }
+
+            public void setColor(Integer color) {
+                this.color.setBackgroundColor(color);
+            }
+
+            public void setPos(Integer pos) {
+                this.pos = pos;
             }
         }
     }

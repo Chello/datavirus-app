@@ -20,13 +20,27 @@ public class ChartModel {
 
     private ArrayList<String> elementsName;
 
+    private ArrayList<Integer> elementsColor;
+
+    private ArrayList<Boolean> elementsVisible;
+
     public ArrayList<String> getElementsName() {
-        return elementsName;
+        return this.elementsName;
+    }
+
+    public ArrayList<Integer> getElementsColor() {
+        return this.elementsColor;
+    }
+
+    public void setElementVisible(Integer pos, Boolean visible) {
+        this.elementsVisible.set(pos, visible);
     }
 
     public ChartModel() {
         this.lineDataSets = new ArrayList<>();
         this.elementsName = new ArrayList<>();
+        this.elementsColor = new ArrayList<>();
+        this.elementsVisible = new ArrayList<>();
     }
 
     public static ChartModel getInstance() {
@@ -35,12 +49,18 @@ public class ChartModel {
         return instance;
     }
 
-    public void addLinesToChart(LineChart chart) {
+//    public Integer getPosFromDenominazione(String denominazione)
+
+    public void setChartData(LineChart chart) {
         LineData ld = new LineData();
-        for (LineDataSet lds : instance.lineDataSets) {
-            ld.addDataSet(lds);
+        //for (LineDataSet lds : instance.lineDataSets) {
+        for (Integer i = 0; i < instance.lineDataSets.size(); i++) {
+            LineDataSet lds = instance.lineDataSets.get(i);
+            if (instance.elementsVisible.get(i))
+                ld.addDataSet(lds);
         }
         chart.setData(ld);
+        chart.invalidate();
     }
 
     /**
@@ -48,15 +68,17 @@ public class ChartModel {
      * @param dataset the dataset to plot
      * @param elementName the title for the new datas
      */
-    public void addDataToChart(ArrayList<Integer> dataset, String elementName) {
+    public void addDataToModel(ArrayList<Integer> dataset, String elementName) {
         List<Entry> entries = new ArrayList<Entry>();
         this.elementsName.add(elementName);
+        this.elementsVisible.add(true);
         int i = 0;
         for (Integer data : dataset) {
             entries.add(new Entry(i++, data));
         }
         LineDataSet lineDataSet = new LineDataSet(entries, elementName);
         Integer color = this.getRandomColor();
+        this.elementsColor.add(color);
         lineDataSet.setColor(color);
         lineDataSet.setCircleColor(color);
         instance.lineDataSets.add(lineDataSet);
