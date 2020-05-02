@@ -14,7 +14,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.Calendar;
 
-public class ChartActivity extends AppCompatActivity implements OnTickChange {
+public class ChartActivity extends AppCompatActivity implements OnChartElementActions {
 
     public static String DATE = "date";
     public static String FIELD_DATA = "field_data";
@@ -64,7 +64,7 @@ public class ChartActivity extends AppCompatActivity implements OnTickChange {
     }
 
     @Override
-    public void onTickChange() {
+    public void refreshchart() {
         this.chartModel.setChartData(this.covidChart);
     }
 

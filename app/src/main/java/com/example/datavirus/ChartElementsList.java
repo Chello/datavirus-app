@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -91,7 +91,7 @@ public class ChartElementsList extends Fragment {
         public ChartElementsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.chart_element_recycler_item, parent, false);
-            ChartElementsHolder vh = new ChartElementsHolder(v, (OnTickChange) getActivity());
+            ChartElementsHolder vh = new ChartElementsHolder(v, (OnChartElementActions) getActivity());
             return vh;
         }
 
@@ -112,22 +112,34 @@ public class ChartElementsList extends Fragment {
             private TextView denominazione;
             private CheckBox visible;
             private Integer pos;
-            private OnTickChange listener;
+            private OnChartElementActions listener;
             private CardView color;
+            private ImageButton delete;
 
-            public ChartElementsHolder(View v, final OnTickChange listener) {
+            public ChartElementsHolder(View v, final OnChartElementActions listener) {
                 super(v);
                 this.denominazione = v.findViewById(R.id.chart_element_recycler_denominazione);
                 this.visible = v.findViewById(R.id.chart_element_recycler_visible_checkbox);
                 this.setChecked(true);
-                this.listener = listener;
                 this.color = v.findViewById(R.id.chart_element_recycler_color);
+                this.delete = v.findViewById(R.id.chart_element_recycler_delete);
+                this.listener = listener;
                 this.visible.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         ChartModel cm = ChartModel.getInstance();
                         cm.setElementVisible(pos, isChecked);
-                        listener.onTickChange();
+                        listener.refreshchart();
+                    }
+                });
+                this.delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ChartModel cm = ChartModel.getInstance();
+                        cm.deleteItem(pos);
+                        notifyItemRemoved(pos);
+                        notifyItemRangeChanged(pos, cm.getSize());
+                        listener.refreshchart();
                     }
                 });
             }

@@ -43,9 +43,25 @@ public class ChartModel {
         this.elementsVisible = new ArrayList<>();
     }
 
+    public void deleteItem(int pos) {
+        this.elementsVisible.remove(pos);
+        this.elementsColor.remove(pos);
+        this.lineDataSets.remove(pos);
+        this.elementsName.remove(pos);
+    }
+
+    public Integer getSize() {
+        return this.elementsName.size();
+    }
+
     public static ChartModel getInstance() {
         if (instance == null)
-            instance = new ChartModel();
+            instance = startFresh();
+        return instance;
+    }
+
+    public static ChartModel startFresh() {
+        instance = new ChartModel();
         return instance;
     }
 
