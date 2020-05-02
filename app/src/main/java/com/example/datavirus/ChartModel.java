@@ -90,7 +90,7 @@ public class ChartModel {
         this.elementsVisible.add(true);
         int i = 0;
         for (Integer data : dataset) {
-            entries.add(new Entry(i++, data));
+            entries.add(new Entry(i++, data != null ? data : 0));
         }
         LineDataSet lineDataSet = new LineDataSet(entries, elementName);
         Integer color = this.getRandomColor();

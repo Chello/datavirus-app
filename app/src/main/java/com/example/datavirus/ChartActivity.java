@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -55,7 +56,10 @@ public class ChartActivity extends AppCompatActivity implements OnChartElementAc
         //remove legend
         this.covidChart.getLegend().setEnabled(false);
 
-        //
+        //Remove description label
+        this.covidChart.getDescription().setEnabled(false);
+
+        //Finally set data on the chart
         this.chartModel.setChartData(this.covidChart);
     }
 
@@ -66,6 +70,13 @@ public class ChartActivity extends AppCompatActivity implements OnChartElementAc
     @Override
     public void refreshchart() {
         this.chartModel.setChartData(this.covidChart);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("Back", "Premuto");
+        ChartModel.startFresh();
+        super.onBackPressed();
     }
 
     /**
