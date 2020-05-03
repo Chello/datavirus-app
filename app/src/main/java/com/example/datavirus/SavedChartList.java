@@ -19,6 +19,8 @@ public class SavedChartList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_chart_list);
+        this.savetoFile();
+        this.readFromFile();
     }
 
     private void savetoFile() {
@@ -49,8 +51,8 @@ public class SavedChartList extends AppCompatActivity {
 
     private void readFromFile() {
         String textFromFile = "";
-// Gets the file from the primary external storage space of the
-// current application.
+        // Gets the file from the primary external storage space of the
+        // current application.
         File testFile = new File(this.getExternalFilesDir(null), "TestFile.txt");
         if (testFile != null) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -65,6 +67,7 @@ public class SavedChartList extends AppCompatActivity {
                     textFromFile += "\n";
                 }
                 reader.close();
+                Log.d("Lettura file", textFromFile);
             } catch (Exception e) {
                 Log.e("ReadWriteFile", "Unable to read the TestFile.txt file.");
             }

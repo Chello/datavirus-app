@@ -1,54 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical" >
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
 
-        <TextView
-            android:id="@+id/data_tiles_head"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:text="@string/data_tiles_head"
-            android:textSize="30sp"
-            app:autoSizeTextType="uniform" />
+            android:layout_gravity="center_horizontal|center_vertical" >
 
-        <Button
+            <TextView
+                android:id="@+id/data_tiles_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="@string/data_tiles_head"
+                android:textSize="30sp"
+                app:autoSizeTextType="uniform" />
 
-            android:id="@+id/button_geographic"
+            <Button
+
+                android:id="@+id/button_geographic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:text="@string/geographicChooser"
+                android:padding="16dp"
+                android:scrollbarSize="16dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/head_date"
+                android:textAlignment="center" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/data_tiles"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:text="@string/geographicChooser"
-            android:padding="16dp"
-            android:scrollbarSize="16dp"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/head_date"
-            android:textAlignment="center" />
+        </ScrollView>
 
     </LinearLayout>
 
-    <ScrollView
-        android:id="@+id/data_tiles"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-    </ScrollView>
-
-</LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fab_saved_list"
+        android:src="@android:drawable/ic_menu_save"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_margin="20dp"
+        android:padding="20dp" />
+</RelativeLayout>

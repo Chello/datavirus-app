@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements OnDPCDataReady, OnDPCGeoListener, OnTileClick {
@@ -41,7 +43,9 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
      * Manages the handlers for buttons
      */
     private void buttonHandler() {
+        final MainActivity activity = this;
         Button macrofield = (Button) findViewById(R.id.button_geographic);
+        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab_saved_list);
         //TODO check lambda
         macrofield.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +54,13 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
                 //picker.setCovidData(covidData);
                 getSupportFragmentManager().beginTransaction()
                         .add(picker, "picker").addToBackStack(null).commit();
+            }
+        });
+        myFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(activity, SavedChartList.class);
+                activity.startActivity(i);
             }
         });
     }
