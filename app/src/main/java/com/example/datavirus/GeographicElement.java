@@ -1,9 +1,11 @@
 package com.example.datavirus;
 
-public class GeographicElement {
+import androidx.annotation.Nullable;
+
+public class GeographicElement implements Comparable<GeographicElement> {
     //TODO write doc
-    private String denominazione;
-    private DPCData.GeoField geoField;
+    protected String denominazione;
+    protected DPCData.GeoField geoField;
 
     public String getDenominazione() {
         return denominazione;
@@ -21,5 +23,10 @@ public class GeographicElement {
     public GeographicElement(DPCData.GeoField geoField) {
         this.geoField = geoField;
         this.denominazione = "Nazionale";//res.getString(R.string.national_poll);
+    }
+
+    @Override
+    public int compareTo(GeographicElement o) {
+        return this.denominazione.compareTo(o.denominazione);
     }
 }

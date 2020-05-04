@@ -106,7 +106,7 @@ public class ChartActivity extends AppCompatActivity implements OnChartElementAc
         @Override
         public String getAxisLabel(float value, AxisBase axis) {
             Calendar toRet = (Calendar) this.startDate.clone();
-            toRet.add(Calendar.DAY_OF_MONTH, Math.round(value));
+            toRet.add(Calendar.DAY_OF_MONTH, Math.round(value) +1);
             return String.format(getResources().getString(R.string.placeholder_date_chart), toRet.get(Calendar.DAY_OF_MONTH), toRet.get(Calendar.MONTH));
 
         }

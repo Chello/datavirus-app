@@ -8,9 +8,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -98,28 +101,23 @@ public class DataTilesFragment extends Fragment {
             this.fields = fields.toArray(new String[0]);
         }
 
-        // Create new views (invoked by the layout manager)
         @Override
-        public DataTilesHolder onCreateViewHolder(ViewGroup parent,
-                                                  int viewType) {
-            // create a new view
+        public DataTilesHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             CardView v = (CardView) LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.recycler_tile, parent, false);
             DataTilesHolder vh = new DataTilesHolder(v, (OnTileClick) getActivity());
             return vh;
         }
 
-        // Replace the contents of a view (invoked by the layout manager)
         @Override
         public void onBindViewHolder(DataTilesHolder holder, int position) {
             String key = this.fields[position];
-            holder.setTileHead(key);
+            holder.setTileHeadTick(key);
             holder.setQty(this.reports[this.last].getInt(key));
             holder.setQtyDelta(this.reports[this.last].getInt(key) - this.reports[this.lastLast].getInt(key));
 
         }
 
-        // Return the size of your dataset (invoked by the layout manager)
         @Override
         public int getItemCount() {
             return this.fields.length;
@@ -131,6 +129,10 @@ public class DataTilesFragment extends Fragment {
             private TextView qty;
             private TextView qty_delta;
             private TextView tile_head;
+            private CheckBox star;
+
+            private String field;
+
             private OnTileClick listener;
 
             public void setQty(Integer qty) {
@@ -141,7 +143,12 @@ public class DataTilesFragment extends Fragment {
                 this.qty_delta.setText(qty_delta.toString());
             }
 
-            public void setTileHead(String tile_head) {
+            public void setTileHeadTick(String tile_head) {
+                this.field = tile_head;
+                //If this element exists
+                if (StarredTileSaver.getInstance(getContext()).exists(geoField, tile_head) != -1)
+                    //tick the tick
+                    this.star.setChecked(true);
                 this.tile_head.setText(this.adjustTitleString(tile_head));
                 //setting colors
                 if (tile_head.equals(getResources().getText(R.string.denominazione_total)))
@@ -154,6 +161,18 @@ public class DataTilesFragment extends Fragment {
                     this.container.setBackgroundColor(getResources().getColor(R.color.colorRed, null));
                 else
                     this.container.setBackgroundColor(getResources().getColor(R.color.colorGrey, null));
+
+                //set listener
+                this.star.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        //star.setBackgroundResource(R.drawable.star);
+                        if (isChecked)
+                            StarredTileSaver.getInstance(getContext()).saveElement(geoField, field);
+                        else StarredTileSaver.getInstance(getContext()).deleteElement(geoField, field);
+
+                    }
+                });
             }
 
             private String adjustTitleString(String s) {
@@ -168,6 +187,7 @@ public class DataTilesFragment extends Fragment {
                 this.qty = v.findViewById(R.id.tile_qty);
                 this.qty_delta = v.findViewById(R.id.tile_qty_delta);
                 this.tile_head = v.findViewById(R.id.tile_head);
+                this.star = v.findViewById(R.id.recycler_tile_star);
                 v.setOnClickListener(this);
             }
 

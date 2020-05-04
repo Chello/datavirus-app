@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         final MainActivity activity = this;
         Button macrofield = (Button) findViewById(R.id.button_geographic);
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab_saved_list);
-        //TODO check lambda
+
         macrofield.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
                         .add(picker, "picker").addToBackStack(null).commit();
             }
         });
+
         myFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
 
     @Override
     public void onTileClick(GeographicElement geo, String field) {
-        Log.d("Tile click", field);
         Intent i = new Intent(this, ChartActivity.class);
         Bundle b = new Bundle();
 

@@ -11,58 +11,53 @@
     app:cardElevation="8dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" >
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tile_head"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tile_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="16dp"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tile_qty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tile_qty_delta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="16dp"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/recycler_tile_star"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textSize="20sp"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tile_qty"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="TextView"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/tile_qty_delta"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_margin="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_alignParentEnd="true" />
 
-        <TextView
-            android:id="@+id/tile_qty_delta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="TextView"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/tile_qty"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tile_qty" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
