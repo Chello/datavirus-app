@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         Intent i = new Intent(this, ChartActivity.class);
         Bundle b = new Bundle();
 
-        b.putIntegerArrayList(ChartActivity.FIELD_DATA, this.covidData.getValuesFromGeoField(geo, field));
+        b.putIntegerArrayList(ChartActivity.FIELD_DATA, this.covidData.getValuesFromGeoField(new FieldGeographicElement(geo, field)));
 
         i.putExtras(b);
         i.putExtra(ChartActivity.DATE, this.covidData.getFirstDate());

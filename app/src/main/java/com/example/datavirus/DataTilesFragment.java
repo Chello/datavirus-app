@@ -20,7 +20,7 @@ import java.util.ArrayList;
 //TODO javadoc
 public class DataTilesFragment extends Fragment {
 
-    private DataTilesAdapter adapter;
+    private StaticGeoTilesAdapter adapter;
 
     private DPCData covidData;
 
@@ -55,7 +55,7 @@ public class DataTilesFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        this.adapter = new DataTilesAdapter(this.covidData.getReportFromGeoData(this.geoField));
+        this.adapter = new StaticGeoTilesAdapter(this.covidData.getReportFromGeoElement(this.geoField));
         recyclerView.setAdapter(this.adapter);
     }
 
@@ -63,13 +63,16 @@ public class DataTilesFragment extends Fragment {
         return new DataTilesFragment();
     }
 
-    public class DataTilesAdapter extends RecyclerView.Adapter<DataTilesAdapter.DataTilesHolder> {
+    /**
+     * Adapter for tiles with static GeographicField
+     */
+    public class StaticGeoTilesAdapter extends RecyclerView.Adapter<StaticGeoTilesAdapter.DataTilesHolder> {
         private DailyReport[] reports;
         private String[] fields;
         private Integer last;
         private Integer lastLast;
 
-        public DataTilesAdapter(DailyReport[] myDataset) {
+        public StaticGeoTilesAdapter(DailyReport[] myDataset) {
             this.reports = myDataset;
             this.last = myDataset.length -1;
             this.lastLast = myDataset.length -2;
@@ -95,7 +98,7 @@ public class DataTilesFragment extends Fragment {
         @Override
         public void onBindViewHolder(DataTilesHolder holder, int position) {
             String key = this.fields[position];
-            holder.setTileHeadTick(key);
+            holder.setTileHeadTick(key, null);
             holder.setQty(this.reports[this.last].getInt(key));
             holder.setQtyDelta(this.reports[this.last].getInt(key) - this.reports[this.lastLast].getInt(key));
         }
@@ -125,13 +128,17 @@ public class DataTilesFragment extends Fragment {
                 this.qty_delta.setText(qty_delta.toString());
             }
 
-            public void setTileHeadTick(String tile_head) {
+            public void setTileHeadTick(String tile_head, @Nullable String denominazione) {
                 this.field = tile_head;
                 //If this element exists
                 if (StarredTileSaver.getInstance(getContext()).exists(geoField, tile_head) != -1)
                     //tick the tick
                     this.star.setChecked(true);
-                this.tile_head.setText(this.adjustTitleString(tile_head));
+                //If there's not a denominazione
+                if (denominazione == null)
+                    this.tile_head.setText(this.adjustTitleString(tile_head));//only set header text with the tile_head
+                else this.tile_head.setText(String.format((String) getResources().getText(R.string.placeholder_concat), this.adjustTitleString(tile_head), denominazione));
+
                 //setting colors
                 if (tile_head.equals(getResources().getText(R.string.denominazione_total)))
                     this.container.setBackgroundColor(getResources().getColor(R.color.colorBlue, null));

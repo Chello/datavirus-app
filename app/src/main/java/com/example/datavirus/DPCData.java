@@ -123,7 +123,7 @@ public class DPCData  {
         return this.nazionale;
     }
 
-    public DailyReport[] getReportFromGeoData(GeographicElement element) {
+    public DailyReport[] getReportFromGeoElement(GeographicElement element) {
         if (element.getGeoField() == GeoField.NAZIONALE)
             return this.nazionale;
         if (element.getGeoField() == GeoField.REGIONALE)
@@ -133,11 +133,11 @@ public class DPCData  {
         return null;
     }
 
-    public ArrayList<Integer> getValuesFromGeoField(GeographicElement element, String field) {
-        DailyReport[] reports = this.getReportFromGeoData(element);
+    public ArrayList<Integer> getValuesFromGeoField(FieldGeographicElement element) {
+        DailyReport[] reports = this.getReportFromGeoElement(element);
         ArrayList<Integer> toRet = new ArrayList<Integer>();
         for (DailyReport report : reports) {
-            toRet.add(report.getInt(field));
+            toRet.add(report.getInt(element.getField()));
         }
         return toRet;
     }
@@ -164,21 +164,11 @@ public class DPCData  {
      * @return the date of the day requested in parameter
      */
     private Calendar getDate(Integer pos) {
-//        try {
-//            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ITALY);
-//            String dateRaw = this.nazionale[pos].getString("data");
-//            //return format.parse(dateRaw);
-//            Calendar calendar = Calendar.getInstance(); // creates a new calendar instance
-//            calendar.setTime(dateFormat.parse(dateRaw));   // assigns calendar to given date
-//            return calendar;
-//        } catch (ParseException e) {
-//            return null;
-//        }
         String dateRaw = this.nazionale[pos].getString("data");
         return DPCData.convertStringToDate(dateRaw);
     }
 
-    public static Calendar convertStringToDate(String s) {
+    private static Calendar convertStringToDate(String s) {
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ITALY);
             Calendar calendar = Calendar.getInstance(); // creates a new calendar instance
@@ -194,7 +184,7 @@ public class DPCData  {
      * @param regione the regione to obtain
      * @return the Regiona report
      */
-    public DailyReport[] getRegionaleReport(String regione) {
+    private DailyReport[] getRegionaleReport(String regione) {
         DailyReport[] arr = new DailyReport[this.regionale.size()];
         if (this.regionale.containsKey(regione))
             return this.regionale.get(regione).toArray(arr);
@@ -206,7 +196,7 @@ public class DPCData  {
      * @param provincia the provincia to obtain
      * @return the Provincia report
      */
-    public DailyReport[] getProvincialeReport(String provincia) {
+    private DailyReport[] getProvincialeReport(String provincia) {
         if (this.provinciale.containsKey(provincia)) {
             ArrayList<DailyReport> arr = this.provinciale.get(provincia);
             return arr.toArray(new DailyReport[arr.size()]);
