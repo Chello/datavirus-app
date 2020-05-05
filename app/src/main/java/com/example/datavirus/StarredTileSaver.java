@@ -20,6 +20,10 @@ public class StarredTileSaver {
 
     private Context context;
 
+    public ArrayList<FieldGeographicElement> getSavedTiles() {
+        return savedTiles;
+    }
+
     private ArrayList<FieldGeographicElement> savedTiles;
 
     public StarredTileSaver(Context context) {
@@ -34,24 +38,24 @@ public class StarredTileSaver {
         return instance;
     }
 
-    public void saveElement(GeographicElement geographicElement, String field) {
+    public void saveElement(FieldGeographicElement geographicElement) {
 
-        this.savedTiles.add(new FieldGeographicElement(geographicElement, field));
+        this.savedTiles.add(geographicElement);
         this.savetoFile();
         this.loadFile();
     }
 
-    public Integer exists(GeographicElement geographicElement, String field) {
+    public Integer exists(FieldGeographicElement geographicElement) {
         Integer i;
         for (i = 0; i < this.savedTiles.size(); i++) {
-            if (this.savedTiles.get(i).compareTo(new FieldGeographicElement(geographicElement, field)) == 0)
+            if (this.savedTiles.get(i).compareTo(geographicElement) == 0)
                 return i;
         }
         return -1;
     }
 
-    public void deleteElement(GeographicElement geographicElement, String field) {
-        Integer i = this.exists(geographicElement, field);
+    public void deleteElement(FieldGeographicElement geographicElement) {
+        Integer i = this.exists(geographicElement);
         if (i != -1)
             this.savedTiles.remove(i);
         this.savetoFile();

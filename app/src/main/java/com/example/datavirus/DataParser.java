@@ -18,10 +18,14 @@ import java.util.Scanner;
 public class DataParser {
 
     private LoadingDialog dialog;
-    private DPCData repositoryData;
+    private static DPCData repositoryData;
     private FragmentManager fm;
     private OnDPCDataReady UI;
     private Resources res;
+
+    public static DPCData getDPCDataInstance() {
+        return repositoryData;
+    }
 
     private static String JSONUrl[] = new String[] {
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale.json",
@@ -39,15 +43,6 @@ public class DataParser {
     public boolean refreshData() {
         AsyncTask<String, Integer, String[]> data = new AsyncDownloader().execute(JSONUrl);
         return true;
-    }
-
-    public void setUI(OnDPCDataReady UI) {
-        this.UI = UI;
-        if (this.repositoryData == null) {
-            this.refreshData();
-        } else {
-            this.UI.setDPCData(this.repositoryData);
-        }
     }
 
     private class AsyncDownloader  extends AsyncTask<String, Integer, String[]> {

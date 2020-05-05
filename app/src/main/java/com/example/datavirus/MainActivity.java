@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         myFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(activity, SavedChartList.class);
+                Intent i = new Intent(activity, SavedChartActivity.class);
                 activity.startActivity(i);
             }
         });
@@ -103,16 +102,16 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
     }
 
     @Override
-    public void onTileClick(GeographicElement geo, String field) {
+    public void onTileClick(FieldGeographicElement fieldGeographicElement) {
         Intent i = new Intent(this, ChartActivity.class);
         Bundle b = new Bundle();
 
-        b.putIntegerArrayList(ChartActivity.FIELD_DATA, this.covidData.getValuesFromGeoField(new FieldGeographicElement(geo, field)));
+        b.putIntegerArrayList(ChartActivity.FIELD_DATA, this.covidData.getValuesFromGeoField(fieldGeographicElement));
 
         i.putExtras(b);
         i.putExtra(ChartActivity.DATE, this.covidData.getFirstDate());
-        i.putExtra(ChartActivity.DENOMINAZIONE, geo.getDenominazione());
-        i.putExtra(ChartActivity.FIELD, field);
+        i.putExtra(ChartActivity.DENOMINAZIONE, fieldGeographicElement.getDenominazione());
+        i.putExtra(ChartActivity.FIELD, fieldGeographicElement.getField());
         startActivity(i);
     }
 
