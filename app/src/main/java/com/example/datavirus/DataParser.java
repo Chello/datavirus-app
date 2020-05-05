@@ -10,10 +10,7 @@ import android.util.Log;
 
 import androidx.fragment.app.FragmentManager;
 
-import org.json.*;
-
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
@@ -49,7 +46,7 @@ public class DataParser {
         if (this.repositoryData == null) {
             this.refreshData();
         } else {
-            this.UI.setReport(this.repositoryData);
+            this.UI.setDPCData(this.repositoryData);
         }
     }
 
@@ -73,7 +70,7 @@ public class DataParser {
             } else {
                 dialog.dismiss();
                 repositoryData = new DPCData(res, jsonArray[0], jsonArray[1], jsonArray[2]);
-                UI.setReport(repositoryData);
+                UI.setDPCData(repositoryData);
             }
         }
 

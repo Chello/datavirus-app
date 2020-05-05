@@ -26,17 +26,23 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         buttonHandler();
     }
 
+    /**
+     * Function called when DataParser object has DPC data ready
+     * @param data
+     */
     @Override
-    public void setReport(DPCData data) {
+    public void setDPCData(DPCData data) {
         this.covidData = data;
         //Setting nationals values
-        DataTilesFragment frg = DataTilesFragment.newInstance(this.covidData.getNazionale(), new GeographicElement(DPCData.GeoField.NAZIONALE), getResources());
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.data_tiles, frg)
-                .commit();
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.data_tiles, frg)
+//                .commit();
+        DataTilesFragment frg = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_tiles_main);
 
-        this.updateTitle(new GeographicElement(DPCData.GeoField.NAZIONALE));
+        GeographicElement geographicElement = new GeographicElement(DPCData.GeoField.NAZIONALE);
+        frg.setStaticGeoField(geographicElement, this.covidData);
+        this.updateTitle(geographicElement);
     }
 
     /**
@@ -68,11 +74,17 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
 
 
     public void onDPCGeoClick(GeographicElement element) {
-        DataTilesFragment newFragment = DataTilesFragment.newInstance(this.covidData.getReportFromGeoData(element), element, getResources());
+        DataTilesFragment frg = DataTilesFragment.newInstance();
+
+        DataTilesFragment oldFrg = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_tiles_main);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.data_tiles, newFragment)
-                .commit();
+                .replace(R.id.fragment_tiles_main, frg)
+                .addToBackStack(null).commit();
+
+        getSupportFragmentManager().executePendingTransactions();
+
+        frg.setStaticGeoField(element, this.covidData);
 
         this.updateTitle(element);
     }

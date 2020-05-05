@@ -1,14 +1,13 @@
 package com.example.datavirus;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +22,14 @@ public class DataTilesFragment extends Fragment {
 
     private DataTilesAdapter adapter;
 
-    private DailyReport[] reports;
+    private DPCData covidData;
 
     protected GeographicElement geoField;
 
-    public void setReports(DailyReport[] reports) {
-        this.reports = reports;
+    public void setStaticGeoField(GeographicElement field, DPCData reports) {
+        this.geoField = field;
+        this.covidData = reports;
+        populateRecycler(null);
     }
 
     @Override
@@ -40,11 +41,12 @@ public class DataTilesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.data_tiles, container, false);
-        populateRecycler(v);
+        //populateRecycler(v);
         return v;
     }
 
-    private void populateRecycler(View v) {
+
+    private void populateRecycler(@Nullable View v) {
         if (v == null) v = getView();
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_tiles);
 
@@ -53,31 +55,12 @@ public class DataTilesFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        this.adapter = new DataTilesAdapter(this.reports);
+        this.adapter = new DataTilesAdapter(this.covidData.getReportFromGeoData(this.geoField));
         recyclerView.setAdapter(this.adapter);
     }
 
-    public static DataTilesFragment newInstance(DailyReport[] reports, GeographicElement geoField, Resources res) {
-        Bundle args = new Bundle();
-        Integer last = reports.length -1;
-        Integer lastLast = reports.length -2;
-
-        for (String key : reports[last].getKeys(res)) {
-            if (reports[last].getInt(key) != null) {
-                args.putInt(key, reports[last].getInt(key));
-                args.putInt(key + "_delta", reports[last].getInt(key) - reports[lastLast].getInt(key));
-            }
-        }
-
-        DataTilesFragment fragment = new DataTilesFragment();
-        fragment.setArguments(args);
-        fragment.setGeoField(geoField);
-        fragment.setReports(reports);
-        return fragment;
-    }
-
-    public void setGeoField(GeographicElement field) {
-        this.geoField = field;
+    public static DataTilesFragment newInstance() {
+        return new DataTilesFragment();
     }
 
     public class DataTilesAdapter extends RecyclerView.Adapter<DataTilesAdapter.DataTilesHolder> {
@@ -115,7 +98,6 @@ public class DataTilesFragment extends Fragment {
             holder.setTileHeadTick(key);
             holder.setQty(this.reports[this.last].getInt(key));
             holder.setQtyDelta(this.reports[this.last].getInt(key) - this.reports[this.lastLast].getInt(key));
-
         }
 
         @Override

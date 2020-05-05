@@ -38,7 +38,7 @@ public class StarredTileSaver {
 
         this.savedTiles.add(new FieldGeographicElement(geographicElement, field));
         this.savetoFile();
-        //this.loadFile();
+        this.loadFile();
     }
 
     public Integer exists(GeographicElement geographicElement, String field) {
@@ -54,7 +54,8 @@ public class StarredTileSaver {
         Integer i = this.exists(geographicElement, field);
         if (i != -1)
             this.savedTiles.remove(i);
-        savetoFile();
+        this.savetoFile();
+        this.loadFile();
     }
 
     private void savetoFile() {

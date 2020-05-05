@@ -7,5 +7,5 @@ public interface OnDPCDataReady {
 
     //public void updateData(DPCData.DailyReport[] report);
 
-    void setReport(DPCData data);
+    void setDPCData(DPCData data);
 }
