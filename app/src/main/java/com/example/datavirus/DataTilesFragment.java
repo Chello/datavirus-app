@@ -25,6 +25,7 @@ public class DataTilesFragment extends Fragment {
 
     private DPCData covidData;
 
+
     public void setStaticGeoField(GeographicElement geographicElement, DPCData reports) {
         this.covidData = reports;
         populateRecycler(geographicElement);

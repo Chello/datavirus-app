@@ -11,16 +11,20 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
+import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity implements OnDPCDataReady, OnDPCGeoListener, OnTileClick {
 
-    DataParser parser;
-    DPCData covidData;
+    private Stack<GeographicElement> backStackGeoElements;
+    private DPCData covidData;
+    private DataParser parser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.backStackGeoElements = new Stack<>();
         this.parser = new DataParser(getResources(), getSupportFragmentManager(), this);
         buttonHandler();
     }
@@ -39,9 +43,9 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
 //                .commit();
         DataTilesFragment frg = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_tiles_main);
 
-        GeographicElement geographicElement = new GeographicElement(DPCData.GeoField.NAZIONALE);
-        frg.setStaticGeoField(geographicElement, this.covidData);
-        this.updateTitle(geographicElement);
+        this.backStackGeoElements.push(new GeographicElement(DPCData.GeoField.NAZIONALE));
+        frg.setStaticGeoField(this.backStackGeoElements.peek(), this.covidData);
+        this.updateTitle();
     }
 
     /**
@@ -73,24 +77,32 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
 
 
     public void onDPCGeoClick(GeographicElement element) {
+        this.backStackGeoElements.push(element);
         DataTilesFragment frg = DataTilesFragment.newInstance();
 
-        DataTilesFragment oldFrg = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_tiles_main);
-
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_tiles_main, frg)
-                .addToBackStack(null).commit();
+                .addToBackStack(null)
+                .add(R.id.fragment_tiles_main, frg)
+                .commit();
 
         getSupportFragmentManager().executePendingTransactions();
 
         frg.setStaticGeoField(element, this.covidData);
 
-        this.updateTitle(element);
+        this.updateTitle();
     }
 
-    private void updateTitle(GeographicElement element) {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.backStackGeoElements.pop();
+        if (!this.backStackGeoElements.empty())
+            this.updateTitle();
+    }
+
+    private void updateTitle() {
         TextView head = (TextView) findViewById(R.id.data_tiles_head);
-        head.setText(String.format(getResources().getString(R.string.data_tiles_head), element.getDenominazione()));
+        head.setText(String.format(getResources().getString(R.string.data_tiles_head), this.backStackGeoElements.peek().getDenominazione()));
 
         TextView dateTV = (TextView) findViewById(R.id.head_date);
         Calendar date = this.covidData.getLastDate();
