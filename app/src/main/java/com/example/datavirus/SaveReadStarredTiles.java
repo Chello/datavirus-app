@@ -14,9 +14,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class StarredTileSaver {
+/**
+ * Singleton class for read and write the tiles starred
+ */
+public class SaveReadStarredTiles {
 
-    private static StarredTileSaver instance;
+
+    private static SaveReadStarredTiles instance;
 
     private Context context;
 
@@ -26,15 +30,15 @@ public class StarredTileSaver {
 
     private ArrayList<FieldGeographicElement> savedTiles;
 
-    public StarredTileSaver(Context context) {
+    public SaveReadStarredTiles(Context context) {
         this.context = context;
         this.savedTiles = new ArrayList<>();
         this.loadFile();
     }
 
-    public static StarredTileSaver getInstance(Context context) {
+    public static SaveReadStarredTiles getInstance(Context context) {
         if (instance == null)
-            instance = new StarredTileSaver(context);
+            instance = new SaveReadStarredTiles(context);
         return instance;
     }
 

@@ -31,16 +31,11 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
 
     /**
      * Function called when DataParser object has DPC data ready
-     * @param data
+     * @param data the COVID-19 report
      */
     @Override
     public void setDPCData(DPCData data) {
         this.covidData = data;
-        //Setting nationals values
-
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.data_tiles, frg)
-//                .commit();
         DataTilesFragment frg = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_tiles_main);
 
         this.backStackGeoElements.push(new GeographicElement(DPCData.GeoField.NAZIONALE));

@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.service.quicksettings.Tile;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +17,17 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-//TODO javadoc
+/**
+ * Fragment that shows tiles about various FieldGeographicElement obtained via StarredTileSaver
+ * Or for a static Geographic Element, showing all fields contained in that reports
+ */
 public class DataTilesFragment extends Fragment {
 
+    /**
+     * Adapter for the RecyclerView
+     */
     private TilesAdapter adapter;
+
 
     private DPCData covidData;
 
@@ -94,7 +100,7 @@ public class DataTilesFragment extends Fragment {
          * @param covidData DPCData report handler
          */
         public TilesAdapter(DPCData covidData) {
-            StarredTileSaver saver = StarredTileSaver.getInstance(getContext());
+            SaveReadStarredTiles saver = SaveReadStarredTiles.getInstance(getContext());
 
             this.staticGeoField = false;
             this.last = new ArrayList<>();
@@ -178,13 +184,13 @@ public class DataTilesFragment extends Fragment {
             }
 
             public void setQtyDelta(Integer qty_delta) {
-                this.qty_delta.setText(qty_delta.toString());
+                this.qty_delta.setText(String.format(getResources().getString(R.string.placeholder_delta), qty_delta));
             }
 
             public void setTile(final FieldGeographicElement fieldGeographicElement, Boolean specifyRegion) {
                 this.fieldGeographicElement = fieldGeographicElement;
                 //If this element exists
-                if (StarredTileSaver.getInstance(getContext()).exists(fieldGeographicElement) != -1)
+                if (SaveReadStarredTiles.getInstance(getContext()).exists(fieldGeographicElement) != -1)
                     //tick the tick
                     this.star.setChecked(true);
                 //If there's not a denominazione
@@ -212,8 +218,8 @@ public class DataTilesFragment extends Fragment {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         //star.setBackgroundResource(R.drawable.star);
                         if (isChecked)
-                            StarredTileSaver.getInstance(getContext()).saveElement(fieldGeographicElement);
-                        else StarredTileSaver.getInstance(getContext()).deleteElement(fieldGeographicElement);
+                            SaveReadStarredTiles.getInstance(getContext()).saveElement(fieldGeographicElement);
+                        else SaveReadStarredTiles.getInstance(getContext()).deleteElement(fieldGeographicElement);
 
                     }
                 });

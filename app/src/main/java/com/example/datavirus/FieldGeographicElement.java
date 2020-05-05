@@ -1,15 +1,11 @@
 package com.example.datavirus;
 
-import androidx.annotation.Nullable;
-
+/**
+ * Contains also a field (like "casi_totali" or "dimessi_guariti")
+ */
 public class FieldGeographicElement extends GeographicElement {
 
     private String field;
-
-    public FieldGeographicElement(String denominazione, DPCData.GeoField geoField, String field) {
-        super(denominazione, geoField);
-        this.field = field;
-    }
 
     public FieldGeographicElement(GeographicElement geographicElement, String field) {
         super(geographicElement.getDenominazione(), geographicElement.getGeoField());
