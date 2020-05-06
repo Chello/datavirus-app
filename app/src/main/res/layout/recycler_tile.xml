@@ -56,6 +56,7 @@
             android:layout_margin="12dp"
             android:clickable="true"
             android:focusable="true"
+            style="?android:attr/starStyle"
             android:layout_alignParentEnd="true" />
 
     </RelativeLayout>

@@ -86,6 +86,9 @@ public class ChartModel {
      */
     public void addDataToModel(ArrayList<Integer> dataset, String elementName) {
         List<Entry> entries = new ArrayList<Entry>();
+        if (this.elementsName.indexOf(elementName) != -1) {
+            return;
+        }
         this.elementsName.add(elementName);
         this.elementsVisible.add(true);
         int i = 0;
@@ -100,6 +103,10 @@ public class ChartModel {
         instance.lineDataSets.add(lineDataSet);
     }
 
+    /**
+     * Returns an integer representing a random color
+     * @return a random color
+     */
     private Integer getRandomColor() {
         Random rand = new Random();
         Integer r = rand.nextInt(255);

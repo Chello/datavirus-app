@@ -26,6 +26,7 @@
     <string name="geo_picker_title">Seleziona localitá</string>
     <string name="checkbox_visible">Visibile</string>
     <string name="national_poll">andamento nazionale</string>
+    <string name="toast_add_to_chart">Seleziona un altro campo da aggiungere al grafico</string>
 
     <string-array name="macrofields">
         <item>Nazionale</item>

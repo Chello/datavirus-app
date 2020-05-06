@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         Calendar date = DataParser.getDPCDataInstance().getLastDate();
         dateTV.setText(String.format(String.valueOf(getResources().getText(R.string.placeholder_date_ph)),
                 date.get(Calendar.DAY_OF_MONTH),
-                date.get(Calendar.MONTH),
+                date.get(Calendar.MONTH) +1,
                 date.get(Calendar.YEAR),
                 date.get(Calendar.HOUR_OF_DAY)));
     }

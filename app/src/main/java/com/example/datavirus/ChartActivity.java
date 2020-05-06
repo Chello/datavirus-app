@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -63,10 +64,6 @@ public class ChartActivity extends AppCompatActivity implements OnChartElementAc
         this.chartModel.setChartData(this.covidChart);
     }
 
-    public void onClickAddBtn(View v) {
-        finish();
-    }
-
     @Override
     public void refreshchart() {
         this.chartModel.setChartData(this.covidChart);
@@ -77,6 +74,11 @@ public class ChartActivity extends AppCompatActivity implements OnChartElementAc
         Log.d("Back", "Premuto");
         ChartModel.startFresh();
         super.onBackPressed();
+    }
+
+    public void onClickAddBtn(View view) {
+        Toast.makeText(this, getResources().getText(R.string.toast_add_to_chart), Toast.LENGTH_LONG).show();
+        finish();
     }
 
     /**
