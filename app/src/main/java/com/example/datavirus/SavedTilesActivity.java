@@ -19,13 +19,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class SavedChartActivity extends AppCompatActivity implements OnTileClick {
-
-    private DPCData covidData;
-
-    public void setCovidData(DPCData covidData) {
-        this.covidData = covidData;
-    }
+public class SavedTilesActivity extends AppCompatActivity implements OnTileClick {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,18 +38,22 @@ public class SavedChartActivity extends AppCompatActivity implements OnTileClick
         super.onResume();
         DataTilesFragment frg = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.list_saved_tiles_fragment);
 
-        frg.setSavedTilesReport(DataParser.getDPCDataInstance());
+        frg.setSavedTilesReport();
     }
 
+    /**
+     * Creates a new ChartActivity showing data in chart
+     * @param fieldGeographicElement the data specification
+     */
     @Override
     public void onTileClick(FieldGeographicElement fieldGeographicElement) {
         Intent i = new Intent(this, ChartActivity.class);
         Bundle b = new Bundle();
 
-        b.putIntegerArrayList(ChartActivity.FIELD_DATA, this.covidData.getValuesFromGeoField(fieldGeographicElement));
+        b.putIntegerArrayList(ChartActivity.FIELD_DATA, DataParser.getDPCDataInstance().getValuesFromGeoField(fieldGeographicElement));
 
         i.putExtras(b);
-        i.putExtra(ChartActivity.DATE, this.covidData.getFirstDate());
+        i.putExtra(ChartActivity.DATE, DataParser.getDPCDataInstance().getFirstDate());
         i.putExtra(ChartActivity.DENOMINAZIONE, fieldGeographicElement.getDenominazione());
         i.putExtra(ChartActivity.FIELD, fieldGeographicElement.getField());
         startActivity(i);

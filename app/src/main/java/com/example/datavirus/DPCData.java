@@ -25,7 +25,9 @@ import java.util.Set;
 
 /**
  * Objects from this class will contain data from Nazionale, Regionale and Provinciale sections.
- * These data are structured as the italian Dipartimento della Protezione Civile JSONs are structured
+ * These data are structured as the italian Dipartimento della Protezione Civile's JSONs are structured.
+ *
+ * This class is intended as a Singleton. The instance is accessible via DataParser::getDPCDataInstance()
  */
 
 public class DPCData {
@@ -41,14 +43,35 @@ public class DPCData {
             "denominazione_regione", "codice_regione", "In fase di definizione/aggiornamento");
 
     //private static List<String> excludeList;
-    private Gson gson;
     //Reports for territorial data
     private DailyReport[] nazionale;
     private HashMap<String, ArrayList<DailyReport>> regionale;
     private HashMap<String, ArrayList<DailyReport>> provinciale;
 
-    private Resources res;
+    /**
+     * Constructor. Parses the Json strings and structures data
+     * @param nazionaleJson json for nazionale field
+     * @param regionaleJson json for regionale field
+     * @param provincialeJson json for provinciale field
+     */
+    public DPCData(String nazionaleJson, String regionaleJson, String provincialeJson) {
 
+        JsonParser parser = new JsonParser();
+
+        this.nazionale = DailyReport.reportsBuilder(parser.parse(nazionaleJson).getAsJsonArray());
+        DailyReport[] regionale = DailyReport.reportsBuilder(parser.parse(regionaleJson).getAsJsonArray());
+        DailyReport[] provinciale = DailyReport.reportsBuilder(parser.parse(provincialeJson).getAsJsonArray());
+
+        this.regionale = createKeyValueList(regionale);
+        this.provinciale = createKeyValueList(provinciale);
+
+        Log.d("DPCParse", "Data parsed");
+    }
+
+    /**
+     * Returns the number of reports, that corresponds at the number of days since the outbreak count started
+     * @return the number of reports
+     */
     public Integer getReportsNumber() {
         return this.nazionale.length;
     }
@@ -100,15 +123,6 @@ public class DPCData {
     }
 
     /**
-     * Returns the list of Province
-     * @return
-     */
-    public ArrayList<String> getProvinceList() {
-        Set<String> s = this.provinciale.keySet();
-        return new ArrayList<String>(s);
-    }
-
-    /**
      * Returns the Nazionale report
      * @return the Nazionale report
      */
@@ -126,6 +140,11 @@ public class DPCData {
         return null;
     }
 
+    /**
+     * Returns a list of integer representing the numbers relative to FieldGeographicElement passed
+     * @param element the element to search for
+     * @return list of integer, progression of the curve
+     */
     public ArrayList<Integer> getValuesFromGeoField(FieldGeographicElement element) {
         DailyReport[] reports = this.getReportFromGeoElement(element);
         ArrayList<Integer> toRet = new ArrayList<Integer>();
@@ -161,6 +180,11 @@ public class DPCData {
         return DPCData.convertStringToDate(dateRaw);
     }
 
+    /**
+     * Converts a Json Date string into a Calendar object
+     * @param s
+     * @return
+     */
     private static Calendar convertStringToDate(String s) {
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ITALY);
@@ -195,22 +219,6 @@ public class DPCData {
             return arr.toArray(new DailyReport[arr.size()]);
         }
         return null;
-    }
-
-    public DPCData(Resources res, String nazionaleJson, String regionaleJson, String provincialeJson) {
-        this.gson = new Gson();
-        this.res = res;
-
-        JsonParser parser = new JsonParser();
-
-        this.nazionale = DailyReport.reportsBuilder(parser.parse(nazionaleJson).getAsJsonArray());
-        DailyReport[] regionale = DailyReport.reportsBuilder(parser.parse(regionaleJson).getAsJsonArray());
-        DailyReport[] provinciale = DailyReport.reportsBuilder(parser.parse(provincialeJson).getAsJsonArray());
-
-        this.regionale = createKeyValueList(regionale);
-        this.provinciale = createKeyValueList(provinciale);
-
-        Log.d("DPCParse", "Data parsed");
     }
 
     /**
@@ -260,7 +268,4 @@ public class DPCData {
         }
         return build;
     }
-
-
-
 }

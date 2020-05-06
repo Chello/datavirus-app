@@ -24,11 +24,11 @@ public class SaveReadStarredTiles {
 
     private Context context;
 
+    private ArrayList<FieldGeographicElement> savedTiles;
+
     public ArrayList<FieldGeographicElement> getSavedTiles() {
         return savedTiles;
     }
-
-    private ArrayList<FieldGeographicElement> savedTiles;
 
     public SaveReadStarredTiles(Context context) {
         this.context = context;
@@ -44,6 +44,9 @@ public class SaveReadStarredTiles {
 
     public void saveElement(FieldGeographicElement geographicElement) {
 
+        if (this.exists(geographicElement) != -1) {
+            return;
+        }
         this.savedTiles.add(geographicElement);
         this.savetoFile();
         this.loadFile();
@@ -52,16 +55,21 @@ public class SaveReadStarredTiles {
     public Integer exists(FieldGeographicElement geographicElement) {
         Integer i;
         for (i = 0; i < this.savedTiles.size(); i++) {
-            if (this.savedTiles.get(i).compareTo(geographicElement) == 0)
+            if (this.savedTiles.get(i).compareTo(geographicElement) == 0) {
+                Log.d("Salvatore ", "l'ho trovato");
                 return i;
+            }
         }
+        Log.d("Salvatore ", "Non l'ho trovato");
         return -1;
     }
 
     public void deleteElement(FieldGeographicElement geographicElement) {
         Integer i = this.exists(geographicElement);
-        if (i != -1)
-            this.savedTiles.remove(i);
+        if (i != -1) {
+            Log.d("Salvatore ", "Remosso");
+            this.savedTiles.remove((int) i);
+        }
         this.savetoFile();
         this.loadFile();
     }

@@ -15,36 +15,53 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
+/**
+ * This class downloads JSONs from the Dipartimento della Protezione Civile's GitHub repository.
+ * It also handles the instance for the downloaded data structure, kept by a DPCData object
+ */
 public class DataParser {
 
     private LoadingDialog dialog;
     private static DPCData repositoryData;
     private FragmentManager fm;
     private OnDPCDataReady UI;
-    private Resources res;
 
+    /**
+     * Returns the instance of the DPCData downloades
+     * @return the DPCData instance
+     */
     public static DPCData getDPCDataInstance() {
         return repositoryData;
     }
 
-    private static String JSONUrl[] = new String[] {
+    private static String[] JSONUrl = new String[] {
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale.json",
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni.json",
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-province.json"};
 
-    public DataParser(Resources res, FragmentManager fm, OnDPCDataReady UI) {
+    /**
+     * Initiallizes the object
+     * @param fm FragmentManager, useful for opening LoadingDialog
+     * @param UI listener for when DPCData are obtained
+     */
+    public DataParser(FragmentManager fm, OnDPCDataReady UI) {
         this.UI = UI;
         this.dialog = new LoadingDialog();
         this.fm = fm;
-        this.res = res;
         this.refreshData();
     }
 
-    public boolean refreshData() {
+    /**
+     * Refreshes the data.
+     * It will be called the OnDPCDataReady::onDPCDataReady() when finishes
+     */
+    public void refreshData() {
         AsyncTask<String, Integer, String[]> data = new AsyncDownloader().execute(JSONUrl);
-        return true;
     }
 
+    /**
+     * Downloads Json Strings asyncronusly
+     */
     private class AsyncDownloader  extends AsyncTask<String, Integer, String[]> {
 
         private Exception excp;
@@ -64,8 +81,8 @@ public class DataParser {
                 return;
             } else {
                 dialog.dismiss();
-                repositoryData = new DPCData(res, jsonArray[0], jsonArray[1], jsonArray[2]);
-                UI.setDPCData(repositoryData);
+                repositoryData = new DPCData(jsonArray[0], jsonArray[1], jsonArray[2]);
+                UI.onDPCDataReady(repositoryData);
             }
         }
 
@@ -92,7 +109,6 @@ public class DataParser {
             Scanner scanner = new Scanner(new URL(Url).openStream(), StandardCharsets.UTF_8.toString());
             scanner.useDelimiter("\\A");
             String scanned = scanner.hasNext() ? scanner.next() : "";
-            //Parse into json
             return scanned;
 
         }

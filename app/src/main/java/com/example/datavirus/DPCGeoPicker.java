@@ -34,18 +34,9 @@ public class DPCGeoPicker extends DialogFragment {
 
     private DPCGeoAdapter adapter;
 
-    private DPCData covidData;
 
     public DPCGeoPicker() {
         // Required empty public constructor
-    }
-
-    /**
-     * This method sets the covidData for
-     * @param covidData
-     */
-    public void setCovidData(DPCData covidData) {
-        this.covidData = covidData;
     }
 
     /**
@@ -53,9 +44,8 @@ public class DPCGeoPicker extends DialogFragment {
      * this fragment using the provided parameters.
      * @return A new instance of fragment DPCDataPicker.
      */
-    public static DPCGeoPicker newInstance(DPCData covidData) {
+    public static DPCGeoPicker newInstance() {
         DPCGeoPicker fragment = new DPCGeoPicker();
-        fragment.setCovidData(covidData);
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -87,7 +77,7 @@ public class DPCGeoPicker extends DialogFragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        this.adapter = new DPCGeoAdapter(this.covidData.getOrderedGeoElements());
+        this.adapter = new DPCGeoAdapter(DataParser.getDPCDataInstance().getOrderedGeoElements());
         recyclerView.setAdapter(this.adapter);
     }
 

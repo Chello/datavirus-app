@@ -29,16 +29,11 @@ public class DataTilesFragment extends Fragment {
     private TilesAdapter adapter;
 
 
-    private DPCData covidData;
-
-
-    public void setStaticGeoField(GeographicElement geographicElement, DPCData reports) {
-        this.covidData = reports;
+    public void setStaticGeoField(GeographicElement geographicElement) {
         populateRecycler(geographicElement);
     }
 
-    public void setSavedTilesReport(DPCData covidData) {
-        this.covidData = covidData;
+    public void setSavedTilesReport() {
         this.populateRecycler(null);
     }
 
@@ -71,8 +66,8 @@ public class DataTilesFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         if (geographicElement != null)
-            this.adapter = new TilesAdapter(this.covidData, geographicElement);
-        else this.adapter = new TilesAdapter(this.covidData);
+            this.adapter = new TilesAdapter(DataParser.getDPCDataInstance(), geographicElement);
+        else this.adapter = new TilesAdapter(DataParser.getDPCDataInstance());
 
         recyclerView.setAdapter(this.adapter);
     }

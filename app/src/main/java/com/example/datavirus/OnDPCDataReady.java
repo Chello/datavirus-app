@@ -5,7 +5,9 @@ package com.example.datavirus;
  */
 public interface OnDPCDataReady {
 
-    //public void updateData(DPCData.DailyReport[] report);
-
-    void setDPCData(DPCData data);
+    /**
+     * Called when the DPC data is ready from the parser
+     * @param data the DPCData obtained by the parser
+     */
+    void onDPCDataReady(DPCData data);
 }

@@ -11,12 +11,12 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
+import java.util.EmptyStackException;
 import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity implements OnDPCDataReady, OnDPCGeoListener, OnTileClick {
 
     private Stack<GeographicElement> backStackGeoElements;
-    private DPCData covidData;
     private DataParser parser;
 
 
@@ -25,7 +25,8 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.backStackGeoElements = new Stack<>();
-        this.parser = new DataParser(getResources(), getSupportFragmentManager(), this);
+        this.parser = new DataParser(getSupportFragmentManager(), this);
+
         buttonHandler();
     }
 
@@ -34,12 +35,11 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
      * @param data the COVID-19 report
      */
     @Override
-    public void setDPCData(DPCData data) {
-        this.covidData = data;
+    public void onDPCDataReady(DPCData data) {
         DataTilesFragment frg = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_tiles_main);
 
         this.backStackGeoElements.push(new GeographicElement(DPCData.GeoField.NAZIONALE));
-        frg.setStaticGeoField(this.backStackGeoElements.peek(), this.covidData);
+        frg.setStaticGeoField(this.backStackGeoElements.peek());
         this.updateTitle();
     }
 
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         macrofield.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DPCGeoPicker picker = DPCGeoPicker.newInstance(covidData);
+                DPCGeoPicker picker = DPCGeoPicker.newInstance();
                 //picker.setCovidData(covidData);
                 getSupportFragmentManager().beginTransaction()
                         .add(picker, "picker").addToBackStack(null).commit();
@@ -64,25 +64,30 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         myFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(activity, SavedChartActivity.class);
+                Intent i = new Intent(activity, SavedTilesActivity.class);
                 activity.startActivity(i);
             }
         });
     }
 
-
+    /**
+     * Creates a new DataTilesFragment that overcomes in the existing one with the updated data
+     * @param element the element chosen by the user
+     */
     public void onDPCGeoClick(GeographicElement element) {
         this.backStackGeoElements.push(element);
         DataTilesFragment frg = DataTilesFragment.newInstance();
+        DataTilesFragment oldFrg = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_tiles_main);
 
         getSupportFragmentManager().beginTransaction()
                 .addToBackStack(null)
+                .hide(oldFrg)
                 .add(R.id.fragment_tiles_main, frg)
                 .commit();
 
         getSupportFragmentManager().executePendingTransactions();
 
-        frg.setStaticGeoField(element, this.covidData);
+        frg.setStaticGeoField(element);
 
         this.updateTitle();
     }
@@ -90,7 +95,11 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        this.backStackGeoElements.pop();
+        try {
+            this.backStackGeoElements.pop();
+        } catch (EmptyStackException ex) {
+            finish();
+        }
         if (!this.backStackGeoElements.empty())
             this.updateTitle();
     }
@@ -100,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         head.setText(String.format(getResources().getString(R.string.data_tiles_head), this.backStackGeoElements.peek().getDenominazione()));
 
         TextView dateTV = (TextView) findViewById(R.id.head_date);
-        Calendar date = this.covidData.getLastDate();
+        Calendar date = DataParser.getDPCDataInstance().getLastDate();
         dateTV.setText(String.format(String.valueOf(getResources().getText(R.string.placeholder_date_ph)),
                 date.get(Calendar.DAY_OF_MONTH),
                 date.get(Calendar.MONTH),
@@ -113,10 +122,10 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         Intent i = new Intent(this, ChartActivity.class);
         Bundle b = new Bundle();
 
-        b.putIntegerArrayList(ChartActivity.FIELD_DATA, this.covidData.getValuesFromGeoField(fieldGeographicElement));
+        b.putIntegerArrayList(ChartActivity.FIELD_DATA, DataParser.getDPCDataInstance().getValuesFromGeoField(fieldGeographicElement));
 
         i.putExtras(b);
-        i.putExtra(ChartActivity.DATE, this.covidData.getFirstDate());
+        i.putExtra(ChartActivity.DATE, DataParser.getDPCDataInstance().getFirstDate());
         i.putExtra(ChartActivity.DENOMINAZIONE, fieldGeographicElement.getDenominazione());
         i.putExtra(ChartActivity.FIELD, fieldGeographicElement.getField());
         startActivity(i);
