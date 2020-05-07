@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         this.backStackGeoElements = new Stack<>();
         this.parser = new DataParser(getSupportFragmentManager(), this);
 
-        buttonHandler();
+        //buttonHandler();
     }
 
     /**
@@ -114,28 +114,40 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
     /**
      * Manages the handlers for buttons
      */
-    private void buttonHandler() {
-        final MainActivity activity = this;
-        Button macrofield = (Button) findViewById(R.id.button_geographic);
-        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab_saved_list);
+//    private void buttonHandler() {
+//        final MainActivity activity = this;
+//        Button macrofield = (Button) findViewById(R.id.button_geographic);
+//        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab_saved_list);
+//
+//        macrofield.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DPCGeoPicker picker = DPCGeoPicker.newInstance();
+//                //picker.setCovidData(covidData);
+//                getSupportFragmentManager().beginTransaction()
+//                        .add(picker, "picker").commit();
+//            }
+//        });
+//
+//        myFab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(activity, SavedTilesActivity.class);
+//                activity.startActivity(i);
+//            }
+//        });
+//    }
 
-        macrofield.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DPCGeoPicker picker = DPCGeoPicker.newInstance();
-                //picker.setCovidData(covidData);
-                getSupportFragmentManager().beginTransaction()
-                        .add(picker, "picker").commit();
-            }
-        });
+    public void onClickAddBtn(View v) {
+        DPCGeoPicker picker = DPCGeoPicker.newInstance();
+        //picker.setCovidData(covidData);
+        getSupportFragmentManager().beginTransaction()
+                .add(picker, "picker").commit();
+    }
 
-        myFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(activity, SavedTilesActivity.class);
-                activity.startActivity(i);
-            }
-        });
+    public void onClickFAB(View v) {
+        Intent i = new Intent(this, SavedTilesActivity.class);
+        this.startActivity(i);
     }
 
     /**
@@ -156,6 +168,19 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         getSupportFragmentManager().executePendingTransactions();
         frg.setStaticGeoField(element);
         this.updateTitle(element.getDenominazione());
+    }
+
+    /**
+     * When resumes recovers new data about tiles changes.
+     * If data are ready, reset all tiles
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (DataParser.getDPCDataInstance() != null) {
+            DataTilesFragment frg = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_tiles_main);
+            frg.setStaticGeoField(this.backStackGeoElements.peek());
+        }
     }
 
     @Override
