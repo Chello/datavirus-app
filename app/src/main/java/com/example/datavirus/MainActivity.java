@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
     private static final String CHANNEL_ID = "DataVirus";
     private Stack<GeographicElement> backStackGeoElements;
     private DataParser parser;
+    private PendingIntent alarmIntent;
 
 
     @Override
@@ -36,8 +37,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         setContentView(R.layout.activity_main);
 
         this.createNotificationChannel();
-
-        this.setAlarm(this);
+        this.setAlarm();
 
         this.backStackGeoElements = new Stack<>();
         this.parser = new DataParser(getSupportFragmentManager(), this);
@@ -45,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         buttonHandler();
     }
 
+    /**
+     * Creates a new notification channel for Datavirus app.
+     * Useful for API > 26
+     */
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -61,18 +65,38 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         }
     }
 
+    /**
+     * Triggered when click on refresh button. Refreshes data
+     * @param v the view of the element clicked
+     */
+    public void onRefresh(View v) {
+        parser.refreshData();
+    }
 
-    private void setAlarm(Context context){
-        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, DataNotifyService.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+    /**
+     * Sets the alarm for new data incoming
+     */
+    private void setAlarm(){
+        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, DataNotifyService.class);
+        this.alarmIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         Calendar calendar = Calendar.getInstance();
+
+        if (calendar.get(Calendar.HOUR_OF_DAY) > 18)
+            return;
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 18);
 
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY , alarmIntent);
     }
+
+//    private void unsetAlarm() {
+//        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        if (this.alarmIntent != null)
+//            alarmMgr.cancel(this.alarmIntent);
+//        this.alarmIntent = null;
+//    }
 
     /**
      * Function called when DataParser object has DPC data ready

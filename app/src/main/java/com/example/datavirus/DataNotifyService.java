@@ -35,9 +35,14 @@ public class DataNotifyService extends BroadcastReceiver implements OnDPCDataRea
 
     }
 
+    /**
+     * When the BroadcastReciever is called, starts download of DPC Data.
+     * If updated data incoming, show notification
+     * @param context the context used for handle notification
+     * @param intent the intent triggered
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
-        //android.os.Debug.waitForDebugger();
         this.context = context;
         String message = "Hellooo" + (persist++).toString();
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
@@ -47,6 +52,12 @@ public class DataNotifyService extends BroadcastReceiver implements OnDPCDataRea
         DataParser parser = new DataParser(this);
     }
 
+    /**
+     * Called when DPCData is ready.
+     * Triggers notification if data are updated
+     * Else sets new timer.
+     * @param data the DPCData obtained by the parser
+     */
     @Override
     public void onDPCDataReady(DPCData data) {
         //Toast.makeText(this.context, "Data ready", Toast.LENGTH_LONG).show();
@@ -64,6 +75,9 @@ public class DataNotifyService extends BroadcastReceiver implements OnDPCDataRea
         }
     }
 
+    /**
+     * Show notification showing that data are updated
+     */
     private void showNotification() {
         Toast.makeText(this.context, "Notif ", Toast.LENGTH_LONG).show();
 
@@ -76,6 +90,7 @@ public class DataNotifyService extends BroadcastReceiver implements OnDPCDataRea
                 .setContentTitle(this.context.getString(R.string.notification_title))
                 .setContentText(this.context.getString(R.string.notification_description))
                 .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.context);
@@ -84,6 +99,9 @@ public class DataNotifyService extends BroadcastReceiver implements OnDPCDataRea
         Toast.makeText(this.context, "Notif shown", Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Set a new timer in 10 minutes
+     */
     private void setNextAlarm() {
         AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, DataNotifyService.class);
@@ -91,7 +109,7 @@ public class DataNotifyService extends BroadcastReceiver implements OnDPCDataRea
 
         alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() +
-                        60 * 1000, alarmIntent);
+                        60 * 10 * 1000, alarmIntent);
 
     }
 }

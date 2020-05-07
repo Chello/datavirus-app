@@ -40,7 +40,8 @@ public class DataParser {
         "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-province.json"};
 
     /**
-     * Initiallizes the object
+     * Initiallizes the object as frontend.
+     * Shows progress and errors in frontend.
      * @param fm FragmentManager, useful for opening LoadingDialog
      * @param UI listener for when DPCData are obtained
      */
@@ -51,6 +52,10 @@ public class DataParser {
         this.refreshData();
     }
 
+    /**
+     * Initializes the object as backend.
+     * @param UI
+     */
     public DataParser(OnDPCDataReady UI) {
         this.UI = UI;
         this.refreshData();
@@ -111,6 +116,12 @@ public class DataParser {
             }
         }
 
+        /**
+         * Returns Json from URL
+         * @param Url Url where Json is
+         * @return a Json string
+         * @throws IOException If error on network
+         */
         private String retrieveJSONFromUrl(String Url) throws IOException {
             //Download json from source URL
             Scanner scanner = new Scanner(new URL(Url).openStream(), StandardCharsets.UTF_8.toString());

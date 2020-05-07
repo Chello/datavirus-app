@@ -69,13 +69,28 @@ public class ChartActivity extends AppCompatActivity implements OnChartElementAc
         this.chartModel.setChartData(this.covidChart);
     }
 
+    /**
+     * Handler for clean button. Clears the chart
+     * @param v the button view
+     */
+    public void onClickClearBtn(View v) {
+        ChartModel.startFresh();
+        finish();
+    }
+
+    /**
+     * Triggered when back button is pressed
+     */
     @Override
     public void onBackPressed() {
-        Log.d("Back", "Premuto");
-        ChartModel.startFresh();
+        Toast.makeText(this, getResources().getText(R.string.toast_add_to_chart), Toast.LENGTH_LONG).show();
         super.onBackPressed();
     }
 
+    /**
+     * Closes the view leaving user choose another tile for adding at the chart
+     * @param view the view of the button
+     */
     public void onClickAddBtn(View view) {
         Toast.makeText(this, getResources().getText(R.string.toast_add_to_chart), Toast.LENGTH_LONG).show();
         finish();

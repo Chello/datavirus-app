@@ -25,7 +25,6 @@
                 android:paddingTop="16dp"
                 android:layout_gravity="center"
                 android:textAlignment="center"
-                android:text="@string/data_tiles_head"
                 android:textSize="30sp"
                 app:autoSizeTextType="uniform" />
 
@@ -44,6 +43,12 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/head_date"
                 android:textAlignment="center" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/refresh"
+                android:onClick="onRefresh" />
 
         </LinearLayout>
 
