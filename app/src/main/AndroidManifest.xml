@@ -18,11 +18,6 @@
             android:exported="false"
             android:name=".DataNotifyService" />
 
-        <service
-            android:name=".MyNewIntentService"
-            android:exported="false" >
-        </service>
-
         <activity android:name=".SavedTilesActivity" />
         <activity android:name=".ChartActivity" />
         <activity

@@ -17,6 +17,8 @@
     <string name="placeholder_date_ph">Bollettino del %d/%d/%d ore %d</string>
 
     <!--    Readable strings-->
+    <string name="notification_title">DataVirus App</string>
+    <string name="notification_description">É arrivato il bollettino della Protezione Civile</string>
     <string name="geographicChooser">Seleziona area geografica</string>
     <string name="national">Nazionale</string>
     <string name="region">Regione</string>
