@@ -21,7 +21,7 @@
     <string name="refresh">Aggiorna</string>
     <string name="notification_title">DataVirus App</string>
     <string name="notification_description">É arrivato il bollettino della Protezione Civile</string>
-    <string name="geographicChooser">Seleziona area geografica</string>
+    <string name="geographicChooser">Nuova localitá</string>
     <string name="national">Nazionale</string>
     <string name="region">Regione</string>
     <string name="province">Provincia</string>

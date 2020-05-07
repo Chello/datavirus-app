@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
 
         this.backStackGeoElements.push(new GeographicElement(DPCData.GeoField.NAZIONALE));
         frg.setStaticGeoField(this.backStackGeoElements.peek());
-        this.updateTitle();
+        this.updateTitle(getResources().getString(R.string.national));
     }
 
     /**
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
                 DPCGeoPicker picker = DPCGeoPicker.newInstance();
                 //picker.setCovidData(covidData);
                 getSupportFragmentManager().beginTransaction()
-                        .add(picker, "picker").addToBackStack(null).commit();
+                        .add(picker, "picker").commit();
             }
         });
 
@@ -154,10 +154,8 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
                 .commit();
 
         getSupportFragmentManager().executePendingTransactions();
-
         frg.setStaticGeoField(element);
-
-        this.updateTitle();
+        this.updateTitle(element.getDenominazione());
     }
 
     @Override
@@ -165,16 +163,15 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         super.onBackPressed();
         try {
             this.backStackGeoElements.pop();
+            this.updateTitle(this.backStackGeoElements.peek().getDenominazione());
         } catch (EmptyStackException ex) {
             finish();
         }
-        if (!this.backStackGeoElements.empty())
-            this.updateTitle();
     }
 
-    private void updateTitle() {
+    private void updateTitle(String title) {
         TextView head = (TextView) findViewById(R.id.data_tiles_head);
-        head.setText(String.format(getResources().getString(R.string.data_tiles_head), this.backStackGeoElements.peek().getDenominazione()));
+        head.setText(String.format(getResources().getString(R.string.data_tiles_head), title));
 
         TextView dateTV = (TextView) findViewById(R.id.head_date);
         Calendar date = DataParser.getDPCDataInstance().getLastDate();

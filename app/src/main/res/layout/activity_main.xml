@@ -28,15 +28,31 @@
                 android:textSize="30sp"
                 app:autoSizeTextType="uniform" />
 
-            <Button
-
-                android:id="@+id/button_geographic"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:text="@string/geographicChooser"
-                android:padding="16dp"
-                android:scrollbarSize="16dp"/>
+                android:orientation="horizontal"
+                android:weightSum="10" >
+
+                <Button
+                    android:id="@+id/button_geographic"
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:text="@string/geographicChooser"
+                    android:padding="16dp"
+                    android:scrollbarSize="16dp"/>
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="match_parent"
+                    android:text="@string/refresh"
+                    android:onClick="onRefresh" />
+
+            </LinearLayout>
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -44,11 +60,6 @@
                 android:id="@+id/head_date"
                 android:textAlignment="center" />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/refresh"
-                android:onClick="onRefresh" />
 
         </LinearLayout>
 
