@@ -22,6 +22,7 @@ import java.util.Calendar;
 
 public class DataNotifyService extends BroadcastReceiver implements OnDPCDataReady {
 
+    private static final String CHANNEL_ID = "DataVirus";
     private static Integer persist;
     private Context context;
 
@@ -51,18 +52,16 @@ public class DataNotifyService extends BroadcastReceiver implements OnDPCDataRea
     public void onDPCDataReady(DPCData data) {
         Toast.makeText(this.context, "Data ready", Toast.LENGTH_LONG).show();
 
-        Notification.Builder builder = new Notification.Builder(this.context);
-        builder.setContentTitle("My Title");
-        builder.setContentText("This is the Body");
-        builder.setSmallIcon(R.drawable.ic_launcher_background);
-        Intent notifyIntent = new Intent(this.context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this.context, 3, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        //to be able to launch your activity from the notification
-        builder.setContentIntent(pendingIntent);
-        Notification notificationCompat = builder.build();
-        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this.context);
-        managerCompat.notify(3, notificationCompat);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this.context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle("textTitle")
+                .setContentText("textContent")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.context);
+
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(10, builder.build());
     }
 }
 
