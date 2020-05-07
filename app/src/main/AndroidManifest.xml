@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.datavirus">
+
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,7 +12,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SavedTilesActivity"></activity>
+
+        <receiver
+            android:process=":remote"
+            android:exported="false"
+            android:name=".DataNotifyService" />
+
+        <service
+            android:name=".MyNewIntentService"
+            android:exported="false" >
+        </service>
+
+        <activity android:name=".SavedTilesActivity" />
         <activity android:name=".ChartActivity" />
         <activity
             android:name=".MainActivity"

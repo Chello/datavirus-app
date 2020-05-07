@@ -51,6 +51,11 @@ public class DataParser {
         this.refreshData();
     }
 
+    public DataParser(OnDPCDataReady UI) {
+        this.UI = UI;
+        this.refreshData();
+    }
+
     /**
      * Refreshes the data.
      * It will be called the OnDPCDataReady::onDPCDataReady() when finishes
@@ -69,18 +74,20 @@ public class DataParser {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog.show(fm, "Loading");
+            if (dialog != null)
+                dialog.show(fm, "Loading");
         }
 
         @Override
         protected void onPostExecute(String[] jsonArray) {
             super.onPostExecute(jsonArray);
             //if download has failed
-            if (this.excp != null) {
+            if (this.excp != null && dialog != null) {
                 dialog.setError(this.excp);
                 return;
             } else {
-                dialog.dismiss();
+                if (dialog != null)
+                    dialog.dismiss();
                 repositoryData = new DPCData(jsonArray[0], jsonArray[1], jsonArray[2]);
                 UI.onDPCDataReady(repositoryData);
             }

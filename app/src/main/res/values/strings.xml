@@ -6,6 +6,8 @@
     <string name="denominazione_healed">dimessi_guariti</string>
     <string name="denominazione_deaths">deceduti</string>
     <string name="denominazione_date">data</string>
+    <string name="channel_name">DataVirus</string>
+    <string name="channel_description">Canale di DataVirus</string>
 
     <!--    Placeholder strings-->
     <string name="placeholder_decimal">%d</string>
