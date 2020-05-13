@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
@@ -80,13 +81,13 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
 
         Calendar calendar = Calendar.getInstance();
 
-        if (calendar.get(Calendar.HOUR_OF_DAY) > 18)
-            return;
-        calendar.setTimeInMillis(System.currentTimeMillis());
+        if (calendar.get(Calendar.HOUR_OF_DAY) >= 18)
+            calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) +1);
         calendar.set(Calendar.HOUR_OF_DAY, 18);
+        calendar.set(Calendar.MINUTE, 00);
+        calendar.setTimeInMillis(System.currentTimeMillis());
 
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY , alarmIntent);
-
 
     }
 
