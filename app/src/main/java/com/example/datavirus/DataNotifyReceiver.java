@@ -1,35 +1,26 @@
 package com.example.datavirus;
 
 import android.app.AlarmManager;
-import android.app.IntentService;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
 
-public class DataNotifyService extends BroadcastReceiver implements OnDPCDataReady {
+public class DataNotifyReceiver extends BroadcastReceiver implements OnDPCDataReady {
 
     private static final String CHANNEL_ID = "DataVirus";
     private static Integer persist;
     private Context context;
 
-    public DataNotifyService() {
+    public DataNotifyReceiver() {
         super();
         persist = 0;
 
@@ -44,6 +35,7 @@ public class DataNotifyService extends BroadcastReceiver implements OnDPCDataRea
     @Override
     public void onReceive(Context context, Intent intent) {
         this.context = context;
+        Log.d("Receiver", "Ore " + Calendar.getInstance().toString() + " OnRecieve chiamato");
         String message = "Hellooo" + (persist++).toString();
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 //        Intent intent2 = new Intent(context, TripNotification.class);
@@ -68,9 +60,11 @@ public class DataNotifyService extends BroadcastReceiver implements OnDPCDataRea
         //If the dowloaded data have the same day of today
         if (today.get(Calendar.DAY_OF_YEAR) == downloaded.get(Calendar.DAY_OF_YEAR)) {
             this.showNotification();
+            Log.d("Receiver", "Ore " + Calendar.getInstance().toString() + " Notifica mostrata");
         //Else if today is a day following than the downloaded day update
         } else if (today.get(Calendar.DAY_OF_YEAR) > downloaded.get(Calendar.DAY_OF_YEAR)) {
-            this.setNextAlarm();
+            this.setNextAlarm(); //set a new alarm
+            Log.d("Receiver", "Ore " + Calendar.getInstance().toString() + " Nuovo alarm " + downloaded.toString());
             Toast.makeText(this.context, downloaded.toString() + " " + today.toString(), Toast.LENGTH_LONG).show();
         }
     }
@@ -104,7 +98,7 @@ public class DataNotifyService extends BroadcastReceiver implements OnDPCDataRea
      */
     private void setNextAlarm() {
         AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, DataNotifyService.class);
+        Intent intent = new Intent(context, DataNotifyReceiver.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,

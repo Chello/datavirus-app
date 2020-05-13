@@ -8,16 +8,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
 import java.util.EmptyStackException;
@@ -26,6 +23,7 @@ import java.util.Stack;
 public class MainActivity extends AppCompatActivity implements OnDPCDataReady, OnDPCGeoListener, OnTileClick {
 
     private static final String CHANNEL_ID = "DataVirus";
+    private static final String PREF_NOTIFICATION = "NOTIFICATIONS";
     private Stack<GeographicElement> backStackGeoElements;
     private DataParser parser;
     private PendingIntent alarmIntent;
@@ -37,12 +35,11 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         setContentView(R.layout.activity_main);
 
         this.createNotificationChannel();
-        this.setAlarm();
+        this.notificationCheckboxHandler();
+        //this.setAlarm();
 
         this.backStackGeoElements = new Stack<>();
         this.parser = new DataParser(getSupportFragmentManager(), this);
-
-        //buttonHandler();
     }
 
     /**
@@ -78,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
      */
     private void setAlarm(){
         AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, DataNotifyService.class);
+        Intent intent = new Intent(this, DataNotifyReceiver.class);
         this.alarmIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         Calendar calendar = Calendar.getInstance();
@@ -89,14 +86,19 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         calendar.set(Calendar.HOUR_OF_DAY, 18);
 
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY , alarmIntent);
+
+
     }
 
-//    private void unsetAlarm() {
-//        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//        if (this.alarmIntent != null)
-//            alarmMgr.cancel(this.alarmIntent);
-//        this.alarmIntent = null;
-//    }
+    /**
+     * Function to call for deleting the alarm
+     */
+    private void unsetAlarm() {
+        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        if (this.alarmIntent != null)
+            alarmMgr.cancel(this.alarmIntent);
+        this.alarmIntent = null;
+    }
 
     /**
      * Function called when DataParser object has DPC data ready
@@ -108,36 +110,44 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
 
         this.backStackGeoElements.push(new GeographicElement(DPCData.GeoField.NAZIONALE));
         frg.setStaticGeoField(this.backStackGeoElements.peek());
+
         this.updateTitle(getResources().getString(R.string.national));
     }
 
     /**
-     * Manages the handlers for buttons
+     * Handles notification checkbox.
+     * Set default parameter from sharedpreferences and sets and unsets notifications
      */
-//    private void buttonHandler() {
-//        final MainActivity activity = this;
-//        Button macrofield = (Button) findViewById(R.id.button_geographic);
-//        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab_saved_list);
-//
-//        macrofield.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                DPCGeoPicker picker = DPCGeoPicker.newInstance();
-//                //picker.setCovidData(covidData);
-//                getSupportFragmentManager().beginTransaction()
-//                        .add(picker, "picker").commit();
-//            }
-//        });
-//
-//        myFab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i = new Intent(activity, SavedTilesActivity.class);
-//                activity.startActivity(i);
-//            }
-//        });
-//    }
+    public void notificationCheckboxHandler() {
+        CheckBox checkBox = (CheckBox) findViewById(R.id.checkbox_notification);
 
+        final SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        Boolean highScore = sharedPref.getBoolean(PREF_NOTIFICATION, true);
+
+        checkBox.setChecked(highScore);
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                if (isChecked) {
+                    setAlarm();
+                } else {
+                    unsetAlarm();
+                }
+
+                editor.putBoolean(MainActivity.PREF_NOTIFICATION, isChecked);
+                editor.apply();
+            }
+        });
+
+    }
+
+    /**
+     * Triggered when add button is pressed
+     * @param v the button view
+     */
     public void onClickAddBtn(View v) {
         DPCGeoPicker picker = DPCGeoPicker.newInstance();
         //picker.setCovidData(covidData);
@@ -145,6 +155,10 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
                 .add(picker, "picker").commit();
     }
 
+    /**
+     * Triggered when FAB button is pressed
+     * @param v the FAB view
+     */
     public void onClickFAB(View v) {
         Intent i = new Intent(this, SavedTilesActivity.class);
         this.startActivity(i);
