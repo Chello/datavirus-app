@@ -27,11 +27,9 @@ public class LoadingDialog extends DialogFragment {
     public LoadingDialog() {}
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Creates a new fragment LoadingDialog
      * @return A new instance of fragment LoadingDialog.
      */
-    // TODO: Rename and change types and number of parameters
     public static LoadingDialog newInstance() {
         LoadingDialog fragment = new LoadingDialog();
         return fragment;
@@ -48,7 +46,13 @@ public class LoadingDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        return super.onCreateDialog(savedInstanceState);
+        //return super.onCreateDialog(savedInstanceState);
+        return new Dialog(getActivity(), getTheme()){
+            @Override
+            public void onBackPressed() {
+                return;
+            }
+        };
     }
 
     /**

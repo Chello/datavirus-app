@@ -83,7 +83,7 @@ public class ChartActivity extends AppCompatActivity implements OnChartElementAc
      */
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, getResources().getText(R.string.toast_add_to_chart), Toast.LENGTH_LONG).show();
+        ChartModel.startFresh();
         super.onBackPressed();
     }
 

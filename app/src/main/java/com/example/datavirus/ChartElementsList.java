@@ -1,6 +1,5 @@
 package com.example.datavirus;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -78,8 +77,7 @@ public class ChartElementsList extends Fragment {
 
         private ArrayList<String> elements;
         private ArrayList<Integer> colors;
-        //TODO devi fare un;interfaccia su chartactivity per triggerare il refresh
-        private Context context;
+
 
         public ChartElementsAdapter() {
             this.elements = ChartModel.getInstance().getElementsName();
@@ -145,7 +143,7 @@ public class ChartElementsList extends Fragment {
             }
 
             public void setDenominazione(String denominazione) {
-                this.denominazione.setText(denominazione);
+                this.denominazione.setText(DPCData.trimTitleString(denominazione));
             }
 
             public void setChecked(Boolean check) {

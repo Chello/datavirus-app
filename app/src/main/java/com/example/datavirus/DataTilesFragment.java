@@ -80,10 +80,6 @@ public class DataTilesFragment extends Fragment {
      * Adapter for tiles with static GeographicField
      */
     public class TilesAdapter extends RecyclerView.Adapter<TilesAdapter.DataTilesHolder> {
-//        private DailyReport[] reports;
-//        private String[] fields;
-//        private Integer last;
-//        private Integer lastLast;
 
         private ArrayList<Integer> last;
         private ArrayList<Integer> lastLast;
@@ -190,9 +186,10 @@ public class DataTilesFragment extends Fragment {
                     this.star.setChecked(true);
                 //If there's not a denominazione
                 if (specifyRegion)
-                    this.tile_head.setText(this.adjustTitleString(fieldGeographicElement.getField()));//only set header text with the tile_head
+                    this.tile_head.setText(DPCData.trimTitleString(fieldGeographicElement.getField()));//only set header text with the tile_head
+                //otherwise set both denominazione and field
                 else this.tile_head.setText(String.format((String) getResources().getText(R.string.placeholder_concat),
-                        this.adjustTitleString(fieldGeographicElement.getField()),
+                        DPCData.trimTitleString(fieldGeographicElement.getField()),
                         fieldGeographicElement.getDenominazione()));
 
                 //setting colors
@@ -218,11 +215,6 @@ public class DataTilesFragment extends Fragment {
 
                     }
                 });
-            }
-
-            private String adjustTitleString(String s) {
-                s = s.trim().replace('_', ' '); //replace bad characters
-                return s.substring(0, 1).toUpperCase() + s.substring(1); //first capital letter
             }
 
             public DataTilesHolder(CardView v, OnTileClick listener) {

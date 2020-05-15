@@ -268,4 +268,14 @@ public class DPCData {
         }
         return build;
     }
+
+    /**
+     * Trims the String passed, replacing '_' with ' ' and capitalizyng first letter
+     * @param s the string to trim
+     * @return the string trimmed
+     */
+    public static String trimTitleString(String s) {
+        s = s.trim().replace('_', ' '); //replace bad characters
+        return s.substring(0, 1).toUpperCase() + s.substring(1); //first capital letter
+    }
 }

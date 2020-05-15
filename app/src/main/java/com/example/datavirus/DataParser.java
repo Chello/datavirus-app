@@ -50,6 +50,7 @@ public class DataParser {
         this.dialog = new LoadingDialog();
         this.fm = fm;
         this.refreshData();
+        //this.dialog.
     }
 
     /**

@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         calendar.setTimeInMillis(System.currentTimeMillis());
 
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY , alarmIntent);
-
     }
 
     /**
