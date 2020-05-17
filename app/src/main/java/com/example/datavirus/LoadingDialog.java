@@ -50,7 +50,6 @@ public class LoadingDialog extends DialogFragment {
         return new Dialog(getActivity(), getTheme()){
             @Override
             public void onBackPressed() {
-                return;
             }
         };
     }

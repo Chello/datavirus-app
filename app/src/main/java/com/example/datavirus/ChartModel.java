@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
+/**
+ * This class is used for hold data to plot in a chart.
+ * It's a singleton, so access can be made
+ */
 public class ChartModel {
 
     private static ChartModel instance;
@@ -24,18 +29,34 @@ public class ChartModel {
 
     private ArrayList<Boolean> elementsVisible;
 
+    /**
+     * Returns the names of the saved items
+     * @return the names of the saved items
+     */
     public ArrayList<String> getElementsName() {
         return this.elementsName;
     }
 
+    /**
+     * Returns the colors of the saved items
+     * @return the colors of the saved items
+     */
     public ArrayList<Integer> getElementsColor() {
         return this.elementsColor;
     }
 
+    /**
+     * Set an element to be visible or not in the chart
+     * @param pos the position to hide or show
+     * @param visible true if to be shown, false otherwise
+     */
     public void setElementVisible(Integer pos, Boolean visible) {
         this.elementsVisible.set(pos, visible);
     }
 
+    /**
+     * Constructor of the Chart Model
+     */
     public ChartModel() {
         this.lineDataSets = new ArrayList<>();
         this.elementsName = new ArrayList<>();
@@ -43,6 +64,10 @@ public class ChartModel {
         this.elementsVisible = new ArrayList<>();
     }
 
+    /**
+     * Removes a item from the chart plot list
+     * @param pos the position to remove
+     */
     public void deleteItem(int pos) {
         this.elementsVisible.remove(pos);
         this.elementsColor.remove(pos);
@@ -50,23 +75,38 @@ public class ChartModel {
         this.elementsName.remove(pos);
     }
 
+    /**
+     * Returns the number of the chart plot list
+     * @return the number of the chart plot list
+     */
     public Integer getSize() {
         return this.elementsName.size();
     }
 
+    /**
+     * Returns the singleton instance of ChartModel
+     * @return the singleton instance of ChartModel
+     */
     public static ChartModel getInstance() {
         if (instance == null)
             instance = startFresh();
         return instance;
     }
 
+    /**
+     * Recreates a new singleton instance.
+     * As consequence, a clean chart model is made.
+     * @return the new ChartModel instance
+     */
     public static ChartModel startFresh() {
         instance = new ChartModel();
         return instance;
     }
 
-//    public Integer getPosFromDenominazione(String denominazione)
-
+    /**
+     * Plots lines added previously to this model to the passed chart
+     * @param chart the chart to plot data
+     */
     public void setChartData(LineChart chart) {
         LineData ld = new LineData();
         //for (LineDataSet lds : instance.lineDataSets) {

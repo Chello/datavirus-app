@@ -101,6 +101,16 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
     }
 
     /**
+     * Sets or unsets the alarm notifications
+     * @param alarmSet true if you want to set alarm, false if you want to disable it
+     */
+    public void setAlarm(Boolean alarmSet) {
+        if (alarmSet)
+            this.setAlarm();
+        else this.unsetAlarm();
+    }
+
+    /**
      * Function called when DataParser object has DPC data ready
      * @param data the COVID-19 report
      */
@@ -122,20 +132,18 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         CheckBox checkBox = (CheckBox) findViewById(R.id.checkbox_notification);
 
         final SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        Boolean highScore = sharedPref.getBoolean(PREF_NOTIFICATION, true);
+        Boolean notificationsEnabled = sharedPref.getBoolean(PREF_NOTIFICATION, true);
 
-        checkBox.setChecked(highScore);
+        checkBox.setChecked(notificationsEnabled);
+
+        this.setAlarm(notificationsEnabled);
 
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = sharedPref.edit();
 
-                if (isChecked) {
-                    setAlarm();
-                } else {
-                    unsetAlarm();
-                }
+                setAlarm(isChecked);
 
                 editor.putBoolean(MainActivity.PREF_NOTIFICATION, isChecked);
                 editor.apply();
