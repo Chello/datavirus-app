@@ -14,17 +14,17 @@ import androidx.core.app.NotificationManagerCompat;
 
 import java.util.Calendar;
 
+/**
+ * Broadcast Receiver that checks if exists a new daily update in COVID data in DPC.
+ * If that exists, a notification will be reported to user.
+ * Otherwise calls an Android Alarm to itself after 10 minutes
+ */
 public class DataNotifyReceiver extends BroadcastReceiver implements OnDPCDataReady {
 
     private static final String CHANNEL_ID = "DataVirus";
-    private static Integer persist;
+
     private Context context;
 
-    public DataNotifyReceiver() {
-        super();
-        persist = 0;
-
-    }
 
     /**
      * When the BroadcastReciever is called, starts download of DPC Data.
@@ -36,11 +36,6 @@ public class DataNotifyReceiver extends BroadcastReceiver implements OnDPCDataRe
     public void onReceive(Context context, Intent intent) {
         this.context = context;
         Log.d("Receiver", "Ore " + Calendar.getInstance().toString() + " OnRecieve chiamato");
-        String message = "Hellooo" + (persist++).toString();
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-//        Intent intent2 = new Intent(context, TripNotification.class);
-//        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        context.startActivity(intent2);
         DataParser parser = new DataParser(this);
     }
 
@@ -52,7 +47,6 @@ public class DataNotifyReceiver extends BroadcastReceiver implements OnDPCDataRe
      */
     @Override
     public void onDPCDataReady(DPCData data) {
-        //Toast.makeText(this.context, "Data ready", Toast.LENGTH_LONG).show();
 
         Calendar downloaded = data.getLastDate();
         Calendar today = Calendar.getInstance();
@@ -60,12 +54,11 @@ public class DataNotifyReceiver extends BroadcastReceiver implements OnDPCDataRe
         //If the dowloaded data have the same day of today
         if (today.get(Calendar.DAY_OF_YEAR) == downloaded.get(Calendar.DAY_OF_YEAR)) {
             this.showNotification();
-            Log.d("Receiver", "Ore " + Calendar.getInstance().toString() + " Notifica mostrata");
+            //Log.d("Receiver", "Ore " + Calendar.getInstance().toString() + " Notifica mostrata");
         //Else if today is a day following than the downloaded day update
         } else if (today.get(Calendar.DAY_OF_YEAR) > downloaded.get(Calendar.DAY_OF_YEAR)) {
             this.setNextAlarm(); //set a new alarm
-            Log.d("Receiver", "Ore " + Calendar.getInstance().toString() + " Nuovo alarm " + downloaded.toString());
-            Toast.makeText(this.context, downloaded.toString() + " " + today.toString(), Toast.LENGTH_LONG).show();
+            //Log.d("Receiver", "Ore " + Calendar.getInstance().toString() + " Nuovo alarm " + downloaded.toString());
         }
     }
 
@@ -73,8 +66,6 @@ public class DataNotifyReceiver extends BroadcastReceiver implements OnDPCDataRe
      * Show notification showing that data are updated
      */
     private void showNotification() {
-        Toast.makeText(this.context, "Notif ", Toast.LENGTH_LONG).show();
-
         Intent intent = new Intent(this.context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this.context, 0, intent, 0);
@@ -90,7 +81,6 @@ public class DataNotifyReceiver extends BroadcastReceiver implements OnDPCDataRe
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.context);
         // notificationId is a unique int for each notification that you must define
         notificationManager.notify(10, builder.build());
-        Toast.makeText(this.context, "Notif shown", Toast.LENGTH_LONG).show();
     }
 
     /**

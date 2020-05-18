@@ -96,7 +96,6 @@ public class ChartElementsList extends Fragment {
 
         @NonNull
         @Override
-
         public ChartElementsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.chart_element_recycler_item, parent, false);

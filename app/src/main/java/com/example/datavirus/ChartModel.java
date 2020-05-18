@@ -15,7 +15,7 @@ import java.util.Random;
 
 /**
  * This class is used for hold data to plot in a chart.
- * It's a singleton, so access can be made
+ * It's a singleton, so access can be made everywhere.
  */
 public class ChartModel {
 

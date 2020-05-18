@@ -19,6 +19,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Activity that shows the starred tiles.
+ * It uses DataTilesFragment
+ */
 public class StarredActivity extends AppCompatActivity implements OnTileClick {
 
     @Override
@@ -37,7 +41,6 @@ public class StarredActivity extends AppCompatActivity implements OnTileClick {
     protected void onResume() {
         super.onResume();
         DataTilesFragment frg = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.list_saved_tiles_fragment);
-
         frg.setSavedTilesReport();
     }
 

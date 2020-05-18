@@ -22,8 +22,6 @@ import android.view.ViewGroup;
  */
 public class LoadingDialog extends DialogFragment {
 
-    private OnDPCDataReady activityContext;
-
     public LoadingDialog() {}
 
     /**

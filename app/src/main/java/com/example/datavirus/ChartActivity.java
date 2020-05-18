@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -16,6 +15,9 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.Calendar;
 
+/**
+ * Activity that holds and plots the chart, including list of elements plotted
+ */
 public class ChartActivity extends AppCompatActivity implements OnChartElementActions {
 
     public static String DATE = "date";
@@ -35,13 +37,13 @@ public class ChartActivity extends AppCompatActivity implements OnChartElementAc
 
         this.chartModel.addDataToModel(getIntent().getExtras().getIntegerArrayList(FIELD_DATA),
                 getIntent().getStringExtra(FIELD) + " " + getIntent().getStringExtra(DENOMINAZIONE));
-        this.updateChart();
+        this.initChart();
     }
 
     /**
      * Updates the chart
      */
-    private void updateChart() {
+    private void initChart() {
         this.covidChart = (LineChart) findViewById(R.id.chart);
         //Add formatter to X axis, so will plotted dates instead of increment number
         Calendar date = (Calendar) getIntent().getSerializableExtra(DATE);
@@ -64,6 +66,10 @@ public class ChartActivity extends AppCompatActivity implements OnChartElementAc
         this.chartModel.setChartData(this.covidChart);
     }
 
+    /**
+     * Refreshes data plotted in chart.
+     * If nothing to plot, activity calls finish()
+     */
     @Override
     public void onChartElementActions() {
         if (this.chartModel.getSize() == 0)

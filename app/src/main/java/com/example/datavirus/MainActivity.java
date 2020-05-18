@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
     public void onDPCDataReady(DPCData data) {
         DataTilesFragment frg = (DataTilesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_tiles_main);
 
-        this.backStackGeoElements.push(new GeographicElement(DPCData.GeoField.NAZIONALE));
+        this.backStackGeoElements.push(new GeographicElement());
         frg.setStaticGeoField(this.backStackGeoElements.peek());
 
         this.updateTitle(getResources().getString(R.string.national));

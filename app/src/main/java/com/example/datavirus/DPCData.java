@@ -29,8 +29,8 @@ import java.util.Set;
  *
  * This class is intended as a Singleton. The instance is accessible via DataParser::getDPCDataInstance()
  */
-
 public class DPCData {
+
     enum GeoField {
         NAZIONALE, REGIONALE, PROVINCIALE
     }
@@ -42,8 +42,6 @@ public class DPCData {
             "denominazione_provincia", "codice_provincia",
             "denominazione_regione", "codice_regione", "In fase di definizione/aggiornamento");
 
-    //private static List<String> excludeList;
-    //Reports for territorial data
     private DailyReport[] nazionale;
     private HashMap<String, ArrayList<DailyReport>> regionale;
     private HashMap<String, ArrayList<DailyReport>> provinciale;
@@ -96,7 +94,7 @@ public class DPCData {
      */
     public ArrayList<GeographicElement> getOrderedGeoElements() {
         ArrayList<GeographicElement> toReturn = new ArrayList<GeographicElement>();
-        toReturn.add(new GeographicElement(GeoField.NAZIONALE));
+        toReturn.add(new GeographicElement());
         for (String regione : this.getRegioniList()) {
             toReturn.add(new GeographicElement(regione, GeoField.REGIONALE));
             toReturn.addAll(this.getProvinciaFromRegione(regione));
@@ -182,8 +180,8 @@ public class DPCData {
 
     /**
      * Converts a Json Date string into a Calendar object
-     * @param s
-     * @return
+     * @param s the string in json format
+     * @return a Calendar instance
      */
     private static Calendar convertStringToDate(String s) {
         try {

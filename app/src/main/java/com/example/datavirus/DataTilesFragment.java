@@ -28,26 +28,24 @@ public class DataTilesFragment extends Fragment {
      */
     private TilesAdapter adapter;
 
-
+    /**
+     * Function for showing a static GeographicElement for the tiles
+     * @param geographicElement the geographic element to set
+     */
     public void setStaticGeoField(GeographicElement geographicElement) {
         populateRecycler(geographicElement);
     }
 
+    /**
+     * Function for showing the saved tiles
+     */
     public void setSavedTilesReport() {
         this.populateRecycler(null);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.data_tiles, container, false);
-        //populateRecycler(v);
-        return v;
+        return inflater.inflate(R.layout.data_tiles, container, false);
     }
 
     /**
@@ -72,12 +70,16 @@ public class DataTilesFragment extends Fragment {
         recyclerView.setAdapter(this.adapter);
     }
 
+    /**
+     * Returns a new instance of DataTilesFragment
+     * @return a new instance of DataTilesFragment
+     */
     public static DataTilesFragment newInstance() {
         return new DataTilesFragment();
     }
 
     /**
-     * Adapter for tiles with static GeographicField
+     * Adapter for RecyclerView tiles
      */
     public class TilesAdapter extends RecyclerView.Adapter<TilesAdapter.DataTilesHolder> {
 
@@ -138,6 +140,12 @@ public class DataTilesFragment extends Fragment {
             //this.fields = fields.toArray(new String[0]);
         }
 
+        /**
+         * Creates a ViewHolder
+         * @param parent the parent ViewGroup
+         * @param viewType the viewType
+         * @return a new DataTilesHolder instance
+         */
         @Override
         public DataTilesHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             CardView v = (CardView) LayoutInflater.from(parent.getContext())
@@ -146,6 +154,11 @@ public class DataTilesFragment extends Fragment {
             return vh;
         }
 
+        /**
+         * Binds an holder with data
+         * @param holder the data holder
+         * @param position the position of the element in the RecyclerView
+         */
         @Override
         public void onBindViewHolder(DataTilesHolder holder, int position) {
             holder.setTile(this.elements.get(position), this.staticGeoField);
@@ -153,13 +166,20 @@ public class DataTilesFragment extends Fragment {
             holder.setQtyDelta(this.lastLast.get(position));
         }
 
+        /**
+         * Returns the count of the item in the RecyclerView
+         * @return the count of the item in the RecyclerView
+         */
         @Override
         public int getItemCount() {
             return this.last.size();
         }
 
+        /**
+         * Data holder for tiles in the RecyclerView
+         */
         public class DataTilesHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-            // each data item is just a string in this case
+
             private CardView container;
             private TextView qty;
             private TextView qty_delta;
@@ -170,18 +190,31 @@ public class DataTilesFragment extends Fragment {
 
             private OnTileClick listener;
 
+            /**
+             * Sets the quantity for the tile
+             * @param qty the quantity
+             */
             public void setQty(Integer qty) {
                 this.qty.setText(qty.toString());
             }
 
+            /**
+             * Sets the delta quantity for the tile
+             * @param qty_delta the delta quantity
+             */
             public void setQtyDelta(Integer qty_delta) {
                 this.qty_delta.setText(String.format(getResources().getString(R.string.placeholder_delta), qty_delta));
             }
 
+            /**
+             * Sets tile data like color, position and title
+             * @param fieldGeographicElement the element of tile container
+             * @param specifyRegion if region has to be added to title of this tile
+             */
             public void setTile(final FieldGeographicElement fieldGeographicElement, Boolean specifyRegion) {
                 this.fieldGeographicElement = fieldGeographicElement;
                 //If this element exists
-                if (ManageStarredTiles.getInstance(getContext()).exists(fieldGeographicElement) != -1)
+                if (ManageStarredTiles.getInstance(getContext()).getPos(fieldGeographicElement) != -1)
                     //tick the tick
                     this.star.setChecked(true);
                 //If there's not a denominazione
@@ -217,6 +250,11 @@ public class DataTilesFragment extends Fragment {
                 });
             }
 
+            /**
+             * Constructor of DataTilesHolder
+             * @param v the cardview wrapper
+             * @param listener the listener when tile is clicked
+             */
             public DataTilesHolder(CardView v, OnTileClick listener) {
                 super(v);
                 this.listener = listener;

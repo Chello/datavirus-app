@@ -54,10 +54,15 @@ public class DailyReport {
         return toRet;
     }
 
-    private void moveElemToPos(ArrayList<String> arr, String item, Integer itemPos) {
+    /**
+     * Called for re-order items in the array
+     * @param arr array to reorder
+     * @param item item to move
+     * @param itemPos position where move the item
+     */
+    private static void moveElemToPos(ArrayList<String> arr, String item, Integer itemPos) {
         if (!arr.contains(item))
             return;
-        Integer oldPos = arr.indexOf(item);
         arr.remove(item);
         arr.add(itemPos, item );
     }

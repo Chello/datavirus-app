@@ -9,7 +9,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,18 +25,13 @@ import java.util.ArrayList;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link DPCGeoPicker#newInstance} factory method to
- * create an instance of this fragment.
+ * The picker for a new GeographicField element
  */
 public class DPCGeoPicker extends DialogFragment {
 
     private DPCGeoAdapter adapter;
 
-
-    public DPCGeoPicker() {
-        // Required empty public constructor
-    }
+    public DPCGeoPicker() {}
 
     /**
      * Use this factory method to create a new instance of
@@ -51,6 +45,7 @@ public class DPCGeoPicker extends DialogFragment {
         return fragment;
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,7 +54,7 @@ public class DPCGeoPicker extends DialogFragment {
         builder.setView(v).setTitle(R.string.geo_picker_title);
 
         this.populateRecycler(v);
-        this.setUpSearchView(v);
+        this.initSearchView(v);
         return v;
 
     }
@@ -81,7 +76,11 @@ public class DPCGeoPicker extends DialogFragment {
         recyclerView.setAdapter(this.adapter);
     }
 
-    private void setUpSearchView(View v) {
+    /**
+     * Initializes the SearchView with a listener for the recyclerview
+     * @param v the view containing the searchview
+     */
+    private void initSearchView(View v) {
         SearchView searchView = (SearchView) v.findViewById(R.id.action_search);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -112,6 +111,12 @@ public class DPCGeoPicker extends DialogFragment {
          * Filter for search an item by SearchView
          */
         private Filter filter = new Filter() {
+
+            /**
+             * Function that performs filerings in the RecyclerView given by a SearchView
+             * @param constraint the searched text
+             * @return a FilterResult instance
+             */
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 ArrayList<GeographicElement> filteredList = new ArrayList<>();
@@ -155,11 +160,15 @@ public class DPCGeoPicker extends DialogFragment {
             this.searchList = new ArrayList<>(list);
         }
 
-        // Create new views (invoked by the layout manager)
+        /**
+         * Creates a new ViewHolder for the DPCGeoAdapter
+         * @param parent the parent ViewGroup
+         * @param viewType the viewType
+         * @return a new instance of the DPCGeoHolder
+         */
         @Override
         public DPCGeoHolder onCreateViewHolder(ViewGroup parent,
                                                int viewType) {
-            // create a new view
             LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                     .inflate( R.layout.dialog_recycler_item, parent, false);
 
@@ -167,7 +176,11 @@ public class DPCGeoPicker extends DialogFragment {
             return vh;
         }
 
-        // Replace the contents of a view (invoked by the layout manager)
+        /**
+         * Binds RecyclerView holder with data
+         * @param holder the holder to set up
+         * @param position the position of the holder's tile
+         */
         @Override
         public void onBindViewHolder(DPCGeoHolder holder, int position) {
             Resources res = getResources();
@@ -192,12 +205,19 @@ public class DPCGeoPicker extends DialogFragment {
 
         }
 
-        // Return the size of your dataset (invoked by the layout manager)
+        /**
+         * Returns the item count
+         * @return the item count
+         */
         @Override
         public int getItemCount() {
             return this.geoElements.size();
         }
 
+        /**
+         * Returns the filter for the RecyclerView
+         * @return the filter
+         */
         @Override
         public Filter getFilter() {
             return filter;

@@ -26,25 +26,42 @@ public class ManageStarredTiles {
 
     private ArrayList<FieldGeographicElement> savedTiles;
 
+    /**
+     * Returns the list of starred tiles
+     * @return the list of starred tiles
+     */
     public ArrayList<FieldGeographicElement> getSavedTiles() {
         return savedTiles;
     }
 
-    public ManageStarredTiles(Context context) {
+    /**
+     * Constructor. It requires a context for getting strings
+     * @param context the context
+     */
+    private ManageStarredTiles(Context context) {
         this.context = context;
         this.savedTiles = new ArrayList<>();
         this.loadFile();
     }
 
+    /**
+     * Returns the instance of the singleton ManageStarredTiles
+     * @param context the context for initializing the object
+     * @return a new instance of ManageStarredTiles
+     */
     public static ManageStarredTiles getInstance(Context context) {
         if (instance == null)
             instance = new ManageStarredTiles(context);
         return instance;
     }
 
+    /**
+     * Saves an element to the starred list
+     * @param geographicElement the FieldGeographicElement of the element to save in starred
+     */
     public void saveElement(FieldGeographicElement geographicElement) {
 
-        if (this.exists(geographicElement) != -1) {
+        if (this.getPos(geographicElement) != -1) {
             return;
         }
         this.savedTiles.add(geographicElement);
@@ -52,20 +69,27 @@ public class ManageStarredTiles {
         this.loadFile();
     }
 
-    public Integer exists(FieldGeographicElement geographicElement) {
+    /**
+     * Return the position of the searched element, if exist
+     * @param geographicElement the element to search
+     * @return the position of the element if exist, otherwise returns -1
+     */
+    public Integer getPos(FieldGeographicElement geographicElement) {
         Integer i;
         for (i = 0; i < this.savedTiles.size(); i++) {
             if (this.savedTiles.get(i).compareTo(geographicElement) == 0) {
-                Log.d("Salvatore ", "l'ho trovato");
                 return i;
             }
         }
-        Log.d("Salvatore ", "Non l'ho trovato");
         return -1;
     }
 
+    /**
+     * Deletes the passed element from the starred list, if exists
+     * @param geographicElement the element to delete from starred list
+     */
     public void deleteElement(FieldGeographicElement geographicElement) {
-        Integer i = this.exists(geographicElement);
+        Integer i = this.getPos(geographicElement);
         if (i != -1) {
             Log.d("Salvatore ", "Remosso");
             this.savedTiles.remove((int) i);
@@ -74,12 +98,12 @@ public class ManageStarredTiles {
         this.loadFile();
     }
 
+    /**
+     * Function that commits to file what it kepy by this instance
+     */
     private void savetoFile() {
         try {
-            // Creates a file in the primary external storage space of the
-            // current application.
-            // If the file does not exists, it is created.
-            File testFile = new File(this.context.getExternalFilesDir(null), "TestFile.txt");
+            File testFile = new File(this.context.getExternalFilesDir(null), this.context.getString(R.string.starred_file));
             if (!testFile.exists())
                 testFile.createNewFile();
 
@@ -87,20 +111,18 @@ public class ManageStarredTiles {
             BufferedWriter writer = new BufferedWriter(new FileWriter(testFile, false /*append*/));
             writer.write(new Gson().toJson(this.savedTiles));
             writer.close();
-            // Refresh the data so it can seen when the device is plugged in a
-            // computer. You may have to unplug and replug the device to see the
-            // latest changes. This is not necessary if the user should not modify
-            // the files.
+
         } catch (IOException e) {
-            Log.e("ReadWriteFile", "Unable to write to the TestFile.txt file.");
+            Log.e("ReadWriteFile", "Unable to write to the starred file.");
         }
     }
 
+    /**
+     * Loads data from file and builds the ManageStarredTiles object
+     */
     private void loadFile() {
         String textFromFile = "";
-        // Gets the file from the primary external storage space of the
-        // current application.
-        File testFile = new File(this.context.getExternalFilesDir(null), "TestFile.txt");
+        File testFile = new File(this.context.getExternalFilesDir(null), this.context.getString(R.string.starred_file));
         if (testFile != null) {
             StringBuilder stringBuilder = new StringBuilder();
             // Reads the data from the file
@@ -110,7 +132,7 @@ public class ManageStarredTiles {
                 String line;
 
                 while ((line = reader.readLine()) != null) {
-                    textFromFile += line.toString();
+                    textFromFile += line;
                     textFromFile += "\n";
                 }
                 reader.close();
@@ -118,7 +140,7 @@ public class ManageStarredTiles {
                 Log.d("Lettura file", textFromFile);
                 this.savedTiles = new ArrayList<FieldGeographicElement>(Arrays.asList(userArray));
             } catch (Exception e) {
-                Log.e("ReadWriteFile", "Unable to read the TestFile.txt file.");
+                Log.e("ReadWriteFile", "Unable to read the starred file.");
             }
         }
     }
