@@ -65,7 +65,7 @@ public class ChartActivity extends AppCompatActivity implements OnChartElementAc
     }
 
     @Override
-    public void refreshChart() {
+    public void onChartElementActions() {
         if (this.chartModel.getSize() == 0)
             finish();
         this.chartModel.setChartData(this.covidChart);

@@ -18,7 +18,7 @@
             android:exported="false"
             android:name=".DataNotifyReceiver" />
 
-        <activity android:name=".SavedTilesActivity" />
+        <activity android:name=".StarredActivity" />
         <activity android:name=".ChartActivity" />
         <activity
             android:name=".MainActivity"

@@ -2,6 +2,6 @@ package com.example.datavirus;
 
 public interface OnChartElementActions {
 
-    public void refreshChart();
+    public void onChartElementActions();
 
 }

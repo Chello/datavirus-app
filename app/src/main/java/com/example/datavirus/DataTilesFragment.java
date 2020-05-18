@@ -91,7 +91,7 @@ public class DataTilesFragment extends Fragment {
          * @param covidData DPCData report handler
          */
         public TilesAdapter(DPCData covidData) {
-            SaveReadStarredTiles saver = SaveReadStarredTiles.getInstance(getContext());
+            ManageStarredTiles saver = ManageStarredTiles.getInstance(getContext());
 
             this.staticGeoField = false;
             this.last = new ArrayList<>();
@@ -181,7 +181,7 @@ public class DataTilesFragment extends Fragment {
             public void setTile(final FieldGeographicElement fieldGeographicElement, Boolean specifyRegion) {
                 this.fieldGeographicElement = fieldGeographicElement;
                 //If this element exists
-                if (SaveReadStarredTiles.getInstance(getContext()).exists(fieldGeographicElement) != -1)
+                if (ManageStarredTiles.getInstance(getContext()).exists(fieldGeographicElement) != -1)
                     //tick the tick
                     this.star.setChecked(true);
                 //If there's not a denominazione
@@ -210,8 +210,8 @@ public class DataTilesFragment extends Fragment {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         //star.setBackgroundResource(R.drawable.star);
                         if (isChecked)
-                            SaveReadStarredTiles.getInstance(getContext()).saveElement(fieldGeographicElement);
-                        else SaveReadStarredTiles.getInstance(getContext()).deleteElement(fieldGeographicElement);
+                            ManageStarredTiles.getInstance(getContext()).saveElement(fieldGeographicElement);
+                        else ManageStarredTiles.getInstance(getContext()).deleteElement(fieldGeographicElement);
 
                     }
                 });

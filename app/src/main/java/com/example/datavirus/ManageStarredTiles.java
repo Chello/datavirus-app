@@ -17,10 +17,10 @@ import java.util.Arrays;
 /**
  * Singleton class for read and write the tiles starred
  */
-public class SaveReadStarredTiles {
+public class ManageStarredTiles {
 
 
-    private static SaveReadStarredTiles instance;
+    private static ManageStarredTiles instance;
 
     private Context context;
 
@@ -30,15 +30,15 @@ public class SaveReadStarredTiles {
         return savedTiles;
     }
 
-    public SaveReadStarredTiles(Context context) {
+    public ManageStarredTiles(Context context) {
         this.context = context;
         this.savedTiles = new ArrayList<>();
         this.loadFile();
     }
 
-    public static SaveReadStarredTiles getInstance(Context context) {
+    public static ManageStarredTiles getInstance(Context context) {
         if (instance == null)
-            instance = new SaveReadStarredTiles(context);
+            instance = new ManageStarredTiles(context);
         return instance;
     }
 

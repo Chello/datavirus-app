@@ -83,6 +83,7 @@ public class ChartElementsList extends Fragment {
 
         private ArrayList<String> elements;
         private ArrayList<Integer> colors;
+        private ArrayList<Boolean> visible;
 
         /**
          * Constructor of the adapter. Uses the ChartModel singleton
@@ -90,6 +91,7 @@ public class ChartElementsList extends Fragment {
         public ChartElementsAdapter() {
             this.elements = ChartModel.getInstance().getElementsName();
             this.colors = ChartModel.getInstance().getElementsColor();
+            this.visible = ChartModel.getInstance().getElementsVisible();
         }
 
         @NonNull
@@ -112,6 +114,7 @@ public class ChartElementsList extends Fragment {
             holder.setDenominazione(this.elements.get(position));
             holder.setColor(this.colors.get(position));
             holder.setPos(position);
+            holder.setChecked(this.visible.get(position));
         }
 
         /**
@@ -150,7 +153,7 @@ public class ChartElementsList extends Fragment {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         ChartModel cm = ChartModel.getInstance();
                         cm.setElementVisible(pos, isChecked);
-                        listener.refreshChart();
+                        listener.onChartElementActions();
                     }
                 });
                 delete.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +163,7 @@ public class ChartElementsList extends Fragment {
                         cm.deleteItem(pos);
                         notifyItemRemoved(pos);
                         notifyItemRangeChanged(pos, cm.getSize());
-                        listener.refreshChart();
+                        listener.onChartElementActions();
                     }
                 });
             }

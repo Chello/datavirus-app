@@ -24,8 +24,6 @@
     \author{Federico Rachelli}
     \title{\vspace{-2cm}DataVirus.it}
     \maketitle
-    
-    \section{Funzionamento dell'applicazione}
 
     L'app \textbf{\href{https://datavirus.it}{DataVirus.it}} é ispirata dal sito web omonimo.
     Fornisce all'utente una visualizzazione grafica dei dati del Dipartimento di Protezione Civile sull'andamento dell'epidemia di COVID-19.
@@ -33,7 +31,7 @@
     I dati sono accedibili dal \href{https://github.com/pcm-dpc/COVID-19}{repository GitHub ufficiale} della Protezione Civile. 
     Tali dati sono aggiornati quotidianamente (a partire dalle ore 18:00) fino alla fine dello stato di emergenza dichiarato dal Consiglio dei Ministri in data 31 Gennaio 2020.
     
-    \subsection{Visualizzazione dati numerici}
+    \section{Visualizzazione dati}
     L'applicazione all'avvio visualizza una schermata di caricamento dei dati dal Dipartimento di Protezione Civile. 
     Tali dati, una volta ottenuti, sono elaborati e vengono mostrati all'utente gli andamenti a livello nazionale dell'epidemia.
     
@@ -60,8 +58,17 @@
     \\
     Vengono poi visualizzate le tile contenenti il dato odierno e la relativa variazione (delta) rispetto alla giornata precedente.
     \\
-    
-    \subsection{Cambio zona geografica}
+    \subsection{Implementazione}
+    La MainActivity, alla sua creazione, istanzia un oggetto di tipo DataParser.
+    La classe DataParser si occupa di eseguire il download dei file JSON dal Dipartimento di Protezione Civile (\textbf{DPC}) in modalitá grafica (verrá visualizzato il dialog che segnala il download in esecuzione).
+    Una volta concluso lo scaricamento, i dati verranno memorizzati in un oggetto di tipo \emph{DPCData}, accedibile dalla callback \emph{onDPCDataReady()} nell'interfaccia \emph{OnDPCDataReady}, o alternativamente dal metodo statico \emph{DataParser.getDPCDataInstance()}.
+    \\
+    La MainActivity contiene un'istanza di \emph{DataTilesFragment}, che si occupa di visualizzare le tile con i dati (ed incrementi), colorandole e posizionandole in ordine a seconda del parametro 
+    (es. la tile \emph{Dimessi guariti} viene sempre colorata di verde e posizionata al terzo posto). Non per tutte le tile é previsto un ordinamento oppure un colore (verrá applicato il grigio come colore di default).
+    \\
+    Per la lista delle tile scrollabili ho previsto una RecyclerView, per poter disegnare una CardView per ogni ambito.
+
+    \section{Cambio zona geografica}
     La denominazione geografica puó essere cambiata premendo sul pulsante \quotes{Nuova localitá} dalla schermata principale (vedi \ref{fig1:sub2}).
     \\
     Appare il picker della zona geografica:
@@ -86,7 +93,16 @@
 
     Premendo il pulsante back \emph{fisico} si scorreranno all'indietro tutte le selezioni geografiche finora cercate dall'utente.
 
-    \subsection{Preferiti}
+    \subsection{Implementazione}
+
+    La classe \emph{DPCGeoAdapter} é un'estensione di un DialogFragment che, quando aperto, mostrerá una RecyclerView contenente la lista delle regioni e delle province. In prima posizione si trova la selezione per il dato nazionale.
+    \\
+    La lista é strutturata in modo che, per ogni regione, ci sia la lista delle province che la compongono nelle posizioni sottostanti. 
+    \\
+    Alla pressione di una posizione geografica, il GeoPicker chiamerá la funzione \emph{onDPCGeoClick} di una classe che implementa \emph{OnDPCGeoListener} (nella fattispecie verrá utilizzata la MainActivity).
+    L'oggetto passato é di tipo \emph{GeographicElement}, il quale descrive il nome dell'ambito geografico e la sua tipologia (\emph{NAZIONALE, REGIONALE, PROVINCIALE}).
+
+    \section{Preferiti}
     Ogni tile ha in alto a destra una \emph{stellina}: quando premuta, la tile relativa viene salvata tra i preferiti.
     Per recuperare la lista delle tile salvate é sufficiente premere sul floating button in basso a destra (visibile nella schermata principale dell'app, \ref{fig1:sub2}).
 
@@ -100,7 +116,14 @@
     Come si puó notare dalla figura \ref{fig4}, le tile salvate sono visualizzate con la loro denominazione geografica a seguito.
     Premendo su una \emph{stellina} precedentemente marcata verrá rimossa tale tile dalla lista dei preferiti.
 
-    \subsection{Grafici}
+    \subsection{Implementazione}
+    Per il salvataggio dei preferiti si fa uso della classe \emph{ManageStarredTiles}, che offre i metodi per aggiungere o rimuovere un elemento dai preferiti. Per identificare una tile da aggiungere o rimuovere viene passato un oggetto di classe \emph{FieldGeographicElement}.
+    \\
+    I dati sulle tile marcate come starred vengono salvati in un file privato dell'app, in formato json.
+    \\
+    Per la visualizzazione della lista delle tile preferite viene utilizzata la \emph{StarredActivity}, che si occupa di istanziare un \emph{DataTilesFragment} che visualizzerá tutte le tile salvate.
+
+    \section{Grafici}
     Ogni qualvolta si premerá su una tile, verrá mostrato l'andamento nel tempo del dato selezionato in un grafico.
     Si presenterá la schermata come quella in figura \ref{fig5:sub1}.
     \\
@@ -129,7 +152,11 @@
     Alla pressione del pulsante \quotes{Pulisci} si chiuderá la schermata del grafico e il grafico attualmente disegnato verrá scartato, insieme a tutti i dati precedentemente immessi.
     Il medesimo risultato si puó raggiungere alla pressione del pulsante back \emph{fisico}.
 
-    \subsection{Notifiche periodiche}
+    \subsection{Implementazione}
+
+    Per il grafico é stata utilizzata la libreria \href{https://github.com/PhilJay/MPAndroidChart}{\emph{MPAndroidChart}}
+
+    \section{Notifiche periodiche}
     Nell'activity principale, a sinistra della data di ultimo aggiornamento, é presente una checkbox con a fianco una campanellina (vedere fig. \ref{fig1:sub2}).
     \\
     Quando marcata, a partire dalle ore 18:00 di ogni giorno, ogni 10 minuti verrá performata una ricerca di nuovi dati aggiornati (orario nel quale il DPC li rende pubblici).

@@ -19,7 +19,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class SavedTilesActivity extends AppCompatActivity implements OnTileClick {
+public class StarredActivity extends AppCompatActivity implements OnTileClick {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

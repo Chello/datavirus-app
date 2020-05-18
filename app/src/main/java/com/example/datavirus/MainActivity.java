@@ -17,7 +17,6 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
@@ -168,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
      * @param v the FAB view
      */
     public void onClickFAB(View v) {
-        Intent i = new Intent(this, SavedTilesActivity.class);
+        Intent i = new Intent(this, StarredActivity.class);
         this.startActivity(i);
     }
 

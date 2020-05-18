@@ -108,9 +108,8 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /home/chello/Unibo/LAM_Montori/DataVirus/doc/./img/loading_dialog.jpg
 INPUT ./img/loading_dialog.jpg
@@ -120,10 +119,11 @@ INPUT /home/chello/Unibo/LAM_Montori/DataVirus/doc/./img/main_activity.jpg
 INPUT ./img/main_activity.jpg
 INPUT ./img/main_activity.jpg
 INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT /home/chello/Unibo/LAM_Montori/DataVirus/doc/./img/DPC_geo_picker.png
 INPUT ./img/DPC_geo_picker.png
 INPUT ./img/DPC_geo_picker.png
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT /home/chello/Unibo/LAM_Montori/DataVirus/doc/./img/lombardia.png
 INPUT ./img/lombardia.png
 INPUT ./img/lombardia.png

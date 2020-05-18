@@ -46,6 +46,14 @@ public class ChartModel {
     }
 
     /**
+     * Returns the visible list
+     * @return the visible list
+     */
+    public ArrayList<Boolean> getElementsVisible() {
+        return this.elementsVisible;
+    }
+
+    /**
      * Set an element to be visible or not in the chart
      * @param pos the position to hide or show
      * @param visible true if to be shown, false otherwise
