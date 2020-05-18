@@ -7,7 +7,7 @@
 % ---
 %\usepackage{amsmath} % Advanced math typesetting
 \usepackage[utf8]{inputenc} % Unicode support (Umlauts etc.)
-\usepackage[ngerman]{babel} % Change hyphenation rules
+\usepackage[italian]{babel} % Change hyphenation rules
 \usepackage{hyperref} % Add a link to your document
 \usepackage{graphicx} % Add pictures to your document
 \usepackage{listings} % Source code formatting and highlighting
@@ -29,13 +29,13 @@
     Fornisce all'utente una visualizzazione grafica dei dati del Dipartimento di Protezione Civile sull'andamento dell'epidemia di COVID-19.
     \\
     I dati sono accedibili dal \href{https://github.com/pcm-dpc/COVID-19}{repository GitHub ufficiale} della Protezione Civile. 
-    Tali dati sono aggiornati quotidianamente (a partire dalle ore 18:00) fino alla fine dello stato di emergenza dichiarato dal Consiglio dei Ministri in data 31 Gennaio 2020.
+    Tali dati vengono aggiornati a cadenza giornaliera (a partire dalle ore 18:00) fino alla fine dello stato di emergenza dichiarato dal Consiglio dei Ministri in data 31 Gennaio 2020.
     \\
     Per riferimenti precisi sul codice si prega di controllare il Javadoc fornito con il codice dell'app.
     
     \section{Visualizzazione dati}
     L'applicazione all'avvio visualizza una schermata di caricamento dei dati dal Dipartimento di Protezione Civile. 
-    Tali dati, una volta ottenuti, sono elaborati e vengono mostrati all'utente gli andamenti a livello nazionale dell'epidemia.
+    Tali dati, una volta ottenuti, sono elaborati e vengono mostrati all'utente gli andamenti a livello nazionale dell'epidemia (Figura \ref{fig1:sub1}).
     
     \begin{figure}[h]
         \centering
@@ -62,19 +62,19 @@
     \\
     \subsection{Implementazione}
     La MainActivity, alla sua creazione, istanzia un oggetto di tipo DataParser.
-    La classe DataParser si occupa di eseguire il download dei file JSON dal Dipartimento di Protezione Civile (\textbf{DPC}) in modalitá grafica (verrá visualizzato il dialog che segnala il download in esecuzione).
+    La classe DataParser si occupa di eseguire il download dei file JSON dal Dipartimento di Protezione Civile (\textbf{DPC}) in modalitá grafica (verrá visualizzato il dialog che segnala il download in esecuzione. Il dialog utilizzato é \emph{LoadingDialog}).
+    \\
     Una volta concluso lo scaricamento, i dati verranno memorizzati in un oggetto di tipo \emph{DPCData}, accedibile dalla callback \emph{onDPCDataReady()} nell'interfaccia \emph{OnDPCDataReady}, o alternativamente dal metodo statico \emph{DataParser.getDPCDataInstance()}.
     \\
     La MainActivity contiene un'istanza di \emph{DataTilesFragment}, che si occupa di visualizzare le tile con i dati (ed incrementi), colorandole e posizionandole in ordine a seconda del parametro 
     (es. la tile \emph{Dimessi guariti} viene sempre colorata di verde e posizionata al terzo posto). Non per tutte le tile é previsto un ordinamento oppure un colore (verrá applicato il grigio come colore di default).
     \\
-    Per la lista delle tile scrollabili é stata prevista una RecyclerView, per poter disegnare una CardView per ogni ambito.
-    Al click su una tile seguirá una chiamata al metodo \emph{onTileClick} presente in una classe che implementa l'interfaccia \emph{OnTileClick}.
+    Per la lista delle tile scrollabili é stata prevista una RecyclerView (integrata in \emph{DataTilesFragment}). Le tile sono realizzate con un layout CardView.
+    Al click su una tile seguirá una chiamata al metodo \emph{onTileClick} presente in una classe che implementa l'interfaccia \emph{OnTileClick}. Nella fattispecie tale classe sará una istanza di \emph{ChartActivity}.
 
     \section{Cambio zona geografica}
     La denominazione geografica puó essere cambiata premendo sul pulsante \quotes{Nuova localitá} dalla schermata principale (vedi \ref{fig1:sub2}).
     \\
-    Appare il picker della zona geografica:
 
     \begin{figure}[h]
         \centering
@@ -85,7 +85,7 @@
 
     Grazie al picker si puó scegliere la zona geografica di interesse. Puó essere una provincia, una regione oppure si puó selezionare l'andamento nazionale.
     Per comoditá si puó ulteriormente cercare la zona d'interesse premendo sulla \emph{lente d'ingrandimento}.
-    Come risultato verranno visualizzati i dati relativi alla zona selezionata:
+    Come risultato verranno visualizzati i dati relativi alla zona selezionata.
 
     \begin{figure}[h]
         \centering
@@ -157,7 +157,7 @@
 
     \subsection{Implementazione}
 
-    Per il grafico é stata utilizzata la libreria \href{https://github.com/PhilJay/MPAndroidChart}{\emph{MPAndroidChart}}, 
+    Per il grafico é stata utilizzata la libreria \href{https://github.com/PhilJay/MPAndroidChart}{\emph{\textbf{MPAndroidChart}}}, 
     che fornisce un'interfaccia completa per il plotting fornendo molteplici funzionalitá.
     \\
     Questa viene utilizzata dentro alla \emph{ChartActivity}. I dati sono ottenuti attraverso il singleton \emph{ChartModel}, la quale istanza gestisce i dati da disegnare sul grafico.
@@ -174,7 +174,7 @@
 
     \subsection{Implementazione}
     
-    Per gestire le notifiche si é fatto uso di una istanza \emph{DataNotifyReceiver}, \quotes{Broadcast Receiver}.
+    Per gestire le notifiche si é fatto uso di una istanza \emph{DataNotifyReceiver}, classe che estende \quotes{Broadcast Receiver}
     che alla sua chiamata istanzia un oggetto di tipo \emph{DataParser} (senza interfaccia GUI) per ottenere dati aggiornati.
     \\
     La chiamata a \emph{DataNotifyReceiver} viene effettuata attraverso un'\emph{intent} performato dall'\emph{AlarmManager}, per impostare l'orario in cui cominciare la ricerca (ore 18:00).
