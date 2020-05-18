@@ -14,6 +14,9 @@
 \usepackage{caption}
 \usepackage{subcaption}
 
+% custom commands
+\newcommand{\quotes}[1]{``#1''}
+
 \graphicspath{ {./img/} }
 
 \begin{document}
@@ -48,31 +51,18 @@
           \caption{Andamento nazionale}
           \label{fig1:sub2}
         \end{subfigure}
-        %\caption{A figure with two subfigures}
-        % \label{fig:test}
     \end{figure}
     
     Come si puó notare nella figura \ref{fig1:sub2}, questa é la schermata principale dell'applicazione. 
     Viene mostrato in alto la denominazione territoriale dei dati (nella scermata principale verrá mostrato l'andamento nazionale). Sotto i pulsanti, viene visualizzata la data dell'ultimo aggiornamento disponibile dal Dipartimento di Protezione Civile.
     \\
-    Il pulsante "Aggiorna" ricarica i dati dal repository.
+    Il pulsante \quotes{Aggiorna} ricarica i dati dal repository.
     \\
     Vengono poi visualizzate le tile contenenti il dato odierno e la relativa variazione (delta) rispetto alla giornata precedente.
     \\
-    Ogni tile ha in alto a destra una \emph{stellina}: quando premuta, la tile relativa viene salvata tra i preferiti.
-    Per recuperare la lista delle tile salvate é sufficiente premere sul floating button in basso a destra (visibile nella schermata principale dell'app).
-
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=.5\linewidth]{preferences.png}
-        \caption{Lista dei preferiti}
-        \label{fig2}
-    \end{figure}
-
-    Come si puó notare dalla figura \ref{fig2}, le tile salvate sono visualizzate con la loro denominazione geografica a seguito.
-
+    
     \subsection{Cambio zona geografica}
-    La denominazione geografica puó essere cambiata premendo sul pulsante "Nuova localitá" dalla schermata principale (vedi \ref{fig1:sub2}).
+    La denominazione geografica puó essere cambiata premendo sul pulsante \quotes{Nuova localitá} dalla schermata principale (vedi \ref{fig1:sub2}).
     \\
     Appare il picker della zona geografica:
 
@@ -80,11 +70,69 @@
         \centering
         \includegraphics[width=.5\linewidth]{DPC_geo_picker.png}
         \caption{Picker zona geografica}
-        \label{fig3}
+        \label{fig2}
     \end{figure}
 
     Grazie al picker si puó scegliere la zona geografica di interesse. Puó essere una provincia, una regione oppure si puó selezionare l'andamento nazionale.
-    Per comoditá si puó ulteriormente cercare la zona d'interesse grazie al pulsante in alto con la \emph{lente d'ingrandimento}.
+    Per comoditá si puó ulteriormente cercare la zona d'interesse premendo sulla \emph{lente d'ingrandimento}.
+    Come risultato verranno visualizzati i dati relativi alla zona selezionata:
 
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=.5\linewidth]{lombardia.png}
+        \caption{Esempio visualizzazione regione Lombardia}
+        \label{fig3}
+    \end{figure}
+
+    Premendo il pulsante back \emph{fisico} si scorreranno all'indietro tutte le selezioni geografiche finora cercate dall'utente.
+
+    \subsection{Preferiti}
+    Ogni tile ha in alto a destra una \emph{stellina}: quando premuta, la tile relativa viene salvata tra i preferiti.
+    Per recuperare la lista delle tile salvate é sufficiente premere sul floating button in basso a destra (visibile nella schermata principale dell'app, \ref{fig1:sub2}).
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=.5\linewidth]{preferences.png}
+        \caption{Lista dei preferiti}
+        \label{fig4}
+    \end{figure}
+
+    Come si puó notare dalla figura \ref{fig4}, le tile salvate sono visualizzate con la loro denominazione geografica a seguito.
+    Premendo su una \emph{stellina} precedentemente marcata verrá rimossa tale tile dalla lista dei preferiti.
+
+    \subsection{Grafici}
+    Ogni qualvolta si premerá su una tile, verrá mostrato l'andamento nel tempo del dato selezionato in un grafico.
+    Si presenterá la schermata come quella in figura \ref{fig5:sub1}.
+    \\
+    Il dato che ora viene mostrato puó essere confrontato con altri dati. Per ottenere questo risultato sará sufficiente premere sul pulsante \quotes{Aggiungi} e selezionare una nuova tile.
+    \\
+    Ad ogni dato aggiunto viene assegnato un colore random per la sua rappresentazione e apparirá nella lista dei campi attualmente disegnati. 
+    Per ciascuno di questi si potrá decidere se nasconderlo o mostrarlo (con la checkbox sulla sinistra) oppure cancellare dalla lista premendo sull'icona del \emph{cestino}.
+    \\
+    Il grafico é ingrandibile a piacimento, semplicemente utilizzando il \emph{pinch-to-zoom}.
+
+    \begin{figure}[h]
+      \centering
+      \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.7\linewidth]{milano.png}
+        \caption{Esempio grafico Milano}
+        \label{fig5:sub1}
+      \end{subfigure}%
+      \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.7\linewidth]{chart_ICU.jpg}
+        \caption{Confronto tra terapie intensive}
+        \label{fig5:sub2}
+      \end{subfigure}
+    \end{figure}
+    Alla pressione del pulsante \quotes{Pulisci} si chiuderá la schermata del grafico e il grafico attualmente disegnato verrá scartato, insieme a tutti i dati precedentemente immessi.
+    Il medesimo risultato si puó raggiungere alla pressione del pulsante back \emph{fisico}.
+
+    \subsection{Notifiche periodiche}
+    Nell'activity principale, a sinistra della data di ultimo aggiornamento, é presente una checkbox con a fianco una campanellina (vedere fig. \ref{fig1:sub2}).
+    \\
+    Quando marcata, a partire dalle ore 18:00 di ogni giorno, ogni 10 minuti verrá performata una ricerca di nuovi dati aggiornati (orario nel quale il DPC li rende pubblici).
+    Nel caso in cui i dati scaricati abbiano data odierna, l'utente verrá avvisato attraverso una notifica. Alla pressione di tale notifica si aprirá l'app.
 
 \end{document}

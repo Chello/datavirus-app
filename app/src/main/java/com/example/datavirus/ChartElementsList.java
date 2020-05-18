@@ -150,7 +150,7 @@ public class ChartElementsList extends Fragment {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         ChartModel cm = ChartModel.getInstance();
                         cm.setElementVisible(pos, isChecked);
-                        listener.refreshchart();
+                        listener.refreshChart();
                     }
                 });
                 delete.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +160,7 @@ public class ChartElementsList extends Fragment {
                         cm.deleteItem(pos);
                         notifyItemRemoved(pos);
                         notifyItemRangeChanged(pos, cm.getSize());
-                        listener.refreshchart();
+                        listener.refreshChart();
                     }
                 });
             }

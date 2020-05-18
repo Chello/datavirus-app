@@ -65,8 +65,11 @@ public class ChartActivity extends AppCompatActivity implements OnChartElementAc
     }
 
     @Override
-    public void refreshchart() {
+    public void refreshChart() {
+        if (this.chartModel.getSize() == 0)
+            finish();
         this.chartModel.setChartData(this.covidChart);
+
     }
 
     /**
@@ -113,17 +116,16 @@ public class ChartActivity extends AppCompatActivity implements OnChartElementAc
             this.startDate = startDate;
         }
 
-        //TODO scrivi qualcosa qua
         /**
-         *
-         * @param value
-         * @param axis
-         * @return
+         * Returns the formatted date string from the day number after the start of the pandemic.
+         * @param num the number of days after the start of the pandemic
+         * @param axis the axis base holder
+         * @return a string with the label to insert in the axis
          */
         @Override
-        public String getAxisLabel(float value, AxisBase axis) {
+        public String getAxisLabel(float num, AxisBase axis) {
             Calendar toRet = (Calendar) this.startDate.clone();
-            toRet.add(Calendar.DAY_OF_MONTH, Math.round(value) +1);
+            toRet.add(Calendar.DAY_OF_MONTH, Math.round(num) +1);
             return String.format(getResources().getString(R.string.placeholder_date_chart), toRet.get(Calendar.DAY_OF_MONTH), toRet.get(Calendar.MONTH));
 
         }
