@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1589803430 "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.tex" "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.pdf" "main" 1589803432
+["pdflatex"] 1589806210 "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.tex" "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.pdf" "main" 1589806214
   "/etc/texmf/web2c/texmf.cnf" 1569483737 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/chello/Unibo/LAM_Montori/DataVirus/doc/./img/DPC_geo_picker.png" 1589746320 134956 bf795d61374723fdce254d4ce3553b57 ""
   "/home/chello/Unibo/LAM_Montori/DataVirus/doc/./img/chart_ICU.jpg" 1589732218 60851 7e8afac82512a44cbf645492d6654527 ""
@@ -8,9 +8,9 @@
   "/home/chello/Unibo/LAM_Montori/DataVirus/doc/./img/main_activity.jpg" 1589732205 58021 93970d9d8e6076d282355c0385755ed5 ""
   "/home/chello/Unibo/LAM_Montori/DataVirus/doc/./img/milano.png" 1589793062 157262 7f2eb703674afe0d29203ae3410e698e ""
   "/home/chello/Unibo/LAM_Montori/DataVirus/doc/./img/preferences.png" 1589743963 101161 01cec44fe84b5731e7d4ce9f22a8d8fb ""
-  "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.aux" 1589803432 2900 0307cba2de76301d297da3ad310c001b ""
-  "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.out" 1589803432 509 54acbcc16932650931437abb0f3430d6 ""
-  "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.tex" 1589803429 9317 2711a80397baf1dfe508e4dd4ff3ef19 ""
+  "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.aux" 1589806214 2998 88874b3a7feafc2058e9ac6db122c155 ""
+  "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.out" 1589806214 574 557367331e19b19519092c0f6262a201 ""
+  "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.tex" 1589806207 11280 015cc2cda3843bb5b6ac4f076d8e5432 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1480098701 1328 c834bbb027764024c09d3d2bf908b5f0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1480098701 1324 c910af8c371558dc20f2d7822f66fe64 ""
@@ -87,7 +87,7 @@
   "img/milano.png" 1589793062 157262 7f2eb703674afe0d29203ae3410e698e ""
   "img/preferences.png" 1589743963 101161 01cec44fe84b5731e7d4ce9f22a8d8fb ""
   (generated)
-  "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.log"
-  "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.aux"
   "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.pdf"
+  "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.aux"
+  "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.log"
   "/home/chello/Unibo/LAM_Montori/DataVirus/doc/main.out"
