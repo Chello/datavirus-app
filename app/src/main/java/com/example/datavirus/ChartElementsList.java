@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -146,7 +147,7 @@ public class ChartElementsList extends Fragment {
                 this.visible = v.findViewById(R.id.chart_element_recycler_visible_checkbox);
                 this.setChecked(true);
                 this.color = v.findViewById(R.id.chart_element_recycler_color);
-                ImageButton delete = v.findViewById(R.id.chart_element_recycler_delete);
+                ImageView delete = v.findViewById(R.id.chart_element_recycler_delete);
                 this.visible.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

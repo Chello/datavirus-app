@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="10"
+    android:weightSum="11"
     android:orientation="horizontal">
 
     <CheckBox
@@ -30,14 +30,15 @@
         android:layout_gravity="center_vertical"
         android:padding="16dp" />
 
-    <ImageButton
-        android:layout_weight="1"
+    <ImageView
+        android:layout_weight="2"
         android:id="@+id/chart_element_recycler_delete"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:layout_gravity="center"
+        android:padding="2dp"
         android:onClick="onBinClick"
         android:src="@android:drawable/ic_menu_delete"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
 
 </LinearLayout>

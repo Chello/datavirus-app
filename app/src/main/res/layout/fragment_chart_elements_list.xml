@@ -12,7 +12,8 @@
         android:weightSum="10"
         android:orientation="horizontal" >
 
-        <Button
+        <ImageButton
+            android:src="@android:drawable/ic_input_add"
             android:onClick="onClickAddBtn"
             android:id="@+id/add_button"
             android:textSize="20sp"
@@ -21,7 +22,8 @@
             android:layout_weight="5"
             android:layout_height="wrap_content" />
 
-        <Button
+        <ImageButton
+            android:src="@android:drawable/ic_delete"
             android:onClick="onClickClearBtn"
             android:id="@+id/clear_button"
             android:textSize="20sp"

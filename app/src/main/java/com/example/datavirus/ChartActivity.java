@@ -29,6 +29,10 @@ public class ChartActivity extends AppCompatActivity implements OnChartElementAc
 
     private ChartModel chartModel;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

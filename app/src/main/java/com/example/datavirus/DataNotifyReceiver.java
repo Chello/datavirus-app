@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -22,9 +21,7 @@ import java.util.Calendar;
 public class DataNotifyReceiver extends BroadcastReceiver implements OnDPCDataReady {
 
     private static final String CHANNEL_ID = "DataVirus";
-
     private Context context;
-
 
     /**
      * When the BroadcastReciever is called, starts download of DPC Data.
@@ -35,7 +32,7 @@ public class DataNotifyReceiver extends BroadcastReceiver implements OnDPCDataRe
     @Override
     public void onReceive(Context context, Intent intent) {
         this.context = context;
-        Log.d("Receiver", "Ore " + Calendar.getInstance().toString() + " OnRecieve chiamato");
+        //Log.d("Receiver", "Ore " + Calendar.getInstance().toString() + " OnRecieve chiamato");
         DataParser parser = new DataParser(this);
     }
 
@@ -54,16 +51,17 @@ public class DataNotifyReceiver extends BroadcastReceiver implements OnDPCDataRe
         //If the dowloaded data have the same day of today
         if (today.get(Calendar.DAY_OF_YEAR) == downloaded.get(Calendar.DAY_OF_YEAR)) {
             this.showNotification();
+            Log.d("Receiver", "Ore " + today.toString() + "Triggerato");
             //Log.d("Receiver", "Ore " + Calendar.getInstance().toString() + " Notifica mostrata");
         //Else if today is a day following than the downloaded day update
-        } else if (today.get(Calendar.DAY_OF_YEAR) > downloaded.get(Calendar.DAY_OF_YEAR)) {
-            this.setNextAlarm(); //set a new alarm
-            //Log.d("Receiver", "Ore " + Calendar.getInstance().toString() + " Nuovo alarm " + downloaded.toString());
+        } else /*if (today.get(Calendar.DAY_OF_YEAR) > downloaded.get(Calendar.DAY_OF_YEAR)) */{
+            this.setNextIntent(); //set a new alarm
+            Log.d("Receiver", "Ore " + today.toString() + " Nuovo alarm " + downloaded.toString());
         }
     }
 
     /**
-     * Show notification showing that data are updated
+     * Show notification displaying that data are updated
      */
     private void showNotification() {
         Intent intent = new Intent(this.context, MainActivity.class);
@@ -86,14 +84,14 @@ public class DataNotifyReceiver extends BroadcastReceiver implements OnDPCDataRe
     /**
      * Set a new timer in 10 minutes
      */
-    private void setNextAlarm() {
+    private void setNextIntent() {
         AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, DataNotifyReceiver.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() +
-                        60 * 10 * 1000, alarmIntent);
+                    SystemClock.elapsedRealtime() + 60 * 10 * 1000,
+                    alarmIntent);
 
     }
 }

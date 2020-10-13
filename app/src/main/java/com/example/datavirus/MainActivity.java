@@ -81,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements OnDPCDataReady, O
         Calendar calendar = Calendar.getInstance();
 
         if (calendar.get(Calendar.HOUR_OF_DAY) >= 18)
-            calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) +1);
+            //calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) +1);
+            calendar.add(Calendar.DATE, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 18);
         calendar.set(Calendar.MINUTE, 00);
         calendar.setTimeInMillis(System.currentTimeMillis());
